@@ -15,10 +15,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     bool* keys = (bool*) data;
 
     if (key == GLFW_KEY_UP)
-        keys[0] = (action == GLFW_PRESS);
+        keys[0] = (action == GLFW_PRESS || action == GLFW_REPEAT);
 
     if (key == GLFW_KEY_DOWN)
-        keys[1] = (action == GLFW_PRESS);
+        keys[1] = (action == GLFW_PRESS || action == GLFW_REPEAT);
     }
 
 Video::Video(int width, int height, void* pointer) {

@@ -15,10 +15,10 @@ int main() {
 
     while (!glfwWindowShouldClose(video.win())) {
         if (keys[0])
-            pitch += 0.005;
+            pitch += 0.002;
 
         if (keys[1])
-            pitch -= 0.005;
+            pitch -= 0.002;
 
         audio.changePitch(pitch);
         float ratio;
