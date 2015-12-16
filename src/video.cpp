@@ -53,3 +53,29 @@ void Video::refresh() {
 GLFWwindow* Video::win() {
     return _window;
     }
+
+void Video::Project3D(Video& video) {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    float ratio;
+    int width, height;
+    glfwGetFramebufferSize(video.win(), &width, &height);
+    ratio = width / (float) height;
+    glViewport(0, 0, width, height);
+    glOrtho(-ratio, ratio, -1., 1., 1., -1.);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glEnable(GL_DEPTH_TEST);
+    }
+
+void Video::Project2D(Video& video) {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    int width, height;
+    glfwGetFramebufferSize(video.win(), &width, &height);
+    glOrtho(0., width, 0., height, -1.0, 10.0);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glDisable(GL_CULL_FACE);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    }

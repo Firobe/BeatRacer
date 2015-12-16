@@ -11,6 +11,8 @@ class Video {
         ~Video();
         void refresh();
         GLFWwindow* win();
+        static void Project2D(Video&);
+        static void Project3D(Video&);
     private:
         GLFWwindow* _window;
     };

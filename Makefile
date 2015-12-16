@@ -1,6 +1,6 @@
 COMPILER = g++
-ADD_CFLAGS = -Wall
-LIBS = glfw3 glu openal freealut
+ADD_CFLAGS = -Wall -g
+LIBS = glfw3 glu openal freealut ftgl
 CXXFLAGS = `pkg-config --static --cflags $(LIBS)` $(ADD_CFLAGS)
 LINKS = `pkg-config --static --libs $(LIBS)`
 SOURCES = $(wildcard src/*.cpp)

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 
+#include "text.h"
 #include "video.h"
 #include "audio.h"
 
