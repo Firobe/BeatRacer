@@ -42,7 +42,7 @@ Audio::Audio() {
     alSourcef(_source, AL_GAIN, 1);
     alSource3f(_source, AL_POSITION, 0, 0, 0);
     alSource3f(_source, AL_VELOCITY, 0, 0, 0);
-    alSourcei(_source, AL_LOOPING, AL_FALSE);
+    alSourcei(_source, AL_LOOPING, AL_TRUE);
     }
 
 Audio::~Audio() {
