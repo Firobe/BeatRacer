@@ -1,6 +1,7 @@
 #include "video.h"
 
 using namespace std;
+int c;
 
 
 static void error_callback(int error, const char* description) {
@@ -61,8 +62,7 @@ void Video::Project3D(Video& video) {
     int width, height;
     glfwGetFramebufferSize(video.win(), &width, &height);
     ratio = width / (float) height;
-    glViewport(0, 0, width, height);
-    glOrtho(-ratio, ratio, -1., 1., 1., -1.);
+    gluPerspective(FOV, ratio, NEAR, FAR);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glEnable(GL_DEPTH_TEST);
@@ -78,4 +78,20 @@ void Video::Project2D(Video& video) {
     glLoadIdentity();
     glDisable(GL_CULL_FACE);
     glClear(GL_DEPTH_BUFFER_BIT);
+    }
+
+void drawSegment(CoordSPH next) {
+
+    c += 20;
+    c %= 256;
+    glRotatef(next.theta, 0, 0, 1);
+    glRotatef(-next.phi, 0, 1, 0);
+    glTranslatef(next.rho / 2, 0, 0);
+    glScalef(1, 1 / (10 * next.rho), 1 / (100 * next.rho));
+
+    glColor3ub(c, c, c);
+    glutWireCube(next.rho);
+
+    glScalef(1, 10 * next.rho, 100 * next.rho);
+    glTranslatef(next.rho / 2, 0, 0);
     }

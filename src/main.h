@@ -3,9 +3,13 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <fstream>
+#include <string>
 
 #include "text.h"
 #include "video.h"
 #include "audio.h"
+
+void drawMap(std::string);
 
 #endif

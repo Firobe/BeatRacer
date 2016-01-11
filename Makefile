@@ -1,8 +1,9 @@
 COMPILER = g++
 ADD_CFLAGS = -Wall -g
 LIBS = glu openal freealut ftgl glfw3
+NO_PKG_LIBS = -lglut
 CXXFLAGS = `pkg-config --static --cflags $(LIBS)` $(ADD_CFLAGS)
-LINKS = `pkg-config --static --libs $(LIBS)`
+LINKS = `pkg-config --static --libs $(LIBS)` $(NO_PKG_LIBS)
 SOURCES = $(wildcard src/*.cpp)
 EXEC_NAME = btrc
 OBJECTS = $(SOURCES:.cpp=.o)

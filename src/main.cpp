@@ -3,21 +3,23 @@
 #include <cmath>
 
 using namespace std;
+extern int c;
 
 void drawCube();
 
-int main() {
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
     char str[100];
     srand(time(0));
     bool keys[2] = {false, false};
     float pitch = 1, goal = 1;
 
     //Init Audio/Video/Text
-    Video video(800, 600, (void*)keys);
+    Video video(1000, 800, (void*)keys);
     Audio audio;
-    audio.loadBuffer("test.wav");
-    audio.playSource();
-    FTFont* sans = Text::Instance().getFont("comic.ttf", 40);
+    audio.loadBuffer("res/test.wav");
+    //audio.playSource();
+    FTFont* sans = Text::Instance().getFont("res/comic.ttf", 40);
 
     //Main loop
     while (!glfwWindowShouldClose(video.win())) {
@@ -34,15 +36,15 @@ int main() {
             }
 
         pitch -= 0.1 * (pitch - goal); //Smooth transition from pitch to goal
-        audio.changePitch(pitch);
+        //audio.changePitch(pitch);
 
         //Screen clearing
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //3D RENDERING
         Video::Project3D(video);
-        glRotatef(300 * (pitch - 1), 0, 1, 1);
-        drawCube();
+        gluLookAt(-0.2, 0., 0.3, 1., 0., pitch, 0., 0., 1.);
+        drawMap("res/test.map");
 
         //2D RENDERING
         Video::Project2D(video);
@@ -57,55 +59,17 @@ int main() {
     return 0;
     }
 
-void drawCube() {
-    /*
-     * Draws a colored centered cube.
-     */
-    glBegin(GL_POLYGON);
-    glColor3f(1.0, 1.0, 0.);
-    glVertex3f(0.5, -0.5, -0.5);
-    glVertex3f(0.5,  0.5, -0.5);
-    glVertex3f(-0.5,  0.5, -0.5);
-    glVertex3f(-0.5, -0.5, -0.5);
-    glEnd();
+void drawMap(string path) {
+    CoordSPH temp;
+    string buffer;
+    ifstream map;
+    c = 100;
+    map.open(path.c_str());
 
-    glBegin(GL_POLYGON);
-    glColor3f(1.0,  1.0, 1.0);
-    glVertex3f(0.5, -0.5, 0.5);
-    glVertex3f(0.5,  0.5, 0.5);
-    glVertex3f(-0.5,  0.5, 0.5);
-    glVertex3f(-0.5, -0.5, 0.5);
-    glEnd();
+    while (getline(map, buffer)) {
+        sscanf(buffer.c_str(), "%f,%f,%f", &temp.rho, &temp.theta, &temp.phi);
+        drawSegment(temp);
+        }
 
-    glBegin(GL_POLYGON);
-    glColor3f(1.0,  0.0,  1.0);
-    glVertex3f(0.5, -0.5, -0.5);
-    glVertex3f(0.5,  0.5, -0.5);
-    glVertex3f(0.5,  0.5,  0.5);
-    glVertex3f(0.5, -0.5,  0.5);
-    glEnd();
-
-    glBegin(GL_POLYGON);
-    glColor3f(0.0,  1.0,  0.0);
-    glVertex3f(-0.5, -0.5,  0.5);
-    glVertex3f(-0.5,  0.5,  0.5);
-    glVertex3f(-0.5,  0.5, -0.5);
-    glVertex3f(-0.5, -0.5, -0.5);
-    glEnd();
-
-    glBegin(GL_POLYGON);
-    glColor3f(0.0,  0.0,  1.0);
-    glVertex3f(0.5,  0.5,  0.5);
-    glVertex3f(0.5,  0.5, -0.5);
-    glVertex3f(-0.5,  0.5, -0.5);
-    glVertex3f(-0.5,  0.5,  0.5);
-    glEnd();
-
-    glBegin(GL_POLYGON);
-    glColor3f(1.0,  0.0,  0.0);
-    glVertex3f(0.5, -0.5, -0.5);
-    glVertex3f(0.5, -0.5,  0.5);
-    glVertex3f(-0.5, -0.5,  0.5);
-    glVertex3f(-0.5, -0.5, -0.5);
-    glEnd();
+    map.close();
     }
