@@ -1,5 +1,5 @@
 COMPILER = g++
-ADD_CFLAGS = -Wall -g
+ADD_CFLAGS = -Wall -g -std=c++11
 LIBS = glu openal freealut ftgl glfw3
 NO_PKG_LIBS = -lglut
 CXXFLAGS = `pkg-config --static --cflags $(LIBS)` $(ADD_CFLAGS)

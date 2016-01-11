@@ -80,7 +80,7 @@ void Video::Project2D(Video& video) {
     glClear(GL_DEPTH_BUFFER_BIT);
     }
 
-void drawSegment(CoordSPH next) {
+void Video::DrawSegment(CoordSPH next) {
 
     c += 20;
     c %= 256;

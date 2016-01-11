@@ -3,7 +3,6 @@
 #include <cmath>
 
 using namespace std;
-extern int c;
 
 void drawCube();
 
@@ -20,6 +19,8 @@ int main(int argc, char** argv) {
     audio.loadBuffer("res/test.wav");
     audio.playSource();
     FTFont* sans = Text::Instance().getFont("res/comic.ttf", 40);
+    Game game;
+    game.loadMap("res/test.map");
 
     //Main loop
     while (!glfwWindowShouldClose(video.win())) {
@@ -37,19 +38,22 @@ int main(int argc, char** argv) {
 
         pitch -= 0.1 * (pitch - goal); //Smooth transition from pitch to goal
         audio.changePitch(pitch);
+        game.forward(pitch / 100);
 
         //Screen clearing
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //3D RENDERING
         Video::Project3D(video);
-        gluLookAt(-0.2, 0., 0.2, 1., 0., pitch - 1, 0., 0., 1.);
-        drawMap("res/test.map");
+        game.placeCamera();
+        //gluLookAt(-0.2, 0., 0.2, 1., 0., 0.2, 0., 0., 1.);
+        game.drawMap();
+        //game.drawCamera();
 
         //2D RENDERING
         Video::Project2D(video);
         glTranslatef(200, 50, 0);
-        sprintf(str, "musique a %d %% xd lol !", (int)round(pitch * 100));
+        sprintf(str, "Vitesse %d %%", (int)round(pitch * 100));
         Text::Render(str, sans);
 
         //Updating screen
@@ -57,22 +61,4 @@ int main(int argc, char** argv) {
         }
 
     return 0;
-    }
-
-void drawMap(string path) {
-    CoordSPH temp;
-    string buffer;
-    ifstream map;
-    int todo;
-    c = 100;
-    map.open(path.c_str());
-
-    while (getline(map, buffer)) {
-        sscanf(buffer.c_str(), "%f,%f,%f:%d", &temp.rho, &temp.theta, &temp.phi, &todo);
-
-        for (int i = 0 ; i < todo ; i++)
-            drawSegment(temp);
-        }
-
-    map.close();
     }

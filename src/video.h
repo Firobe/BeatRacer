@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <iostream>
 
-#define NEAR 0.1
+#define NEAR 0.01
 #define FAR 1000
 #define FOV 70
 
@@ -23,9 +23,9 @@ class Video {
         GLFWwindow* win();
         static void Project2D(Video&);
         static void Project3D(Video&);
+        static void DrawSegment(CoordSPH);
     private:
         GLFWwindow* _window;
     };
-void drawSegment(CoordSPH next);
 
 #endif
