@@ -90,7 +90,7 @@ void drawSegment(CoordSPH next) {
     glScalef(1, 1 / (10 * next.rho), 1 / (100 * next.rho));
 
     glColor3ub(c, c, c);
-    glutWireCube(next.rho);
+    glutSolidCube(next.rho);
 
     glScalef(1, 10 * next.rho, 100 * next.rho);
     glTranslatef(next.rho / 2, 0, 0);

@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     Video video(1000, 800, (void*)keys);
     Audio audio;
     audio.loadBuffer("res/test.wav");
-    //audio.playSource();
+    audio.playSource();
     FTFont* sans = Text::Instance().getFont("res/comic.ttf", 40);
 
     //Main loop
@@ -36,14 +36,14 @@ int main(int argc, char** argv) {
             }
 
         pitch -= 0.1 * (pitch - goal); //Smooth transition from pitch to goal
-        //audio.changePitch(pitch);
+        audio.changePitch(pitch);
 
         //Screen clearing
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //3D RENDERING
         Video::Project3D(video);
-        gluLookAt(-0.2, 0., 0.3, 1., 0., pitch, 0., 0., 1.);
+        gluLookAt(-0.2, 0., 0.2, 1., 0., pitch - 1, 0., 0., 1.);
         drawMap("res/test.map");
 
         //2D RENDERING
@@ -63,12 +63,15 @@ void drawMap(string path) {
     CoordSPH temp;
     string buffer;
     ifstream map;
+    int todo;
     c = 100;
     map.open(path.c_str());
 
     while (getline(map, buffer)) {
-        sscanf(buffer.c_str(), "%f,%f,%f", &temp.rho, &temp.theta, &temp.phi);
-        drawSegment(temp);
+        sscanf(buffer.c_str(), "%f,%f,%f:%d", &temp.rho, &temp.theta, &temp.phi, &todo);
+
+        for (int i = 0 ; i < todo ; i++)
+            drawSegment(temp);
         }
 
     map.close();
