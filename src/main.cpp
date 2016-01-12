@@ -21,6 +21,9 @@ int main(int argc, char** argv) {
     FTFont* sans = Text::Instance().getFont("res/comic.ttf", 40);
     Game game;
     game.loadMap("res/test.map");
+    Video::Project3D(video);
+    game.placeCamera();
+    glPushMatrix();
 
     //Main loop
     while (!glfwWindowShouldClose(video.win())) {
@@ -45,10 +48,7 @@ int main(int argc, char** argv) {
 
         //3D RENDERING
         Video::Project3D(video);
-        game.placeCamera();
-        //gluLookAt(-0.2, 0., 0.2, 1., 0., 0.2, 0., 0., 1.);
         game.drawMap();
-        //game.drawCamera();
 
         //2D RENDERING
         Video::Project2D(video);

@@ -23,14 +23,11 @@ class Game {
         void loadMap(std::string);
         void drawMap();
         void placeCamera();
-        void drawCamera();
         void forward(float);
     private:
         std::vector<CoordSPH> _map;
         int _currentSegment;
         float _segmentCursor;
-        Coord3D _cameraEye;
-        Coord3D _cameraVector;
     };
 
 #endif

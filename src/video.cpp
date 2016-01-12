@@ -1,7 +1,7 @@
 #include "video.h"
 
-using namespace std;
 int c;
+using namespace std;
 
 
 static void error_callback(int error, const char* description) {
@@ -39,6 +39,9 @@ Video::Video(int width, int height, void* pointer) {
     glfwMakeContextCurrent(_window);
     glfwSwapInterval(1);
     glfwSetKeyCallback(_window, key_callback);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glPushMatrix();
     }
 
 Video::~Video() {
@@ -64,11 +67,12 @@ void Video::Project3D(Video& video) {
     ratio = width / (float) height;
     gluPerspective(FOV, ratio, NEAR, FAR);
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+    glPopMatrix();
     glEnable(GL_DEPTH_TEST);
     }
 
 void Video::Project2D(Video& video) {
+    glPushMatrix();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     int width, height;
@@ -80,18 +84,41 @@ void Video::Project2D(Video& video) {
     glClear(GL_DEPTH_BUFFER_BIT);
     }
 
-void Video::DrawSegment(CoordSPH next) {
+void Video::DrawSegment(CoordSPH next, float delta) {
+    if (delta != 0.) {
+        next.rho -= delta;
+        next.phi = 0;
+        next.theta = 0;
+        }
 
     c += 20;
     c %= 256;
     glRotatef(next.theta, 0, 0, 1);
-    glRotatef(-next.phi, 0, 1, 0);
+    glRotatef(next.phi, 0, -1, 0);
     glTranslatef(next.rho / 2, 0, 0);
     glScalef(1, 1 / (10 * next.rho), 1 / (100 * next.rho));
-
     glColor3ub(c, c, c);
     glutSolidCube(next.rho);
-
     glScalef(1, 10 * next.rho, 100 * next.rho);
     glTranslatef(next.rho / 2, 0, 0);
+    }
+
+void Video::DrawSegmentRev(CoordSPH prev, CoordSPH next, float delta) {
+    c -= 20;
+    c %= 256;
+
+    if (delta != 0.) {
+        next.rho = delta;
+        prev.theta = 0;
+        prev.phi = 0;
+        }
+
+    glRotatef(prev.theta, 0, 0, -1);
+    glRotatef(prev.phi, 0, 1, 0);
+    glTranslatef(-next.rho / 2, 0, 0);
+    glScalef(1, 1 / (10 * next.rho), 1 / (100 * next.rho));
+    glColor3ub(c, c, c);
+    glutSolidCube(next.rho);
+    glScalef(1, 10 * next.rho, 100 * next.rho);
+    glTranslatef(-next.rho / 2, 0, 0);
     }

@@ -23,7 +23,8 @@ class Video {
         GLFWwindow* win();
         static void Project2D(Video&);
         static void Project3D(Video&);
-        static void DrawSegment(CoordSPH);
+        static void DrawSegment(CoordSPH next, float delta = 0.);
+        static void DrawSegmentRev(CoordSPH prev, CoordSPH next, float delta = 0.);
     private:
         GLFWwindow* _window;
     };
