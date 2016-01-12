@@ -61,7 +61,7 @@ void Game::forward(float deltaX) {
         _currentSegment++;
 
         //LOOP
-        if (_currentSegment >= _map.size()) {
+        if ((unsigned int)_currentSegment >= _map.size()) {
             glLoadIdentity();
             placeCamera();
             _currentSegment = 0;
