@@ -29,20 +29,25 @@ void Game::loadMap(string path) {
     }
 
 void Game::drawMap() {
-    c = (10 * _currentSegment) % 256;
+    static GLuint texture = Video::LoadTexture("res/road-tex.bmp");
     glPushMatrix();
-    Video::DrawSegmentRev(_map[_currentSegment], _map[_currentSegment], _segmentCursor);
+    float cursor = _segmentCursor; //Keep tracks of texture position
+    Video::DrawSegmentRev(_map[_currentSegment], _map[_currentSegment], texture, _segmentCursor);
 
     for (int i = _currentSegment - 1 ; i >= 0 ; i--) {
-        Video::DrawSegmentRev(_map[i + 1], _map[i]);
+        Video::DrawSegmentRev(_map[i + 1], _map[i], texture);
+        cursor += _map[i].rho;
         }
 
     glPopMatrix();
     glPushMatrix();
-    Video::DrawSegment(_map[_currentSegment], _segmentCursor);
+    Video::DrawSegment(_map[_currentSegment], texture, cursor, _segmentCursor);
+    cursor += _map[_currentSegment].rho - _segmentCursor;
 
-    for (unsigned int i = _currentSegment + 1 ; i < _map.size() ; i++)
-        Video::DrawSegment(_map[i]);
+    for (unsigned int i = _currentSegment + 1 ; i < _map.size() ; i++) {
+        Video::DrawSegment(_map[i], texture, cursor);
+        cursor += _map[i].rho;
+        }
 
     glPopMatrix();
     }

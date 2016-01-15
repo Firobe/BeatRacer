@@ -10,7 +10,7 @@
 #define FAR 1000
 #define FOV 70
 
-typedef struct Coord3D Coord3D;
+typedef struct CoordSPH CoordSPH;
 struct CoordSPH {
     float rho, theta, phi;
     };
@@ -23,8 +23,10 @@ class Video {
         GLFWwindow* win();
         static void Project2D(Video&);
         static void Project3D(Video&);
-        static void DrawSegment(CoordSPH next, float delta = 0.);
-        static void DrawSegmentRev(CoordSPH prev, CoordSPH next, float delta = 0.);
+        static void DrawSegment(CoordSPH next, GLuint, float, float delta = 0.);
+        static void DrawSegmentRev(CoordSPH prev, CoordSPH next, GLuint, float delta = 0.);
+        static GLuint LoadTexture(const char * filename);
+
     private:
         GLFWwindow* _window;
     };

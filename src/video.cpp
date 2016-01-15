@@ -69,6 +69,7 @@ void Video::Project3D(Video& video) {
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
     }
 
 void Video::Project2D(Video& video) {
@@ -84,28 +85,31 @@ void Video::Project2D(Video& video) {
     glClear(GL_DEPTH_BUFFER_BIT);
     }
 
-void Video::DrawSegment(CoordSPH next, float delta) {
+void Video::DrawSegment(CoordSPH next, GLuint texture, float cursor, float delta) {
     if (delta != 0.) {
         next.rho -= delta;
         next.phi = 0;
         next.theta = 0;
         }
 
-    c += 20;
-    c %= 256;
     glRotatef(next.theta, 0, 0, 1);
     glRotatef(next.phi, 0, -1, 0);
-    glTranslatef(next.rho / 2, 0, 0);
-    glScalef(1, 1 / (10 * next.rho), 1 / (100 * next.rho));
-    glColor3ub(c, c, c);
-    glutSolidCube(next.rho);
-    glScalef(1, 10 * next.rho, 100 * next.rho);
-    glTranslatef(next.rho / 2, 0, 0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, cursor);
+    glVertex3f(0, -0.1, 0);
+    glTexCoord2f(1, cursor);
+    glVertex3f(0, 0.1, 0);
+    glTexCoord2f(1, cursor + next.rho);
+    glVertex3f(next.rho, 0.1, 0);
+    glTexCoord2f(0, cursor + next.rho);
+    glVertex3f(next.rho, -0.1, 0);
+    glEnd();
+
+    glTranslatef(next.rho, 0, 0);
     }
 
-void Video::DrawSegmentRev(CoordSPH prev, CoordSPH next, float delta) {
-    c -= 20;
-    c %= 256;
+void Video::DrawSegmentRev(CoordSPH prev, CoordSPH next, GLuint texture, float delta) {
 
     if (delta != 0.) {
         next.rho = delta;
@@ -115,10 +119,61 @@ void Video::DrawSegmentRev(CoordSPH prev, CoordSPH next, float delta) {
 
     glRotatef(prev.theta, 0, 0, -1);
     glRotatef(prev.phi, 0, 1, 0);
-    glTranslatef(-next.rho / 2, 0, 0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glBegin(GL_QUADS);
+    glVertex3f(0, -0.1, 0);
+    glVertex3f(0, 0.1, 0);
+    glVertex3f(-next.rho, 0.1, 0);
+    glVertex3f(-next.rho, -0.1, 0);
+    glEnd();
+    /*glTranslatef(-next.rho / 2, 0, 0);
     glScalef(1, 1 / (10 * next.rho), 1 / (100 * next.rho));
-    glColor3ub(c, c, c);
     glutSolidCube(next.rho);
     glScalef(1, 10 * next.rho, 100 * next.rho);
-    glTranslatef(-next.rho / 2, 0, 0);
+    glTranslatef(-next.rho / 2, 0, 0);*/
+    glTranslatef(-next.rho, 0, 0);
+    }
+
+
+GLuint Video::LoadTexture(const char * filename) {
+
+    GLuint texture;
+    int width, height;
+    unsigned char * data;
+    FILE * file;
+    file = fopen(filename, "rb");
+
+    if (file == NULL) return 0;
+
+    width = 512;
+    height = 512;
+    data = (unsigned char *)malloc(width * height * 3);
+    fread(data, width * height * 3, 1, file);
+    fclose(file);
+
+    for (int i = 0; i < width * height ; ++i) {
+        int index = i * 3;
+        unsigned char B, R;
+        B = data[index];
+        R = data[index + 2];
+
+        data[index] = R;
+        data[index + 2] = B;
+
+        }
+
+
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 3, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+    free(data);
+
+    return texture;
     }

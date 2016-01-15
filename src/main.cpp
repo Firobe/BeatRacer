@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
     Video video(1000, 800, (void*)keys);
     Audio audio;
     audio.loadBuffer("res/test.wav");
-    audio.playSource();
+    //audio.playSource();
     FTFont* sans = Text::Instance().getFont("res/comic.ttf", 40);
     Game game;
     game.loadMap("res/test.map");
@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
             }
 
         pitch -= 0.1 * (pitch - goal); //Smooth transition from pitch to goal
-        audio.changePitch(pitch);
+        //audio.changePitch(pitch);
         game.forward(pitch / 100);
 
         //Screen clearing
