@@ -38,18 +38,15 @@ void Game::loadMap(string path) {
 
     mat4 tmpmod = mat4(1.);
     vec4 act(0.); //Current origin
-    vec3 sum(0.); //Sum of angles
 
     for (int s = 0 ; s < (int)_transMap.size() ; s++) { //SEGMENT
         vec4 t = tmpmod[1];
-        t *= 0.1;
+        t *= ROAD_WIDTH;
         fillModel(6 * s, act - t); //V1 (tmpmod[1] -> Y vector)
         fillModel(6 * s + 5, act - t); //V6
         fillModel(6 * s + 1, act + t);
 
-        act += toCartesian(_transMap[s] + sum);
-        sum += _transMap[s];
-        sum[0] = 0.;
+        act += tmpmod * toCartesian(_transMap[s]); //Matricial product of modelview & orientation vector
         tmpmod = rotate(tmpmod, _transMap[s][1], vec3(0., 0., 1.));
         tmpmod = rotate(tmpmod, _transMap[s][2], vec3(0., 1., 0.));
         tmpmod = translate(tmpmod, vec3(_transMap[s][0], 0., 0.));
@@ -79,7 +76,7 @@ vec4 Game::toCartesian(vec3 v) {
     }
 
 void Game::drawMap(Video &video) {
-    video.render(_mapModel, _mapColors, _modelSize / 3, lookAt(vec3(-0.5, 0, 0), vec3(1, 0, 0.9), vec3(0, 0, 1)));
+    video.render(_mapModel, _mapColors, _modelSize / 3, lookAt(vec3(-0.5, 0, 0.3), vec3(1, 0, 0), vec3(0, 0, 1)));
     }
 
 void Game::forward(float deltaX) {

@@ -19,19 +19,19 @@ class Shader {
 
         Shader& operator=(Shader const &shaderACopier);
 
-        bool charger();
+        bool load();
         bool compilerShader(GLuint &shader, GLenum type, std::string const &fichierSource);
         GLuint getProgramID() const;
 
 
     private:
 
-        GLuint m_vertexID;
-        GLuint m_fragmentID;
-        GLuint m_programID;
+        GLuint _vertexID;
+        GLuint _fragmentID;
+        GLuint _programID;
 
-        std::string m_vertexSource;
-        std::string m_fragmentSource;
+        std::string _vertexSource;
+        std::string _fragmentSource;
     };
 
 #endif

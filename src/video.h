@@ -12,7 +12,7 @@
 #include <cstdlib>
 #include <iostream>
 
-#define NEAR 0.01
+#define NEAR 0.1
 #define FAR 100.
 #define FOV 70.
 

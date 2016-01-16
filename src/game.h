@@ -16,6 +16,7 @@
 #include <cmath>
 
 #define PI 3.14159265
+#define ROAD_WIDTH 0.1
 
 typedef struct Coord3D Coord3D;
 struct Coord3D {

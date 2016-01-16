@@ -37,7 +37,7 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
     glfwMakeContextCurrent(_window);
     glfwSwapInterval(1);
     glfwSetKeyCallback(_window, key_callback);
-    _shader.charger();
+    _shader.load();
     _projection = glm::perspective(FOV, (double) width / height, NEAR, FAR);
     glEnable(GL_DEPTH_TEST);
     }
