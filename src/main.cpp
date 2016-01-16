@@ -1,29 +1,22 @@
 #include "main.h"
-#include <ctime>
-#include <cmath>
 
 using namespace std;
 
 void drawCube();
 
 int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    char str[100];
-    srand(time(0));
     bool keys[2] = {false, false};
     float pitch = 1, goal = 1;
 
     //Init Audio/Video/Text
-    Video video(1000, 800, (void*)keys);
+    Video video(1000, 800, (void*)keys,
+                "res/Shaders/couleur3D.vert", "res/Shaders/couleur3D.frag");
     Audio audio;
     audio.loadBuffer("res/test.wav");
     //audio.playSource();
-    FTFont* sans = Text::Instance().getFont("res/comic.ttf", 40);
+    //FTFont* sans = Text::Instance().getFont("res/comic.ttf", 40);
     Game game;
     game.loadMap("res/test.map");
-    Video::Project3D(video);
-    game.placeCamera();
-    glPushMatrix();
 
     //Main loop
     while (!glfwWindowShouldClose(video.win())) {
@@ -40,21 +33,14 @@ int main(int argc, char** argv) {
             }
 
         pitch -= 0.1 * (pitch - goal); //Smooth transition from pitch to goal
-        //audio.changePitch(pitch);
+        audio.changePitch(pitch);
         game.forward(pitch / 100);
 
-        //Screen clearing
+        //Clearing screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //3D RENDERING
-        Video::Project3D(video);
-        game.drawMap();
-
-        //2D RENDERING
-        Video::Project2D(video);
-        glTranslatef(200, 50, 0);
-        sprintf(str, "Vitesse %d %%", (int)round(pitch * 100));
-        Text::Render(str, sans);
+        //RENDERING
+        game.drawMap(video);
 
         //Updating screen
         video.refresh();

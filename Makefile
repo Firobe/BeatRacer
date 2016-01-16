@@ -1,7 +1,7 @@
 COMPILER = g++
 ADD_CFLAGS = -Wall -g -std=c++11
 LIBS = glu openal freealut ftgl glfw3
-NO_PKG_LIBS = -lglut
+NO_PKG_LIBS = 
 CXXFLAGS = `pkg-config --static --cflags $(LIBS)` $(ADD_CFLAGS)
 LINKS = `pkg-config --static --libs $(LIBS)` $(NO_PKG_LIBS)
 SOURCES = $(wildcard src/*.cpp)

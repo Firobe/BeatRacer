@@ -42,10 +42,10 @@ FTFont* Text::getFont(const char* filename, int size) {
     }
 
 void Text::Render(const char* str, FTFont* font, float R, float G, float B) {
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    /*glPushAttrib(GL_ALL_ATTRIB_BITS);
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
     glColor3f(R, G, B);
     font->Render(str);
-    glPopAttrib();
+    glPopAttrib();*/
     }

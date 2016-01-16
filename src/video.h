@@ -1,14 +1,20 @@
 #ifndef VIDEO__H
 #define VIDEO__H
 
+#define GLFW_INCLUDE_GLCOREARB
+#define GL_GLEXT_PROTOTYPES
 #include <GLFW/glfw3.h>
-#include <GL/freeglut.h>
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "shader.h"
 #include <cstdlib>
 #include <iostream>
 
 #define NEAR 0.01
-#define FAR 1000
-#define FOV 70
+#define FAR 100.
+#define FOV 70.
 
 typedef struct CoordSPH CoordSPH;
 struct CoordSPH {
@@ -17,18 +23,16 @@ struct CoordSPH {
 
 class Video {
     public:
-        Video(int, int, void*);
+        Video(int, int, void*, std::string, std::string);
         ~Video();
         void refresh();
         GLFWwindow* win();
-        static void Project2D(Video&);
-        static void Project3D(Video&);
-        static void DrawSegment(CoordSPH next, GLuint, float, float delta = 0.);
-        static void DrawSegmentRev(CoordSPH prev, CoordSPH next, GLuint, float delta = 0.);
-        static GLuint LoadTexture(const char * filename);
+        void render(float*, float*, int, glm::mat4 = glm::mat4(1.));
 
     private:
         GLFWwindow* _window;
+        Shader _shader;
+        glm::mat4 _projection;
     };
 
 #endif
