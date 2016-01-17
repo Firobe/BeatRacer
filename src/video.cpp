@@ -61,9 +61,9 @@ GLFWwindow* Video::win() {
 
 void Video::render(GLuint id, int size, Texture& tex, glm::mat4 modelview) {
     glUseProgram(_shader.getProgramID());
+    glm::mat4 modViewProj = _projection * modelview;
 
-    glUniformMatrix4fv(glGetUniformLocation(_shader.getProgramID(), "modelview"), 1, GL_FALSE, glm::value_ptr(modelview));
-    glUniformMatrix4fv(glGetUniformLocation(_shader.getProgramID(), "projection"), 1, GL_FALSE, glm::value_ptr(_projection));
+    glUniformMatrix4fv(glGetUniformLocation(_shader.getProgramID(), "modViewProj"), 1, GL_FALSE, glm::value_ptr(modViewProj));
 
     glBindVertexArray(id);
 
