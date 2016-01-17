@@ -6,6 +6,7 @@ using namespace glm;
 Model::Model() {
     _vboID = 0;
     _vaoID = 0;
+    _textured = true;
     }
 
 Model::~Model() {
@@ -22,8 +23,13 @@ void Model::load(string name) {
     }
 
 void Model::loadTexture(string path) {
-    _texture.setPath(path + ".png");
-    _texture.load();
+    _texture.setPath("res/tex/" + path + ".png");
+
+    if (!_texture.load()) {
+        _textured = false;
+        _texture.setPath("res/tex/default.png");
+        _texture.load();
+        }
     }
 
 void Model::loadV() {
@@ -60,8 +66,91 @@ void Model::loadV() {
     }
 
 void Model::loadModel(string path) {
-    //FILLS _mapModel & _mapTex
-    cout << "Loading Model..." << endl;
+    vector<vec3> vert;
+    vector<vec2> tex;
+    vector<unsigned int> vInd, tInd;
+    path = "res/obj/" + path + ".obj";
+    FILE* file = fopen(path.c_str(), "r");
+
+    if (file == NULL) {
+        cout << "Can't open " << path << endl;
+        exit(EXIT_FAILURE);
+        }
+
+    if (!_textured) {
+        tex.push_back(vec2(0., 0.));
+        tex.push_back(vec2(1., 0.));
+        tex.push_back(vec2(1., 1.));
+        }
+
+    //Reading file
+    for (;;) {
+        char lineHeader[128];
+
+        if (fscanf(file, "%s", lineHeader) == EOF)
+            break;
+
+        if (strcmp(lineHeader, "v") == 0) {
+            vec3 temp;
+            fscanf(file, "%f %f %f\n", &temp.x, &temp.y, &temp.z);
+            vert.push_back(temp);
+            }
+        else if (strcmp(lineHeader, "vt") == 0) {
+            vec2 temp;
+            fscanf(file, "%f %f\n", &temp.x, &temp.y);
+            tex.push_back(temp);
+            }
+        else if (strcmp(lineHeader, "f") == 0) {
+            unsigned int v[3], t[3];
+
+            if (_textured) {
+                if (fscanf(file, "%d/%d %d/%d %d/%d\n", &v[0], &t[0], &v[1], &t[1],
+                           &v[2], &t[2]) != 6) {
+                    cout << "Not enough matches !" << endl;
+                    exit(EXIT_FAILURE);
+                    }
+
+                vInd.push_back(v[0]);
+                vInd.push_back(v[1]);
+                vInd.push_back(v[2]);
+                tInd.push_back(t[0]);
+                tInd.push_back(t[1]);
+                tInd.push_back(t[2]);
+                }
+            else {
+                unsigned int v[3];
+
+                if (fscanf(file, "%d %d %d\n", &v[0], &v[1],
+                           &v[2]) != 3) {
+                    cout << "Not enough matches !" << endl;
+                    exit(EXIT_FAILURE);
+                    }
+
+                vInd.push_back(v[0]);
+                vInd.push_back(v[1]);
+                vInd.push_back(v[2]);
+                tInd.push_back(1);
+                tInd.push_back(2);
+                tInd.push_back(3);
+
+                }
+            }
+        }
+
+    fclose(file);
+    _vertexNb = vInd.size();
+    _mapModel = new float[_vertexNb * 3];
+    _mapTex = new float[_vertexNb * 2];
+
+    //Processing data
+    for (unsigned int i = 0 ; i < vInd.size() ; i++) {
+        _mapModel[i * 3] = vert[vInd[i] - 1].x;
+        _mapModel[i * 3 + 1] = vert[vInd[i] - 1].y;
+        _mapModel[i * 3 + 2] = vert[vInd[i] - 1].z;
+        _mapTex[i * 2] = tex[tInd[i] - 1].x;
+        _mapTex[i * 2 + 1] = tex[tInd[i] - 1].y;
+        }
+
     }
 
 void Model::draw(Video& video) {

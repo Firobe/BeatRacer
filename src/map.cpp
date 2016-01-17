@@ -12,16 +12,15 @@ Map::~Map() {
     }
 
 void Map::loadModel(string path) {
-    cout << "Processing map... ";
     vec3 temp;
     string buffer;
     ifstream map;
     int todo;
-    string nPath = path + ".map";
-    map.open(nPath.c_str());
+    path = "res/map/" + path + ".map";
+    map.open(path.c_str());
 
     if (!map.is_open()) {
-        cout << "Can't open " << nPath << endl;
+        cout << "Can't open " << path << endl;
         exit(EXIT_FAILURE);
         }
 

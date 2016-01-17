@@ -10,12 +10,12 @@ int main(int argc, char** argv) {
 
     //Init Audio/Video/Text
     Video video(1000, 800, (void*)keys,
-                "res/shaderVERT.vert", "res/shaderFRAG.frag");
+                "res/shaders/shaderVERT.vert", "res/shaders/shaderFRAG.frag");
     Audio audio;
     audio.loadBuffer("res/test.wav");
     audio.playSource();
     Map map;
-    map.load("res/road");
+    map.load("road");
 
     //Main loop
     while (!glfwWindowShouldClose(video.win())) {

@@ -30,6 +30,7 @@ class Model {
         float *_mapModel, *_mapTex;
         GLuint _vboID, _vaoID;
         int _vertexNb;
+        bool _textured;
     };
 
 
