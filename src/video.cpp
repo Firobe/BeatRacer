@@ -26,6 +26,9 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
     if (!glfwInit())
         exit(EXIT_FAILURE);
 
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     _window = glfwCreateWindow(width, height, "BeatRacer", NULL, NULL);
 
     if (!_window) {
@@ -56,21 +59,22 @@ GLFWwindow* Video::win() {
     return _window;
     }
 
-void Video::render(float* vertices, float* colors, int size, glm::mat4 modelview) {
+void Video::render(GLuint id, int size, Texture& tex, glm::mat4 modelview) {
     glUseProgram(_shader.getProgramID());
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, colors);
-    glEnableVertexAttribArray(1);
 
     glUniformMatrix4fv(glGetUniformLocation(_shader.getProgramID(), "modelview"), 1, GL_FALSE, glm::value_ptr(modelview));
     glUniformMatrix4fv(glGetUniformLocation(_shader.getProgramID(), "projection"), 1, GL_FALSE, glm::value_ptr(_projection));
 
+    glBindVertexArray(id);
+
+    if (!tex.empty())
+        glBindTexture(GL_TEXTURE_2D, tex.getID());
+
     glDrawArrays(GL_TRIANGLES, 0, size);
 
-    glDisableVertexAttribArray(1);
-    glDisableVertexAttribArray(0);
+    if (!tex.empty())
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+    glBindVertexArray(0);
     glUseProgram(0);
     }

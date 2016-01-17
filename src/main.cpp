@@ -10,13 +10,13 @@ int main(int argc, char** argv) {
 
     //Init Audio/Video/Text
     Video video(1000, 800, (void*)keys,
-                "res/Shaders/couleur3D.vert", "res/Shaders/couleur3D.frag");
+                "res/shaderVERT.vert", "res/shaderFRAG.frag");
     Audio audio;
     audio.loadBuffer("res/test.wav");
-    //audio.playSource();
-    //FTFont* sans = Text::Instance().getFont("res/comic.ttf", 40);
+    audio.playSource();
     Game game;
     game.loadMap("res/test.map");
+    game.loadV();
 
     //Main loop
     while (!glfwWindowShouldClose(video.win())) {

@@ -9,6 +9,7 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "shader.h"
+#include "texture.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -16,10 +17,9 @@
 #define FAR 100.
 #define FOV 70.
 
-typedef struct CoordSPH CoordSPH;
-struct CoordSPH {
-    float rho, theta, phi;
-    };
+#ifndef BUFFER_OFFSET
+#define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
+#endif
 
 class Video {
     public:
@@ -27,7 +27,7 @@ class Video {
         ~Video();
         void refresh();
         GLFWwindow* win();
-        void render(float*, float*, int, glm::mat4 = glm::mat4(1.));
+        void render(GLuint id, int, Texture&, glm::mat4 = glm::mat4(1.));
 
     private:
         GLFWwindow* _window;
