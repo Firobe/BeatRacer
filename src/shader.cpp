@@ -1,17 +1,18 @@
 #include "shader.h"
 
-Shader::Shader() : _vertexID(0), _fragmentID(0), _programID(0), _vertexSource(), _fragmentSource() {
+using namespace std;
+Shader::Shader() : _vertexID(0), _fragmentID(0), _programID(0), _srcVert(), _srcFrag() {
     }
 
-Shader::Shader(Shader const &shaderACopier) {
-    _vertexSource = shaderACopier._vertexSource;
-    _fragmentSource = shaderACopier._fragmentSource;
+Shader::Shader(Shader const &toCp) {
+    _srcVert = toCp._srcVert;
+    _srcFrag = toCp._srcFrag;
     load();
     }
 
 
-Shader::Shader(std::string vertexSource, std::string fragmentSource) : _vertexID(0), _fragmentID(0), _programID(0),
-    _vertexSource(vertexSource), _fragmentSource(fragmentSource) {
+Shader::Shader(string srcVert, string srcFrag) : _vertexID(0), _fragmentID(0), _programID(0),
+    _srcVert(srcVert), _srcFrag(srcFrag) {
     }
 
 
@@ -21,9 +22,9 @@ Shader::~Shader() {
     glDeleteProgram(_programID);
     }
 
-Shader& Shader::operator=(Shader const &shaderACopier) {
-    _vertexSource = shaderACopier._vertexSource;
-    _fragmentSource = shaderACopier._fragmentSource;
+Shader& Shader::operator=(Shader const &toCp) {
+    _srcVert = toCp._srcVert;
+    _srcFrag = toCp._srcFrag;
     load();
     return *this;
     }
@@ -38,10 +39,10 @@ bool Shader::load() {
     if (glIsProgram(_programID) == GL_TRUE)
         glDeleteProgram(_programID);
 
-    if (!compilerShader(_vertexID, GL_VERTEX_SHADER, _vertexSource))
+    if (!buildShader(_vertexID, GL_VERTEX_SHADER, _srcVert))
         return false;
 
-    if (!compilerShader(_fragmentID, GL_FRAGMENT_SHADER, _fragmentSource))
+    if (!buildShader(_fragmentID, GL_FRAGMENT_SHADER, _srcFrag))
         return false;
 
     _programID = glCreateProgram();
@@ -51,17 +52,17 @@ bool Shader::load() {
     glBindAttribLocation(_programID, 1, "in_Color");
     glBindAttribLocation(_programID, 2, "in_TexCoord0");
     glLinkProgram(_programID);
-    GLint erreurLink(0);
-    glGetProgramiv(_programID, GL_LINK_STATUS, &erreurLink);
+    GLint linkError(0);
+    glGetProgramiv(_programID, GL_LINK_STATUS, &linkError);
 
-    if (erreurLink != GL_TRUE) {
-        GLint tailleErreur(0);
-        glGetProgramiv(_programID, GL_INFO_LOG_LENGTH, &tailleErreur);
-        char *erreur = new char[tailleErreur + 1];
-        glGetShaderInfoLog(_programID, tailleErreur, &tailleErreur, erreur);
-        erreur[tailleErreur] = '\0';
-        std::cout << erreur << std::endl;
-        delete[] erreur;
+    if (linkError != GL_TRUE) {
+        GLint errSize(0);
+        glGetProgramiv(_programID, GL_INFO_LOG_LENGTH, &errSize);
+        char *error = new char[errSize + 1];
+        glGetShaderInfoLog(_programID, errSize, &errSize, error);
+        error[errSize] = '\0';
+        cout << error << endl;
+        delete[] error;
         glDeleteProgram(_programID);
         return false;
         }
@@ -70,43 +71,43 @@ bool Shader::load() {
     }
 
 
-bool Shader::compilerShader(GLuint &shader, GLenum type, std::string const &fichierSource) {
+bool Shader::buildShader(GLuint &shader, GLenum type, string const &src) {
     shader = glCreateShader(type);
 
     if (shader == 0) {
-        std::cout << "Erreur, le type de shader (" << type << ") n'existe pas" << std::endl;
+        cout << "No (" << type << ") type shader." << endl;
         return false;
         }
 
-    std::ifstream fichier(fichierSource.c_str());
+    ifstream file(src.c_str());
 
-    if (!fichier) {
-        std::cout << "Erreur le fichier " << fichierSource << " est introuvable" << std::endl;
+    if (!file) {
+        cout << "Can't open " << src << endl;
         glDeleteShader(shader);
         return false;
         }
 
-    std::string ligne;
-    std::string codeSource;
+    string line;
+    string srcC;
 
-    while (getline(fichier, ligne))
-        codeSource += ligne + '\n';
+    while (getline(file, line))
+        srcC += line + '\n';
 
-    fichier.close();
-    const GLchar* chaineCodeSource = codeSource.c_str();
-    glShaderSource(shader, 1, &chaineCodeSource, 0);
+    file.close();
+    const GLchar* srcStr = srcC.c_str();
+    glShaderSource(shader, 1, &srcStr, 0);
     glCompileShader(shader);
-    GLint erreurCompilation(0);
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &erreurCompilation);
+    GLint compError(0);
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compError);
 
-    if (erreurCompilation != GL_TRUE) {
-        GLint tailleErreur(0);
-        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &tailleErreur);
-        char *erreur = new char[tailleErreur + 1];
-        glGetShaderInfoLog(shader, tailleErreur, &tailleErreur, erreur);
-        erreur[tailleErreur] = '\0';
-        std::cout << erreur << std::endl;
-        delete[] erreur;
+    if (compError != GL_TRUE) {
+        GLint errSize(0);
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &errSize);
+        char *error = new char[errSize + 1];
+        glGetShaderInfoLog(shader, errSize, &errSize, error);
+        error[errSize] = '\0';
+        cout << error << endl;
+        delete[] error;
         glDeleteShader(shader);
         return false;
         }

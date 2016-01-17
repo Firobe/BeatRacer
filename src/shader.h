@@ -1,5 +1,5 @@
-#ifndef DEF_SHADER
-#define DEF_SHADER
+#ifndef SHADER__H
+#define SHADER__H
 
 #define GLFW_INCLUDE_GLCOREARB
 #define GL_GLEXT_PROTOTYPES
@@ -13,14 +13,14 @@ class Shader {
     public:
 
         Shader();
-        Shader(Shader const &shaderACopier);
-        Shader(std::string vertexSource, std::string fragmentSource);
+        Shader(Shader const &toCp);
+        Shader(std::string srcVert, std::string srcFrag);
         ~Shader();
 
-        Shader& operator=(Shader const &shaderACopier);
+        Shader& operator=(Shader const &toCp);
 
         bool load();
-        bool compilerShader(GLuint &shader, GLenum type, std::string const &fichierSource);
+        bool buildShader(GLuint &shader, GLenum type, std::string const &src);
         GLuint getProgramID() const;
 
 
@@ -30,8 +30,8 @@ class Shader {
         GLuint _fragmentID;
         GLuint _programID;
 
-        std::string _vertexSource;
-        std::string _fragmentSource;
+        std::string _srcVert;
+        std::string _srcFrag;
     };
 
 #endif
