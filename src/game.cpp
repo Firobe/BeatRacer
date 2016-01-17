@@ -95,7 +95,7 @@ void Game::loadMap(string path) {
         fillModel(6 * s + 2, act + t);
         fillModel(6 * s + 3, act + t);
         fillModel(6 * s + 4, act - t);
-        cursor += _transMap[s][0];
+        cursor += 1. / ROAD_WIDTH * _transMap[s][0];
         }
 
     cout << "OK" << endl;
@@ -110,18 +110,18 @@ void Game::fillModel(int vertex, vec4 v) {
 
 void Game::fillTex(int segment, float cursor) {
     int cur = 12 * segment;
-    float rho = _transMap[segment][0];
-    _mapTex[cur] = 0.;
+    float rho = 1. / ROAD_WIDTH * _transMap[segment][0];
+    _mapTex[cur] = 1.;
     _mapTex[cur + 1] = cursor;
-    _mapTex[cur + 2] = 1.;
+    _mapTex[cur + 2] = 0.;
     _mapTex[cur + 3] = cursor;
-    _mapTex[cur + 4] = 1.;
+    _mapTex[cur + 4] = 0.;
     _mapTex[cur + 5] = cursor + rho;
-    _mapTex[cur + 6] = 1.;
+    _mapTex[cur + 6] = 0.;
     _mapTex[cur + 7] = cursor + rho;
-    _mapTex[cur + 8] = 0.;
+    _mapTex[cur + 8] = 1.;
     _mapTex[cur + 9] = cursor + rho;
-    _mapTex[cur + 10] = 0.;
+    _mapTex[cur + 10] = 1.;
     _mapTex[cur + 11] = cursor;
     }
 

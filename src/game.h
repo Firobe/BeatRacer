@@ -2,10 +2,10 @@
 #define GAME__H
 
 #define GLM_FORCE_RADIANS
-#include <glm/glm.hpp>
-#include <glm/ext.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "../libs/glm/glm.hpp"
+#include "../libs/glm/ext.hpp"
+#include "../libs/glm/gtx/transform.hpp"
+#include "../libs/glm/gtc/type_ptr.hpp"
 
 #include "video.h"
 #include "texture.h"
