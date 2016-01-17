@@ -24,6 +24,10 @@ bool Texture::empty() {
     return (_width == -1);
     }
 
+void Texture::setPath(string str) {
+    _path = str;
+    }
+
 bool Texture::load() {
     int compN;
     unsigned char* data = stbi_load(_path.c_str(), &_width, &_height, &compN, 0);

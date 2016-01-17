@@ -27,7 +27,8 @@ class Video {
         ~Video();
         void refresh();
         GLFWwindow* win();
-        void render(GLuint id, int, Texture&, glm::mat4 = glm::mat4(1.));
+        void render(GLuint id, int, Texture&, glm::mat4 =
+                        glm::lookAt(glm::vec3(-0.5, 0, 0.3), glm::vec3(1, 0, 0), glm::vec3(0, 0, 1)));
 
     private:
         GLFWwindow* _window;

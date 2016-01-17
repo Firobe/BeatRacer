@@ -15,6 +15,7 @@ class Texture {
         GLuint getID();
         bool empty();
         bool load();
+        void setPath(std::string);
     private:
         std::string _path;
         GLuint _id;

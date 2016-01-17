@@ -14,9 +14,8 @@ int main(int argc, char** argv) {
     Audio audio;
     audio.loadBuffer("res/test.wav");
     audio.playSource();
-    Game game;
-    game.loadMap("res/test.map");
-    game.loadV();
+    Map map;
+    map.load("res/road");
 
     //Main loop
     while (!glfwWindowShouldClose(video.win())) {
@@ -34,13 +33,13 @@ int main(int argc, char** argv) {
 
         pitch -= 0.1 * (pitch - goal); //Smooth transition from pitch to goal
         audio.changePitch(pitch);
-        game.forward(pitch / 100);
+        //map.forward(pitch / 100);
 
         //Clearing screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //RENDERING
-        game.drawMap(video);
+        map.draw(video);
 
         //Updating screen
         video.refresh();

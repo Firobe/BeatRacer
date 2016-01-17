@@ -9,7 +9,7 @@
 
 #include "video.h"
 #include "audio.h"
-#include "game.h"
+#include "map.h"
 
 
 #endif

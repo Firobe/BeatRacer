@@ -1,63 +1,29 @@
-#include "game.h"
+#include "map.h"
 
 using namespace std;
 using namespace glm;
 
-Game::Game() : _texture("res/road-tex.bmp") {
+Map::Map() : Model() {
     _currentSegment = 0;
     _segmentCursor = 0;
-    _vboID = 0;
-    _vaoID = 0;
-    _texture.load();
     }
 
-Game::~Game() {
-    glDeleteBuffers(1, &_vboID);
-    glDeleteVertexArrays(1, &_vaoID);
-    delete[] _mapModel;
-    delete[] _mapTex;
+Map::~Map() {
     }
 
-void Game::loadV() {
-    //VBO
-    if (glIsBuffer(_vboID) == GL_TRUE)
-        glDeleteBuffers(1, &_vboID);
-
-    int size1 = _modelSize * sizeof(float);
-    int size2 = _transMap.size() * 2 * 6 * sizeof(float);
-    glGenBuffers(1, &_vboID);
-    glBindBuffer(GL_ARRAY_BUFFER, _vboID);
-    glBufferData(GL_ARRAY_BUFFER, size1 + size2, 0, GL_STATIC_DRAW);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, size1, _mapModel);
-    glBufferSubData(GL_ARRAY_BUFFER, size1, size2, _mapTex);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    //VAO
-    if (glIsVertexArray(_vaoID) == GL_TRUE)
-        glDeleteVertexArrays(1, &_vaoID);
-
-    glGenVertexArrays(1, &_vaoID);
-    glBindVertexArray(_vaoID);
-
-    glBindBuffer(GL_ARRAY_BUFFER, _vboID);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(size1));
-    glEnableVertexAttribArray(2);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
-    }
-
-void Game::loadMap(string path) {
+void Map::loadModel(string path) {
     cout << "Processing map... ";
     vec3 temp;
     string buffer;
     ifstream map;
     int todo;
-    map.open(path.c_str());
+    string nPath = path + ".map";
+    map.open(nPath.c_str());
+
+    if (!map.is_open()) {
+        cout << "Can't open " << nPath << endl;
+        exit(EXIT_FAILURE);
+        }
 
     while (getline(map, buffer)) {
         sscanf(buffer.c_str(), "%f,%f,%f:%d", &temp[0], &temp[1], &temp[2], &todo);
@@ -69,9 +35,9 @@ void Game::loadMap(string path) {
         }
 
     map.close();
-    _modelSize = 3 * 6 * _transMap.size();
-    _mapModel = new float[_modelSize];
-    _mapTex = new float[2 * 6 * _transMap.size()];
+    _vertexNb = 6 * _transMap.size();
+    _mapModel = new float[3 * _vertexNb];
+    _mapTex = new float[2 * _vertexNb];
 
     mat4 tmpmod = mat4(1.);
     float cursor = 0;
@@ -97,18 +63,15 @@ void Game::loadMap(string path) {
         fillModel(6 * s + 4, act - t);
         cursor += 1. / ROAD_WIDTH * _transMap[s][0];
         }
-
-    cout << "OK" << endl;
-    loadV();
     }
 
-void Game::fillModel(int vertex, vec4 v) {
+void Map::fillModel(int vertex, vec4 v) {
     _mapModel[vertex * 3] = v[0];
     _mapModel[vertex * 3 + 1] = v[1];
     _mapModel[vertex * 3 + 2] = v[2];
     }
 
-void Game::fillTex(int segment, float cursor) {
+void Map::fillTex(int segment, float cursor) {
     int cur = 12 * segment;
     float rho = 1. / ROAD_WIDTH * _transMap[segment][0];
     _mapTex[cur] = 1.;
@@ -125,7 +88,7 @@ void Game::fillTex(int segment, float cursor) {
     _mapTex[cur + 11] = cursor;
     }
 
-vec4 Game::toCartesian(vec3 v) {
+vec4 Map::toCartesian(vec3 v) {
     vec4 res(0.);
     res[0] = v[0] * cos(v[1]) * sin(v[2] + PI / 2);
     res[1] = v[0] * sin(v[1]) * sin(v[2] + PI / 2);
@@ -133,12 +96,7 @@ vec4 Game::toCartesian(vec3 v) {
     return res;
     }
 
-void Game::drawMap(Video & video) {
-    video.render(_vaoID, _modelSize / 3, _texture,
-                 lookAt(vec3(-0.5, 0, 0.3), vec3(1, 0, 0), vec3(0, 0, 1)));
-    }
-
-void Game::forward(float deltaX) {
+void Map::forward(float deltaX) {
     while (_segmentCursor + deltaX >= _transMap[_currentSegment][0]) {
         float diff =  _transMap[_currentSegment][0] - _segmentCursor;
         deltaX -= diff;
