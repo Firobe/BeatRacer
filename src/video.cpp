@@ -38,6 +38,12 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
 
     glfwSetWindowUserPointer(_window, pointer);
     glfwMakeContextCurrent(_window);
+    #ifdef WIN32
+    glewExperimental = GL_TRUE;
+    GLenum init(glewInit());
+    if(init != GLEW_OK)
+        exit(EXIT_FAILURE);
+    #endif
     glfwSwapInterval(1);
     glfwSetKeyCallback(_window, key_callback);
     _shader.load();

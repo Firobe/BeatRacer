@@ -2,6 +2,7 @@
 #define TEXTURE__H
 
 #ifdef WIN32
+#define GLEW_BUILD GLEW_STATIC
 #include <GL/glew.h>
 #define GLFW_INCLUDE_NONE
 
