@@ -1,9 +1,17 @@
 #ifndef VIDEO__H
 #define VIDEO__H
 
+#ifdef WIN32
+#include <GL/glew.h>
+#define GLFW_INCLUDE_NONE
+
+#else
 #define GLFW_INCLUDE_GLCOREARB
 #define GL_GLEXT_PROTOTYPES
+#endif
+
 #include <GLFW/glfw3.h>
+
 #define GLM_FORCE_RADIANS
 #include "../libs/glm/glm.hpp"
 #include "../libs/glm/gtx/transform.hpp"

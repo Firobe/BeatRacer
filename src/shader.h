@@ -1,8 +1,15 @@
 #ifndef SHADER__H
 #define SHADER__H
 
+#ifdef WIN32
+#include <GL/glew.h>
+#define GLFW_INCLUDE_NONE
+
+#else
 #define GLFW_INCLUDE_GLCOREARB
 #define GL_GLEXT_PROTOTYPES
+#endif
+
 #include <GLFW/glfw3.h>
 
 #include <iostream>
