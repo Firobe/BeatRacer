@@ -5,30 +5,40 @@ using namespace std;
 void drawCube();
 
 int main(int argc, char** argv) {
-    bool keys[2] = {false, false};
+    bool keys[400];
+
+    for (int i = 0 ; i < 400 ; i++) keys[i] = false;
+
     float pitch = 1, goal = 1;
+    glm::vec2 pos;
 
     //Init Audio/Video/Text
     Video video(1000, 800, (void*)keys,
                 "res/shaders/shaderVERT.vert", "res/shaders/shaderFRAG.frag");
     Audio audio;
     audio.loadBuffer("res/test.wav");
-    audio.playSource();
+    //audio.playSource();
     Map map;
     map.load("road");
 
     //Main loop
     while (!glfwWindowShouldClose(video.win())) {
+        glfwWaitEvents();
+        pos = video.getCursor();
+        video.rotateCamera(zAxis, pos[0]);
+        video.rotateCamera(yAxis, pos[1]);
 
         //Music speed +-10% when UP or DOWN is pressed
-        if (keys[0]) {
+        if (keys[GLFW_KEY_UP]) {
             goal += 0.1;
-            keys[0] = false;
             }
 
-        if (keys[1]) {
+        if (keys[GLFW_KEY_DOWN]) {
             goal -= 0.1;
-            keys[1] = false;
+            }
+
+        if (keys[GLFW_KEY_SPACE]) {
+            video.cameraForward(0.01);
             }
 
         pitch -= 0.1 * (pitch - goal); //Smooth transition from pitch to goal

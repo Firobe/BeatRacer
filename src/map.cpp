@@ -26,8 +26,8 @@ void Map::loadModel(string path) {
 
     while (getline(map, buffer)) {
         sscanf(buffer.c_str(), "%f,%f,%f:%d", &temp[0], &temp[1], &temp[2], &todo);
-        temp[1] *= PI / 180.;
-        temp[2] *= -PI / 180.;
+        temp[1] = radians(temp[1]);
+        temp[2] = -radians(temp[2]);
 
         for (int i = 0 ; i < todo ; i++)
             _transMap.push_back(temp);
@@ -44,18 +44,18 @@ void Map::loadModel(string path) {
 
     for (int s = 0 ; s < (int)_transMap.size() ; s++) { //SEGMENT
         fillTex(s, cursor);
-        vec4 t = tmpmod[1];
+        vec4 t = tmpmod[yAxis];
         t *= ROAD_WIDTH;
         fillModel(6 * s, act - t); //V1 (tmpmod[1] -> Y vector)
         fillModel(6 * s + 5, act - t); //V6
         fillModel(6 * s + 1, act + t);
 
-        act += tmpmod * toCartesian(_transMap[s]); //Matricial product of modelview & orientation vector
-        tmpmod = rotate(tmpmod, _transMap[s][1], vec3(0., 0., 1.));
-        tmpmod = rotate(tmpmod, _transMap[s][2], vec3(0., 1., 0.));
-        tmpmod = translate(tmpmod, vec3(_transMap[s][0], 0., 0.));
+        act += tmpmod * vec4(toCartesian(_transMap[s]), 0.); //Matricial product of modelview & orientation vector
+        tmpmod = rotate(tmpmod, _transMap[s][1], normalize(vec3(tmpmod[zAxis])));
+        tmpmod = rotate(tmpmod, _transMap[s][2], normalize(vec3(tmpmod[yAxis])));
+        tmpmod = translate(tmpmod, _transMap[s][0] * normalize(vec3(tmpmod[xAxis])));
 
-        t = tmpmod[1];
+        t = tmpmod[yAxis];
         t *= 0.1;
         fillModel(6 * s + 2, act + t);
         fillModel(6 * s + 3, act + t);
@@ -85,14 +85,6 @@ void Map::fillTex(int segment, float cursor) {
     _mapTex[cur + 9] = cursor + rho;
     _mapTex[cur + 10] = 1.;
     _mapTex[cur + 11] = cursor;
-    }
-
-vec4 Map::toCartesian(vec3 v) {
-    vec4 res(0.);
-    res[0] = v[0] * cos(v[1]) * sin(v[2] + PI / 2);
-    res[1] = v[0] * sin(v[1]) * sin(v[2] + PI / 2);
-    res[2] = v[0] * cos(v[2] + PI / 2);
-    return res;
     }
 
 void Map::forward(float deltaX) {

@@ -16,6 +16,7 @@
 #include "../libs/glm/glm.hpp"
 #include "../libs/glm/gtx/transform.hpp"
 #include "../libs/glm/gtc/type_ptr.hpp"
+#include "../libs/glm/ext.hpp"
 #include "shader.h"
 #include "texture.h"
 #include <cstdlib>
@@ -24,10 +25,16 @@
 #define NEAR 0.1
 #define FAR 100.
 #define FOV 70.
+#define PI 3.14159265
+#define SENSITIVITY ((float)0.1)
+
+enum Axes { xAxis, yAxis, zAxis };
 
 #ifndef BUFFER_OFFSET
 #define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
 #endif
+
+glm::vec3 toCartesian(glm::vec3 v);
 
 class Video {
     public:
@@ -35,13 +42,19 @@ class Video {
         ~Video();
         void refresh();
         GLFWwindow* win();
-        void render(GLuint id, int, Texture&, glm::mat4 =
-                        glm::lookAt(glm::vec3(-0.5, 0, 0.3), glm::vec3(1, 0, 0), glm::vec3(0, 0, 1)));
+        void render(GLuint id, int, Texture&);
+        void rotateCamera(int, float);
+        void cameraForward(float);
+        glm::vec2 getCursor();
 
     private:
+        void setCamera();
         GLFWwindow* _window;
         Shader _shader;
         glm::mat4 _projection;
+        glm::mat4 _modelView;
+        glm::vec3 _orientation;
+        glm::vec3 _position;
     };
 
 #endif

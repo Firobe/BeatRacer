@@ -17,7 +17,6 @@
 #include <fstream>
 #include <cmath>
 
-#define PI 3.14159265
 #define ROAD_WIDTH 0.1
 
 class Map : public Model {
@@ -28,7 +27,6 @@ class Map : public Model {
         void forward(float);
     private:
         std::vector<glm::vec3> _transMap;
-        glm::vec4 toCartesian(glm::vec3 v);
         void fillModel(int vertex, glm::vec4 v);
         void fillTex(int, float);
         int _currentSegment;
