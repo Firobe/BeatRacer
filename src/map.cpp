@@ -56,7 +56,7 @@ void Map::loadModel(string path) {
         tmpmod = translate(tmpmod, _transMap[s][0] * normalize(vec3(tmpmod[xAxis])));
 
         t = tmpmod[yAxis];
-        t *= 0.1;
+        t *= ROAD_WIDTH;
         fillModel(6 * s + 2, act + t);
         fillModel(6 * s + 3, act + t);
         fillModel(6 * s + 4, act - t);

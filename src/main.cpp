@@ -21,6 +21,9 @@ int main(int argc, char** argv) {
     Map map;
     map.load("road");
 
+    Model ship;
+    ship.load("spaceship");
+
     //Main loop
     while (!glfwWindowShouldClose(video.win())) {
         glfwWaitEvents();
@@ -37,9 +40,14 @@ int main(int argc, char** argv) {
             goal -= 0.1;
             }
 
-        if (keys[GLFW_KEY_SPACE]) {
-            video.cameraForward(0.01);
+        if (keys[GLFW_KEY_W]) {
+            video.cameraForward(0.1);
             }
+
+        if (keys[GLFW_KEY_S]) {
+            video.cameraForward(-0.1);
+            }
+
 
         pitch -= 0.1 * (pitch - goal); //Smooth transition from pitch to goal
         audio.changePitch(pitch);
@@ -50,6 +58,7 @@ int main(int argc, char** argv) {
 
         //RENDERING
         map.draw(video);
+        ship.draw(video);
 
         //Updating screen
         video.refresh();

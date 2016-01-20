@@ -51,7 +51,7 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
     glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     _shader.load();
     _projection = glm::perspective(FOV, (double) width / height, NEAR, FAR);
-    _position = glm::vec3(-0.5, 0, 0.1);
+    _position = glm::vec3(-5, 0, 0.1);
     _orientation = glm::vec3(1, 0, 0);
     setCamera();
     glEnable(GL_DEPTH_TEST);

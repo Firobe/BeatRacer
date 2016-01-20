@@ -17,7 +17,7 @@
 #include <fstream>
 #include <cmath>
 
-#define ROAD_WIDTH 0.1
+#define ROAD_WIDTH 1.
 
 class Map : public Model {
     public:
