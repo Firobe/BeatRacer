@@ -10,6 +10,13 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
 
+    if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS)
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+    if (key == GLFW_KEY_RIGHT_CONTROL && action == GLFW_PRESS)
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+
     void* data = glfwGetWindowUserPointer(window);
     bool* keys = (bool*) data;
 

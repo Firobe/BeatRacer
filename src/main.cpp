@@ -48,6 +48,8 @@ int main(int argc, char** argv) {
             video.cameraForward(-0.1);
             }
 
+        if (keys[GLFW_KEY_LEFT_CONTROL])
+            while (!keys[GLFW_KEY_RIGHT_CONTROL]) glfwWaitEvents();
 
         pitch -= 0.1 * (pitch - goal); //Smooth transition from pitch to goal
         audio.changePitch(pitch);
