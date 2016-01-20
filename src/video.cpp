@@ -25,6 +25,7 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
     if (!glfwInit())
         exit(EXIT_FAILURE);
 
+    glfwWindowHint(GLFW_SAMPLES, 4); //Anti-aliasing
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -37,12 +38,14 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
 
     glfwSetWindowUserPointer(_window, pointer);
     glfwMakeContextCurrent(_window);
-    #ifdef WIN32
+#ifdef WIN32
     glewExperimental = GL_TRUE;
     GLenum init(glewInit());
-    if(init != GLEW_OK)
+
+    if (init != GLEW_OK)
         exit(EXIT_FAILURE);
-    #endif
+
+#endif
     glfwSwapInterval(1);
     glfwSetKeyCallback(_window, key_callback);
     glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -52,6 +55,7 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
     _orientation = glm::vec3(1, 0, 0);
     setCamera();
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_MULTISAMPLE);
     }
 
 Video::~Video() {
@@ -80,6 +84,11 @@ void Video::rotateCamera(int axis, float value) {
 
     if (axis == zAxis)
         _orientation += glm::vec3(0, value, 0);
+
+    if (_orientation[2] >= PI / 2)
+        _orientation[2] = PI / 2 - 0.01;
+    else if (_orientation[2] <= -PI / 2)
+        _orientation[2] = -PI / 2 + 0.01;
 
     setCamera();
     }
