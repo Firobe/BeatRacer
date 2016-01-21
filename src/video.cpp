@@ -59,7 +59,9 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
     _shader.load();
     _projection = glm::perspective(FOV, (double) width / height, NEAR, FAR);
     _position = glm::vec3(-5, 0, 0.1);
-    _orientation = glm::vec3(1, 0, 0);
+    _orientationX = glm::vec3(1, 0, 0);
+    _orientationY = glm::vec3(1, PI / 2, 0);
+    _orientationZ = glm::vec3(1, 0, -PI / 2);
     setCamera();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
@@ -80,28 +82,40 @@ GLFWwindow* Video::win() {
     }
 
 void Video::setCamera() {
-    _modelView = glm::lookAt(_position, _position + toCartesian(_orientation), glm::vec3(0, 0, 1));
+    _modelView = glm::lookAt(_position, _position + toCartesian(_orientationX), glm::vec3(0, 0, 1));
     }
 
 void Video::rotateCamera(int axis, float value) {
     value = glm::radians(value);
 
-    if (axis == yAxis)
-        _orientation += glm::vec3(0, 0, value);
+    if (axis == yAxis) {
+        _orientationX += glm::vec3(0, 0, value);
+        _orientationZ += glm::vec3(0, 0, value);
+        }
 
-    if (axis == zAxis)
-        _orientation += glm::vec3(0, value, 0);
+    if (axis == zAxis) {
+        _orientationX += glm::vec3(0, value, 0);
+        _orientationY += glm::vec3(0, value, 0);
+        }
 
-    if (_orientation[2] >= PI / 2)
-        _orientation[2] = PI / 2 - 0.01;
-    else if (_orientation[2] <= -PI / 2)
-        _orientation[2] = -PI / 2 + 0.01;
+    if (_orientationX[2] >= PI / 2)
+        _orientationX[2] = PI / 2 - 0.01;
+    else if (_orientationX[2] <= -PI / 2)
+        _orientationX[2] = -PI / 2 + 0.01;
 
     setCamera();
     }
 
-void Video::cameraForward(float value) {
-    _position += value * toCartesian(_orientation);
+void Video::cameraTranslate(int axis, float value) {
+    if (axis == xAxis)
+        _position += value * toCartesian(_orientationX);
+
+    if (axis == yAxis)
+        _position += value * toCartesian(_orientationY);
+
+    if (axis == zAxis)
+        _position += value * toCartesian(_orientationZ);
+
     setCamera();
     }
 

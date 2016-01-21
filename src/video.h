@@ -45,7 +45,7 @@ class Video {
         GLFWwindow* win();
         void render(GLuint id, int, Texture&);
         void rotateCamera(int, float);
-        void cameraForward(float);
+        void cameraTranslate(int, float);
         glm::vec2 getCursor();
 
     private:
@@ -54,7 +54,7 @@ class Video {
         Shader _shader;
         glm::mat4 _projection;
         glm::mat4 _modelView;
-        glm::vec3 _orientation;
+        glm::vec3 _orientationX, _orientationY, _orientationZ;
         glm::vec3 _position;
     };
 

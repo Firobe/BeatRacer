@@ -51,10 +51,9 @@ void Map::loadModel(string path) {
         fillModel(6 * s + 1, act + t);
 
         act += tmpmod * vec4(toCartesian(_transMap[s]), 0.); //Matricial product of modelview & orientation vector
-        tmpmod = rotate(tmpmod, _transMap[s][1], normalize(vec3(tmpmod[zAxis])));
-        tmpmod = rotate(tmpmod, _transMap[s][2], normalize(vec3(tmpmod[yAxis])));
-        tmpmod = translate(tmpmod, _transMap[s][0] * normalize(vec3(tmpmod[xAxis])));
-
+        tmpmod = rotate(tmpmod, _transMap[s][1], vec3(0, 0, 1));
+        tmpmod = rotate(tmpmod, _transMap[s][2], vec3(0, 1, 0));
+        tmpmod = translate(tmpmod, _transMap[s][0] * vec3(1, 0, 0));
         t = tmpmod[yAxis];
         t *= ROAD_WIDTH;
         fillModel(6 * s + 2, act + t);

@@ -32,21 +32,23 @@ int main(int argc, char** argv) {
         video.rotateCamera(yAxis, pos[1]);
 
         //Music speed +-10% when UP or DOWN is pressed
-        if (keys[GLFW_KEY_UP]) {
+        if (keys[GLFW_KEY_UP])
             goal += 0.1;
-            }
 
-        if (keys[GLFW_KEY_DOWN]) {
+        if (keys[GLFW_KEY_DOWN])
             goal -= 0.1;
-            }
 
-        if (keys[GLFW_KEY_W]) {
-            video.cameraForward(0.1);
-            }
+        if (keys[GLFW_KEY_W])
+            video.cameraTranslate(xAxis, 0.1);
 
-        if (keys[GLFW_KEY_S]) {
-            video.cameraForward(-0.1);
-            }
+        if (keys[GLFW_KEY_S])
+            video.cameraTranslate(xAxis, -0.1);
+
+        if (keys[GLFW_KEY_A])
+            video.cameraTranslate(yAxis, 0.1);
+
+        if (keys[GLFW_KEY_D])
+            video.cameraTranslate(yAxis, -0.1);
 
         if (keys[GLFW_KEY_LEFT_CONTROL])
             while (!keys[GLFW_KEY_RIGHT_CONTROL]) glfwWaitEvents();
