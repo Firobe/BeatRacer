@@ -20,7 +20,7 @@ void Map::loadModel(string path) {
     map.open(path.c_str());
 
     if (!map.is_open()) {
-        cout << "Can't open " << path << endl;
+        cout << "!! Can't open " << path << " : halting !!" << endl;
         exit(EXIT_FAILURE);
         }
 
@@ -35,8 +35,13 @@ void Map::loadModel(string path) {
 
     map.close();
     _vertexNb = 6 * _transMap.size();
-    _mapModel = new float[3 * _vertexNb];
-    _mapTex = new float[2 * _vertexNb];
+    _mapModel = new(std::nothrow) float[3 * _vertexNb];
+    _mapTex = new(std::nothrow) float[2 * _vertexNb];
+
+    if (_mapModel == NULL || _mapTex == NULL) {
+        cout << "!! Can't allocate map memory : halting !!" << endl;
+        exit(EXIT_FAILURE);
+        }
 
     mat4 tmpmod = mat4(1.);
     float cursor = 0;

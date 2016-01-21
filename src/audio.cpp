@@ -26,14 +26,14 @@ Audio::Audio() {
     _device = alcOpenDevice(NULL);
 
     if (!_device) {
-        cout << "Can't open default audio device !" << endl;
+        cout << "!! Can't open default audio device : halting !!" << endl;
         exit(EXIT_FAILURE);
         }
 
     _context = alcCreateContext(_device, NULL);
 
     if (!alcMakeContextCurrent(_context)) {
-        cout << "Failed to make context current !" << endl;
+        cout << "!! (OpenAL) Failed to make context current : halting !!" << endl;
         exit(EXIT_FAILURE);
         }
 

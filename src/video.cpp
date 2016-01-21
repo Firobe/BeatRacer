@@ -29,8 +29,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 Video::Video(int width, int height, void* pointer, string a, string b) : _shader(a, b) {
     glfwSetErrorCallback(error_callback);
 
-    if (!glfwInit())
+    if (!glfwInit()) {
+        cout << "!! Can't initialize GLFW : halting !!" << endl;
         exit(EXIT_FAILURE);
+        }
 
     glfwWindowHint(GLFW_SAMPLES, 4); //Anti-aliasing
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -40,6 +42,7 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
 
     if (!_window) {
         glfwTerminate();
+        cout << "!! Can't create window : halting !!" << endl;
         exit(EXIT_FAILURE);
         }
 
@@ -49,8 +52,10 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
     glewExperimental = GL_TRUE;
     GLenum init(glewInit());
 
-    if (init != GLEW_OK)
+    if (init != GLEW_OK) {
+        cout << "!! Can't initialize GLEW : halting !!" << endl;
         exit(EXIT_FAILURE);
+        }
 
 #endif
     glfwSwapInterval(1);

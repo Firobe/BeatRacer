@@ -26,9 +26,14 @@ void Model::loadTexture(string path) {
     _texture.setPath("res/tex/" + path + ".png");
 
     if (!_texture.load()) {
+        cout << "Falling back to default texture" << endl;
         _textured = false;
         _texture.setPath("res/tex/default.png");
-        _texture.load();
+
+        if (!_texture.load()) {
+            cout << "!! Cannot open default texture : halting !!" << endl;
+            exit(EXIT_FAILURE);
+            }
         }
     }
 
@@ -73,7 +78,7 @@ void Model::loadModel(string path) {
     FILE* file = fopen(path.c_str(), "r");
 
     if (file == NULL) {
-        cout << "Can't open " << path << endl;
+        cout << "!! Can't open " << path << " : halting !!" << endl;
         exit(EXIT_FAILURE);
         }
 
@@ -106,7 +111,7 @@ void Model::loadModel(string path) {
             if (_textured) {
                 if (fscanf(file, "%d/%d %d/%d %d/%d\n", &v[0], &t[0], &v[1], &t[1],
                            &v[2], &t[2]) != 6) {
-                    cout << "Not enough matches !" << endl;
+                    cout << "!! Map format not supported : halting !!" << endl;
                     exit(EXIT_FAILURE);
                     }
 
@@ -122,7 +127,7 @@ void Model::loadModel(string path) {
 
                 if (fscanf(file, "%d %d %d\n", &v[0], &v[1],
                            &v[2]) != 3) {
-                    cout << "Not enough matches !" << endl;
+                    cout << "!! Map format not supported : halting !!" << endl;
                     exit(EXIT_FAILURE);
                     }
 
@@ -139,8 +144,13 @@ void Model::loadModel(string path) {
 
     fclose(file);
     _vertexNb = vInd.size();
-    _mapModel = new float[_vertexNb * 3];
-    _mapTex = new float[_vertexNb * 2];
+    _mapModel = new(std::nothrow) float[_vertexNb * 3];
+    _mapTex = new(std::nothrow) float[_vertexNb * 2];
+
+    if (_mapModel == NULL || _mapTex == NULL) {
+        cout << "!! Could not allocate model memory : halting !!" << endl;
+        exit(EXIT_FAILURE);
+        }
 
     //Processing data
     for (unsigned int i = 0 ; i < vInd.size() ; i++) {

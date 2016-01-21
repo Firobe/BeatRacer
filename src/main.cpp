@@ -2,8 +2,6 @@
 
 using namespace std;
 
-void drawCube();
-
 int main(int argc, char** argv) {
     bool keys[400];
 
