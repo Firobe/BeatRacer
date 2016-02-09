@@ -14,7 +14,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 all: $(OBJECTS)
 	$(COMPILER) -o $(EXEC_NAME) $(OBJECTS) $(LINKS)
 
-%.o : %.c
+%.o : %.cpp %.h
 	$(COMPILER) -c $(CXXFLAGS) $< -o $@
 
 run: all

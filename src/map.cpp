@@ -11,6 +11,10 @@ Map::Map() : Model() {
 Map::~Map() {
     }
 
+vector<glm::vec3>& Map::getMap() {
+    return _transMap;
+    }
+
 void Map::loadModel(string path) {
     vec3 temp;
     string buffer;
@@ -56,9 +60,9 @@ void Map::loadModel(string path) {
         fillModel(6 * s + 1, act + t);
 
         act += tmpmod * vec4(toCartesian(_transMap[s]), 0.); //Matricial product of modelview & orientation vector
-        tmpmod = rotate(tmpmod, _transMap[s][1], vec3(0, 0, 1));
-        tmpmod = rotate(tmpmod, _transMap[s][2], vec3(0, 1, 0));
-        tmpmod = translate(tmpmod, _transMap[s][0] * vec3(1, 0, 0));
+        tmpmod = glm::rotate(tmpmod, _transMap[s][1], vec3(0, 0, 1));
+        tmpmod = glm::rotate(tmpmod, _transMap[s][2], vec3(0, 1, 0));
+        tmpmod = glm::translate(tmpmod, _transMap[s][0] * vec3(1, 0, 0));
         t = tmpmod[yAxis];
         t *= ROAD_WIDTH;
         fillModel(6 * s + 2, act + t);

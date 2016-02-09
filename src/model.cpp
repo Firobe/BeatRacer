@@ -3,7 +3,7 @@
 using namespace std;
 using namespace glm;
 
-Model::Model() {
+Model::Model() : _modelMatrix(1.) {
     _vboID = 0;
     _vaoID = 0;
     _textured = true;
@@ -164,5 +164,17 @@ void Model::loadModel(string path) {
     }
 
 void Model::draw(Video& video) {
-    video.render(_vaoID, _vertexNb, _texture);
+    video.render(_vaoID, _vertexNb, _texture, _modelMatrix);
+    }
+
+void Model::translate(vec3 tr) {
+    _modelMatrix = glm::translate(_modelMatrix, tr);
+    }
+
+void Model::rotate(float angle, vec3 axis) {
+    _modelMatrix = glm::rotate(_modelMatrix, angle, axis);
+    }
+
+void Model::scale(vec3 sc) {
+    _modelMatrix = glm::scale(_modelMatrix, sc);
     }

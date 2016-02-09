@@ -87,7 +87,7 @@ GLFWwindow* Video::win() {
     }
 
 void Video::setCamera() {
-    _modelView = glm::lookAt(_position, _position + toCartesian(_orientationX), glm::vec3(0, 0, 1));
+    _view = glm::lookAt(_position, _position + toCartesian(_orientationX), glm::vec3(0, 0, 1));
     }
 
 void Video::rotateCamera(int axis, float value) {
@@ -124,10 +124,9 @@ void Video::cameraTranslate(int axis, float value) {
     setCamera();
     }
 
-void Video::render(GLuint id, int size, Texture & tex) {
+void Video::render(GLuint id, int size, Texture & tex, glm::mat4 model) {
     glUseProgram(_shader.getProgramID());
-    glm::mat4 modViewProj = _projection * _modelView;
-
+    glm::mat4 modViewProj = _projection * _view * model;
     glUniformMatrix4fv(glGetUniformLocation(_shader.getProgramID(), "modViewProj"), 1, GL_FALSE, glm::value_ptr(modViewProj));
 
     glBindVertexArray(id);

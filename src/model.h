@@ -22,12 +22,16 @@ class Model {
         ~Model();
         void load(std::string);
         void draw(Video&);
+        void translate(glm::vec3);
+        void rotate(float, glm::vec3);
+        void scale(glm::vec3);
     protected:
         void loadTexture(std::string);
         virtual void loadModel(std::string);
         void loadV();
 
         Texture _texture;
+        glm::mat4 _modelMatrix;
         float *_mapModel, *_mapTex;
         GLuint _vboID, _vaoID;
         int _vertexNb;

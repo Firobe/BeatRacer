@@ -25,6 +25,7 @@ class Map : public Model {
         ~Map();
         void loadModel(std::string);
         void forward(float);
+        std::vector<glm::vec3>& getMap();
     private:
         std::vector<glm::vec3> _transMap;
         void fillModel(int vertex, glm::vec4 v);

@@ -10,6 +10,7 @@
 #include "video.h"
 #include "audio.h"
 #include "map.h"
+#include "ship.h"
 
 
 #endif
