@@ -1,14 +1,14 @@
 #ifndef SHIP__H
 #define SHIP__H
 
+#include "map.h"
 #include "model.h"
 #include "../libs/glm/glm.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <vector>
 
-#define SHIP_SCALE (0.2)
-#define SHIP_HEIGHT (0.3)
+#define SHIP_HEIGHT (0.15)
 
 class Ship {
     public:
@@ -16,11 +16,12 @@ class Ship {
         ~Ship();
         void draw(Video&);
         void turn(float); //Angle in degrees
-        void move(float, float = 0); //Movement of (x, y) on its own axes
+        void move(float); //Movement of (x, y) on its own axes
     protected:
         std::vector<glm::vec3>& _map;
         Model _model;
-        glm::vec3 _roadPosition; //(Road-relative position of the ship)
+        int _curSegment;
+        glm::vec3 _roadPosition; //Road-relative position of the ship, X being the local position in the current segment
         float _orientation; //Road-relative Z angle
     };
 

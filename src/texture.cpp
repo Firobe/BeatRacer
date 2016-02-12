@@ -40,9 +40,9 @@ bool Texture::load() {
     //Flipping texture
     unsigned char* flipData = new unsigned char[_width * _height * compN];
 
-    for (int i = 0 ; i < _height ; i ++)
+    for (int i = 0 ; i < _height ; i++)
         for (int j = 0 ; j < compN * _width ; j++)
-            flipData[(_height - 1 - i)*compN * _width + j] = data[i * compN * _width + j];
+            flipData[(_height - 1 - i) * compN * _width + j] = data[i * compN * _width + j];
 
     GLenum format = (compN == 3) ? GL_RGB : GL_RGBA;
     glGenTextures(1, &_id);

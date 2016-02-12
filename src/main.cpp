@@ -31,19 +31,19 @@ int main(int argc, char** argv) {
         //Music speed +-10% when UP or DOWN is pressed
         if (keys[GLFW_KEY_UP]) {
             goal += 0.1;
-            ship.move(0.1, 0.1);
+            ship.move(0.1);
             }
 
         if (keys[GLFW_KEY_DOWN]) {
             goal -= 0.1;
-            ship.move(-0.1, -0.1);
+            ship.move(-0.1);
             }
 
         if (keys[GLFW_KEY_RIGHT])
-            ship.turn(2);
+            ship.turn(-2);
 
         if (keys[GLFW_KEY_LEFT])
-            ship.turn(-2);
+            ship.turn(2);
 
         if (keys[GLFW_KEY_W])
             video.cameraTranslate(xAxis, 0.1);

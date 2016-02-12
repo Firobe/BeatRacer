@@ -9,7 +9,7 @@
 #include <string>
 #include <iostream>
 
-void list_audio_devices(const ALCchar *devices);
+void list_audio_devices(const ALCchar* devices);
 
 class Audio {
     public:

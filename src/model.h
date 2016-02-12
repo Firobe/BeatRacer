@@ -32,7 +32,8 @@ class Model {
 
         Texture _texture;
         glm::mat4 _modelMatrix;
-        float *_mapModel, *_mapTex;
+        float* _mapModel;
+        float* _mapTex;
         GLuint _vboID, _vaoID;
         int _vertexNb;
         bool _textured;
