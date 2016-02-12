@@ -14,6 +14,14 @@ Ship::~Ship() {
     }
 
 void Ship::draw(Video& v) {
+    _model.translate(glm::vec3(0., 0., -_roadPosition.z));
+    _counter += SHIP_ROUTINE_STEP;
+
+    if (_counter >= 360)
+        _counter -= 360;
+
+    _roadPosition.z = SHIP_HEIGHT + SHIP_ROUTINE_AMPLITUDE * sin(glm::radians(_counter));
+    _model.translate(glm::vec3(0., 0., _roadPosition.z));
     _model.draw(v);
     }
 
@@ -22,7 +30,7 @@ void Ship::turn(float angle) { //Angle in degrees
     _orientation += angle;
     }
 
-void Ship::move(float x) {
+void Ship::move(float x) { //x MUST be positive
     float deltaX = x * cos(glm::radians(_orientation));
     float diff, adv;
 
@@ -43,7 +51,7 @@ void Ship::move(float x) {
         _orientation -= glm::degrees(_map[_curSegment][1]); //Opposite orientation is added : new road-relative orientation
 
         //Bringing the ship at the frontier, facing the new segment
-        _model.translate(glm::vec3(0., 0., -SHIP_HEIGHT));
+        _model.translate(glm::vec3(0., 0., -_roadPosition.z));
         _model.rotate((float)glm::radians(_orientation), glm::vec3(0., 0., -1.)); //
 
         //Applying new Y-rotation, ship is now in the new segment's plane
@@ -51,7 +59,7 @@ void Ship::move(float x) {
 
         //Restoring road-relative position and orientation
         _model.rotate((float)glm::radians(_orientation), glm::vec3(0., 0., 1.)); //
-        _model.translate(glm::vec3(0., 0., SHIP_HEIGHT));
+        _model.translate(glm::vec3(0., 0., _roadPosition.z));
 
         //Calculating remaining distance to move
         x -= adv; //Relative

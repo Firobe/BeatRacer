@@ -58,7 +58,7 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
         }
 
 #endif
-    glfwSwapInterval(1);
+    glfwSwapInterval(VERTICAL_SYNC);
     glfwSetKeyCallback(_window, key_callback);
     glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     _shader.load();
@@ -124,7 +124,7 @@ void Video::cameraTranslate(int axis, float value) {
     setCamera();
     }
 
-void Video::render(GLuint id, int size, Texture & tex, glm::mat4 model) {
+void Video::render(GLuint id, int size, Texture& tex, glm::mat4 model) {
     glUseProgram(_shader.getProgramID());
     glm::mat4 modViewProj = _projection * _view * model;
     glUniformMatrix4fv(glGetUniformLocation(_shader.getProgramID(), "modViewProj"), 1, GL_FALSE, glm::value_ptr(modViewProj));

@@ -23,11 +23,15 @@
 #include <cstdlib>
 #include <iostream>
 
+//Projection parameters
 #define NEAR 0.1
 #define FAR 100.
 #define FOV 70.
+
 #define PI 3.14159265
-#define SENSITIVITY ((float)0.1)
+
+#define VERTICAL_SYNC 1
+#define SENSITIVITY ((float)0.1) //Mouse sensitivity
 
 enum Axes { xAxis, yAxis, zAxis };
 
