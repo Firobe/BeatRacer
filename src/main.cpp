@@ -46,16 +46,16 @@ int main(int argc, char** argv) {
             ship.turn(2);
 
         if (keys[GLFW_KEY_W])
-            video.cameraTranslate(xAxis, 0.1);
+            video.cameraTranslate(xAxis, 0.2);
 
         if (keys[GLFW_KEY_S])
-            video.cameraTranslate(xAxis, -0.1);
+            video.cameraTranslate(xAxis, -0.2);
 
         if (keys[GLFW_KEY_A])
-            video.cameraTranslate(yAxis, 0.1);
+            video.cameraTranslate(yAxis, 0.2);
 
         if (keys[GLFW_KEY_D])
-            video.cameraTranslate(yAxis, -0.1);
+            video.cameraTranslate(yAxis, -0.2);
 
         if (keys[GLFW_KEY_LEFT_CONTROL])
             while (!keys[GLFW_KEY_RIGHT_CONTROL]) glfwWaitEvents();

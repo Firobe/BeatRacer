@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 
-#define SHIP_HEIGHT (0.15)
+#define SHIP_HEIGHT (0.4)
 
 class Ship {
     public:
