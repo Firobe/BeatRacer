@@ -7,6 +7,9 @@ Ship::Ship(vector<glm::vec3>& map): _map(map) {
     _model.translate(glm::vec3(0., 0., SHIP_HEIGHT));
     _roadPosition = glm::vec3(0., 0., SHIP_HEIGHT);
     _orientation = 0.;
+    _speed.x = 0.;
+    _speed.y = 0.;
+    _inertiaAngle = 0.;
     _curSegment = 0;
     }
 
@@ -14,14 +17,6 @@ Ship::~Ship() {
     }
 
 void Ship::draw(Video& v) {
-    _model.translate(glm::vec3(0., 0., -_roadPosition.z));
-    _counter += SHIP_ROUTINE_STEP;
-
-    if (_counter >= 360)
-        _counter -= 360;
-
-    _roadPosition.z = SHIP_HEIGHT + SHIP_ROUTINE_AMPLITUDE * sin(glm::radians(_counter));
-    _model.translate(glm::vec3(0., 0., _roadPosition.z));
     _model.draw(v);
     }
 
@@ -30,25 +25,56 @@ void Ship::turn(float angle) { //Angle in degrees
     _orientation += angle;
     }
 
+void Ship::thrust(float x) {
+    _speed += glm::vec2(x * cos(glm::radians(_orientation)), x * sin(glm::radians(_orientation)));
+    }
+
+void Ship::manage() {
+    _model.translate(glm::vec3(0., 0., -_roadPosition.z));
+    _counter += SHIP_ROUTINE_STEP;
+
+    if (_counter >= 360)
+        _counter -= 360;
+
+    _roadPosition.z = SHIP_HEIGHT + SHIP_ROUTINE_AMPLITUDE * sin(glm::radians(_counter));
+    _model.translate(glm::vec3(0., 0., _roadPosition.z));
+
+    float hypo = sqrt(_speed.x * _speed.x + _speed.y * _speed.y);
+
+    if (hypo != 0.) {
+        _inertiaAngle = glm::degrees(asin(_speed.y / hypo));
+        move(hypo);
+        _speed = glm::vec2(hypo * cos(glm::radians(_inertiaAngle)), hypo * sin(glm::radians(_inertiaAngle)));
+        glm::vec2 dec(_speed);
+        dec *= DECCELERATION;
+        _speed -= dec;
+        }
+    }
+
 void Ship::move(float x) { //x MUST be positive
-    float deltaX = x * cos(glm::radians(_orientation));
+    float deltaX = x * cos(glm::radians(_inertiaAngle));
     float diff, adv;
 
     //PHYSICS MADAFAKA
     while (_roadPosition.x + deltaX >= _map[_curSegment][0]) {
         //How much until the next segment ?
         diff =  _map[_curSegment][0] - _roadPosition.x; //Absolute
-        adv = diff / cos(glm::radians(_orientation)); //Relative
+        adv = diff / cos(glm::radians(_inertiaAngle)); //Relative
 
         //Moving to the next segment
+        //We are not moving forward but towards inertia point
+        _model.rotate(glm::radians(_inertiaAngle - _orientation), glm::vec3(0., 0., 1.));
         _model.translate(glm::vec3(adv, 0., 0.));
-        _roadPosition.y += -adv * sin(glm::radians(_orientation)); //New Y-position
+        //Restoring initial orientation
+        _model.rotate(glm::radians(_inertiaAngle - _orientation), glm::vec3(0., 0., -1.));
+        _roadPosition.y += -adv * sin(glm::radians(_inertiaAngle)); //New Y-position
 
 
         //Entering in next segment
         _curSegment++;
         _roadPosition.x = - tan(_map[_curSegment][1]) * _roadPosition.y; //Adding delta-X caused by imbrication of segments
         _orientation -= glm::degrees(_map[_curSegment][1]); //Opposite orientation is added : new road-relative orientation
+        _inertiaAngle -= glm::degrees(_map[_curSegment][1]); //Opposite orientation is added : new road-relative orientation
 
         //Bringing the ship at the frontier, facing the new segment
         _model.translate(glm::vec3(0., 0., -_roadPosition.z));
@@ -63,13 +89,15 @@ void Ship::move(float x) { //x MUST be positive
 
         //Calculating remaining distance to move
         x -= adv; //Relative
-        deltaX = x * cos(glm::radians(_orientation)); //Absolute
+        deltaX = x * cos(glm::radians(_inertiaAngle)); //Absolute
 
 
         cout << "Segment " << _curSegment << endl;
         }
 
+    _model.rotate(glm::radians(_inertiaAngle - _orientation), glm::vec3(0., 0., 1.));
     _model.translate(glm::vec3(x, 0., 0.)); //Movement of remaining distance
+    _model.rotate(glm::radians(_inertiaAngle - _orientation), glm::vec3(0., 0., -1.));
     _roadPosition.x += deltaX; //Adding remaining absolute distance
-    _roadPosition.y += - x * sin(glm::radians(_orientation)); //Adding remaining Y-position
+    _roadPosition.y += - x * sin(glm::radians(_inertiaAngle)); //Adding remaining Y-position
     }

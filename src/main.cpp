@@ -31,12 +31,12 @@ int main(int argc, char** argv) {
         //Music speed +-10% when UP or DOWN is pressed
         if (keys[GLFW_KEY_UP]) {
             goal += 0.1;
-            ship.move(0.1);
+            ship.thrust(ACCELERATION);
             }
 
         if (keys[GLFW_KEY_DOWN]) {
             goal -= 0.1;
-            ship.move(-0.1);
+            ship.thrust(ACCELERATION);
             }
 
         if (keys[GLFW_KEY_RIGHT])
@@ -60,9 +60,11 @@ int main(int argc, char** argv) {
         if (keys[GLFW_KEY_LEFT_CONTROL])
             while (!keys[GLFW_KEY_RIGHT_CONTROL]) glfwWaitEvents();
 
+        //Misc operations
+
         pitch -= 0.1 * (pitch - goal); //Smooth transition from pitch to goal
         audio.changePitch(pitch);
-        //map.forward(pitch / 100);
+        ship.manage();
 
         //Clearing screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
