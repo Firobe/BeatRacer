@@ -21,6 +21,7 @@
 #include "shader.h"
 #include "texture.h"
 #include <cstdlib>
+#include <ctime>
 #include <iostream>
 
 //Projection parameters
@@ -30,14 +31,22 @@
 
 #define PI 3.14159265
 
-#define VERTICAL_SYNC 1
+#define VERTICAL_SYNC 0
+#define FPS_GOAL 60
+
 #define SENSITIVITY ((float)0.1) //Mouse sensitivity
 
 enum Axes { xAxis, yAxis, zAxis };
 
 #ifndef BUFFER_OFFSET
 #define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
-#endif
+#endif //!BUFFER_OFFSET
+
+#if VERTICAL_SYNC == 1
+#define FPS_GOAL 60
+#endif //VERTICAL_SYNC == 1
+#define FPS_INTERVAL (1./FPS_GOAL) //IN MICROSECONDS
+#define FPS_TICKS (CLOCKS_PER_SEC * FPS_INTERVAL)
 
 glm::vec3 toCartesian(glm::vec3 v);
 

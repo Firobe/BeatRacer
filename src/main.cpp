@@ -14,10 +14,10 @@ int main(int argc, char** argv) {
                 "res/shaders/shaderVERT.vert", "res/shaders/shaderFRAG.frag");
     Audio audio;
     audio.loadBuffer("res/test.wav");
-    audio.playSource();
     Map map;
     map.load("road");
 
+    audio.playSource();
     Ship ship(map.getMap());
 
     //Main loop
@@ -58,6 +58,7 @@ int main(int argc, char** argv) {
 
         //General operations
         audio.changePitch(5 * ship.getSpeed());
+        audio.sync();
         ship.manage();
 
         //Render

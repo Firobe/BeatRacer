@@ -11,6 +11,7 @@ Ship::Ship(vector<glm::vec3>& map): _map(map) {
     _abSpeed = 0;
     _speed.y = 0.;
     _inertiaAngle = 0.;
+    _absPos = 0;
     _curSegment = 0;
     }
 
@@ -97,15 +98,17 @@ void Ship::move(float x) { //x MUST be positive
         //Calculating remaining distance to move
         x -= adv; //Relative
         deltaX = x * cos(glm::radians(_inertiaAngle)); //Absolute
-
-
-        cout << "Segment " << _curSegment << endl;
         }
 
     _model.rotate(glm::radians(_inertiaAngle - _orientation), glm::vec3(0., 0., 1.));
     _model.translate(glm::vec3(x, 0., 0.)); //Movement of remaining distance
     _model.rotate(glm::radians(_inertiaAngle - _orientation), glm::vec3(0., 0., -1.));
     _abSpeed += deltaX;
+    _absPos += deltaX;
     _roadPosition.x += deltaX; //Adding remaining absolute distance
     _roadPosition.y += - x * sin(glm::radians(_inertiaAngle)); //Adding remaining Y-position
+    }
+
+float Ship::getAbsPos() {
+    return _absPos;
     }

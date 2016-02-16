@@ -22,6 +22,7 @@ void listDev(const ALCchar *devices) {
 */
 
 Audio::Audio() {
+    _correction = 1;
     alutInitWithoutContext(NULL, NULL);
     _device = alcOpenDevice(NULL);
 
@@ -69,5 +70,26 @@ void Audio::playSource() {
     }
 
 void Audio::changePitch(float pitch) {
-    alSourcef(_source, AL_PITCH, pitch);
+    _pitch = pitch;
+    }
+
+void Audio::printPosition() {
+    ALfloat nSec;
+    alGetSourcef(_source, AL_SAMPLE_OFFSET, &nSec);
+    cout << "Position at 10. : " << nSec << endl;
+    }
+
+void Audio::sync() {
+    static auto prev = Clock::now();
+    auto now = Clock::now();
+    float diff = (float)chrono::duration_cast<chrono::duration<float>>(now - prev).count();
+
+    while (diff < FPS_INTERVAL) {
+        now = Clock::now();
+        diff = (float)chrono::duration_cast<chrono::duration<float>>(now - prev).count();
+        }
+
+    _correction = (float)FPS_INTERVAL / diff ;
+    prev = now;
+    alSourcef(_source, AL_PITCH, _pitch * _correction);
     }

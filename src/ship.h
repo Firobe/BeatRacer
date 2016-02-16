@@ -23,6 +23,7 @@ class Ship {
         void manage(); //Perform physic actions, should be called at each frame
         void thrust(float);
         float getSpeed();
+        float getAbsPos();
     protected:
         void move(float);
 
@@ -30,6 +31,7 @@ class Ship {
         Model _model;
         int _curSegment;
         glm::vec3 _roadPosition; //Road-relative position of the ship, X being the local position in the current segment
+        float _absPos; //Absolute road-relative x-position
         float _orientation; //Road-relative Z angle
         float _counter; //Used for the Z-position routine
 
