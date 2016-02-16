@@ -19,6 +19,12 @@
 
 #define ROAD_WIDTH 2.
 
+typedef struct Segment Segment;
+struct Segment {
+    glm::vec3 xAxis, yAxis, zAxis, origin;
+    float length;
+    };
+
 class Map : public Model {
     public:
         Map();
@@ -26,12 +32,13 @@ class Map : public Model {
         void loadModel(std::string);
         void forward(float);
         std::vector<glm::vec3>& getMap();
+        glm::vec3 getWorldCoordinates(glm::vec3);
     private:
-        std::vector<glm::vec3> _transMap;
         void fillModel(int vertex, glm::vec4 v);
         void fillTex(int, float);
-        int _currentSegment;
-        float _segmentCursor;
+
+        std::vector<glm::vec3> _transMap;
+        std::vector<Segment> _segmentMap;
     };
 
 #endif

@@ -22,12 +22,13 @@ int main(int argc, char** argv) {
 
     //Main loop
     while (!glfwWindowShouldClose(video.win())) {
-        glfwWaitEvents();
+
+        //User-interface operations
+        glfwPollEvents();
         pos = video.getCursor();
         video.rotateCamera(zAxis, pos[0]);
         video.rotateCamera(yAxis, pos[1]);
 
-        //Music speed +-10% when UP or DOWN is pressed
         if (keys[GLFW_KEY_UP])
             ship.thrust(ACCELERATION);
 
@@ -55,19 +56,14 @@ int main(int argc, char** argv) {
         if (keys[GLFW_KEY_LEFT_CONTROL])
             while (!keys[GLFW_KEY_RIGHT_CONTROL]) glfwWaitEvents();
 
-        //Misc operations
-
+        //General operations
         audio.changePitch(5 * ship.getSpeed());
         ship.manage();
 
-        //Clearing screen
+        //Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        //RENDERING
         map.draw(video);
         ship.draw(video);
-
-        //Updating screen
         video.refresh();
         }
 
