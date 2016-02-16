@@ -7,7 +7,6 @@ int main(int argc, char** argv) {
 
     for (int i = 0 ; i < 400 ; i++) keys[i] = false;
 
-    float pitch = 1, goal = 1;
     glm::vec2 pos;
 
     //Init Audio/Video/Text
@@ -15,7 +14,7 @@ int main(int argc, char** argv) {
                 "res/shaders/shaderVERT.vert", "res/shaders/shaderFRAG.frag");
     Audio audio;
     audio.loadBuffer("res/test.wav");
-    //audio.playSource();
+    audio.playSource();
     Map map;
     map.load("road");
 
@@ -29,15 +28,11 @@ int main(int argc, char** argv) {
         video.rotateCamera(yAxis, pos[1]);
 
         //Music speed +-10% when UP or DOWN is pressed
-        if (keys[GLFW_KEY_UP]) {
-            goal += 0.1;
+        if (keys[GLFW_KEY_UP])
             ship.thrust(ACCELERATION);
-            }
 
-        if (keys[GLFW_KEY_DOWN]) {
-            goal -= 0.1;
-            ship.thrust(ACCELERATION);
-            }
+        if (keys[GLFW_KEY_DOWN])
+            ship.thrust(-ACCELERATION);
 
         if (keys[GLFW_KEY_RIGHT])
             ship.turn(-2);
@@ -62,8 +57,7 @@ int main(int argc, char** argv) {
 
         //Misc operations
 
-        pitch -= 0.1 * (pitch - goal); //Smooth transition from pitch to goal
-        audio.changePitch(pitch);
+        audio.changePitch(5 * ship.getSpeed());
         ship.manage();
 
         //Clearing screen

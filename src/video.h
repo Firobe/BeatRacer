@@ -25,7 +25,7 @@
 
 //Projection parameters
 #define NEAR 0.1
-#define FAR 100.
+#define FAR 10000.
 #define FOV 70.
 
 #define PI 3.14159265

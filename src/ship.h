@@ -11,7 +11,7 @@
 #define SHIP_HEIGHT (0.4)
 #define SHIP_ROUTINE_AMPLITUDE (0.05)
 #define SHIP_ROUTINE_STEP (3.)
-#define DECCELERATION (0.01)
+#define DECCELERATION (0.001)
 #define ACCELERATION (0.01)
 
 class Ship {
@@ -22,6 +22,7 @@ class Ship {
         void turn(float); //Angle in degrees
         void manage(); //Perform physic actions, should be called at each frame
         void thrust(float);
+        float getSpeed();
     protected:
         void move(float);
 
@@ -35,6 +36,7 @@ class Ship {
         //INERTIA
         glm::vec2 _speed;
         float _inertiaAngle;
+        float _abSpeed;
     };
 
 #endif

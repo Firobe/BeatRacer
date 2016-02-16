@@ -8,6 +8,7 @@ Ship::Ship(vector<glm::vec3>& map): _map(map) {
     _roadPosition = glm::vec3(0., 0., SHIP_HEIGHT);
     _orientation = 0.;
     _speed.x = 0.;
+    _abSpeed = 0;
     _speed.y = 0.;
     _inertiaAngle = 0.;
     _curSegment = 0;
@@ -27,6 +28,10 @@ void Ship::turn(float angle) { //Angle in degrees
 
 void Ship::thrust(float x) {
     _speed += glm::vec2(x * cos(glm::radians(_orientation)), x * sin(glm::radians(_orientation)));
+    }
+
+float Ship::getSpeed() {
+    return _abSpeed;
     }
 
 void Ship::manage() {
@@ -54,11 +59,13 @@ void Ship::manage() {
 void Ship::move(float x) { //x MUST be positive
     float deltaX = x * cos(glm::radians(_inertiaAngle));
     float diff, adv;
+    _abSpeed = 0;
 
     //PHYSICS MADAFAKA
     while (_roadPosition.x + deltaX >= _map[_curSegment][0]) {
         //How much until the next segment ?
         diff =  _map[_curSegment][0] - _roadPosition.x; //Absolute
+        _abSpeed += diff;
         adv = diff / cos(glm::radians(_inertiaAngle)); //Relative
 
         //Moving to the next segment
@@ -98,6 +105,7 @@ void Ship::move(float x) { //x MUST be positive
     _model.rotate(glm::radians(_inertiaAngle - _orientation), glm::vec3(0., 0., 1.));
     _model.translate(glm::vec3(x, 0., 0.)); //Movement of remaining distance
     _model.rotate(glm::radians(_inertiaAngle - _orientation), glm::vec3(0., 0., -1.));
+    _abSpeed += deltaX;
     _roadPosition.x += deltaX; //Adding remaining absolute distance
     _roadPosition.y += - x * sin(glm::radians(_inertiaAngle)); //Adding remaining Y-position
     }
