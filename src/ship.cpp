@@ -12,6 +12,7 @@ Ship::Ship(vector<glm::vec3>& map): _map(map) {
     _speed.y = 0.;
     _inertiaAngle = 0.;
     _absPos = 0;
+    _counter = 0;
     _curSegment = 0;
     }
 

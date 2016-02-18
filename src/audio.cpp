@@ -49,10 +49,10 @@ Audio::Audio() {
 Audio::~Audio() {
     alDeleteSources(1, &_source);
     alDeleteBuffers(1, &_buffer);
+    alutExit();
     alcMakeContextCurrent(NULL);
     alcDestroyContext(_context);
     alcCloseDevice(_device);
-    alutExit();
     }
 
 void Audio::loadBuffer(string name) {
@@ -63,6 +63,7 @@ void Audio::loadBuffer(string name) {
     ALvoid* data = alutLoadMemoryFromFile(name.c_str(), &format, &size, &freq);
     alBufferData(_buffer, format, data, size, freq);
     alSourcei(_source, AL_BUFFER, _buffer);
+    free(data);
     }
 
 void Audio::playSource() {
