@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         map.draw(video);
         ship.draw(video);
-	notehandler.draw(video);
+        notehandler.draw(video);
         video.refresh();
         }
 

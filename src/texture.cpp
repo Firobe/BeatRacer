@@ -33,7 +33,6 @@ bool Texture::load() {
     unsigned char* data = stbi_load(_path.c_str(), &_width, &_height, &compN, 0);
 
     if (data == NULL) {
-        cout << _path << " : " << stbi_failure_reason() << endl;
         return false;
         }
 

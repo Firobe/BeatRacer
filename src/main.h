@@ -11,6 +11,6 @@
 #include "audio.h"
 #include "map.h"
 #include "ship.h"
-#include "note.h"
+#include "notehandler.h"
 
 #endif

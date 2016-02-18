@@ -26,7 +26,7 @@ void Model::loadTexture(string path) {
     _texture.setPath("res/tex/" + path + ".png");
 
     if (!_texture.load()) {
-        cout << "Falling back to default texture" << endl;
+        cout << "Can't open " << path << " texture file, falling back to default texture" << endl;
         _textured = false;
         _texture.setPath("res/tex/default.png");
 
@@ -111,7 +111,7 @@ void Model::loadModel(string path) {
             if (_textured) {
                 if (fscanf(file, "%d/%d %d/%d %d/%d\n", &v[0], &t[0], &v[1], &t[1],
                            &v[2], &t[2]) != 6) {
-                    cout << "!! Map format not supported : halting !!" << endl;
+                    cout << "!! Obj format not supported for " << path << " : halting !!" << endl;
                     exit(EXIT_FAILURE);
                     }
 
@@ -165,6 +165,10 @@ void Model::loadModel(string path) {
 
 void Model::draw(Video& video) {
     video.render(_vaoID, _vertexNb, _texture, _modelMatrix);
+    }
+
+void Model::draw(Video& video, glm::mat4& modelMatrix) {
+    video.render(_vaoID, _vertexNb, _texture, modelMatrix);
     }
 
 void Model::translate(vec3 tr) {
