@@ -25,8 +25,8 @@ NoteHandler::NoteHandler(string path, Map& map)  {
                 _notes.push_back(glm::vec2(pos, i));
                 _matrices.back() = glm::translate(_matrices.back(), map.getWorldCoordinates(glm::vec3(pos, (ROAD_WIDTH * (2.*i - 3.)) / 4., 0)));
                 glm::vec2 angles = map.getWorldAngles(pos);
-                _matrices.back() = glm::rotate(_matrices.back(), angles[0], glm::vec3(0., 0., 1.));
                 _matrices.back() = glm::rotate(_matrices.back(), angles[1], glm::vec3(0., 1., 0.));
+                _matrices.back() = glm::rotate(_matrices.back(), angles[0], glm::vec3(0., 0., 1.));
                 }
 
             col /= 2;
