@@ -29,7 +29,7 @@
 #define FAR 10000.
 #define FOV 70.
 
-#define PI 3.14159265
+#define PI 3.14159265358979
 
 #define VERTICAL_SYNC 0
 #define FPS_GOAL 60

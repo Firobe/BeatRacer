@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
     audio.loadBuffer("res/test.wav");
     Map map;
     map.load("road");
-
+    NoteHandler notehandler("pouet", map);
     audio.playSource();
     Ship ship(map.getMap());
 
@@ -65,6 +65,7 @@ int main(int argc, char** argv) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         map.draw(video);
         ship.draw(video);
+	notehandler.draw(video);
         video.refresh();
         }
 
