@@ -14,10 +14,12 @@ class NoteHandler {
         NoteHandler(std::string, Map&);
         ~NoteHandler();
         void draw(Video&);
+        void placeBar(float, Map&);
     private:
         Model _model;
         std::vector<glm::mat4> _matrices;
         std::vector<glm::vec2> _notes; //Vector of (position, column)
+        Model _timingBar;
     };
 
 

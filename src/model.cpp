@@ -186,3 +186,7 @@ void Model::rotate(float angle, vec3 axis) {
 void Model::scale(vec3 sc) {
     _modelMatrix = glm::scale(_modelMatrix, sc);
     }
+
+void Model::resetMatrix() {
+    _modelMatrix = glm::mat4(1.);
+    }

@@ -8,6 +8,7 @@ NoteHandler::NoteHandler(string path, Map& map)  {
     float pos;
     int col;
     _model.load("note");
+    _timingBar.load("timingbar");
     path = "res/map/" + path + ".nt";
     input.open(path.c_str());
 
@@ -40,4 +41,13 @@ NoteHandler::~NoteHandler() {
 void NoteHandler::draw(Video& vid) {
     for (unsigned int i = 0; i < _notes.size() ; i++)
         _model.draw(vid, _matrices[i]);
+    _timingBar.draw(vid);
     }
+
+void NoteHandler::placeBar(float pos, Map& map){
+    _timingBar.resetMatrix();
+    _timingBar.translate(map.getWorldCoordinates(glm::vec3(pos,0,0)));
+    glm::vec2 angles = map.getWorldAngles(pos);
+    _timingBar.rotate(angles[1], glm::vec3(0., 1., 0.));
+    _timingBar.rotate(angles[0], glm::vec3(0., 0., 1.));
+}

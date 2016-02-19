@@ -61,6 +61,7 @@ int main(int argc, char** argv) {
 
         //General operations
         ship.manage();
+        notehandler.placeBar(ship.getAbsPos().x, map);
         video.shipCamera(ship.getAbsPos(), ship.getVertical(), map);
         audio.changePitch(5 * ship.getSpeed());
         audio.sync();
