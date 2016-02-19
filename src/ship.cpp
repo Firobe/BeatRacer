@@ -87,6 +87,12 @@ void Ship::move(float x) { //x MUST be positive
 
         //Entering in next segment
         _curSegment++;
+
+        if ((unsigned int)_curSegment >= _map.size()) {
+            cout << "!! Unexpected end of road : halting !!" << endl;
+            exit(EXIT_FAILURE);
+            }
+
         _roadPosition.x = - tan(_map[_curSegment][1]) * _roadPosition.y; //Adding delta-X caused by imbrication of segments
         _abSpeed -= tan(_map[_curSegment][1]) * _roadPosition.y; //Idem
         _orientation -= glm::degrees(_map[_curSegment][1]); //Opposite orientation is added : new road-relative orientation

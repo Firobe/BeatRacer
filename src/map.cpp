@@ -106,12 +106,22 @@ void Map::fillTex(int segment, float cursor) {
     }
 
 glm::vec3 Map::getWorldCoordinates(glm::vec3 roadCoord) {
-    float curLen = 0.;
-    int seg = 0;
+    static float curLen = 0.;
+    static int seg = 0;
 
-    while (curLen < roadCoord.x) {
+    while (seg - 1 >= 0 && curLen - roadCoord.x >= _segmentMap[seg - 1].length) {
+        curLen -= _segmentMap[seg - 1].length;
+        seg--;
+        }
+
+    while (curLen < roadCoord.x && (unsigned int)seg < _segmentMap.size()) {
         curLen += _segmentMap[seg].length;
         seg++;
+        }
+
+    if ((unsigned int)seg >= _segmentMap.size() || seg < 0) {
+        cout << "!! Reading out of road : halting !!" << endl;
+        exit(EXIT_FAILURE);
         }
 
     return _segmentMap[seg].origin + (roadCoord.x - curLen) * _segmentMap[seg].xAxis
@@ -119,12 +129,22 @@ glm::vec3 Map::getWorldCoordinates(glm::vec3 roadCoord) {
     }
 
 glm::mat3 Map::getWorldOrientation(float xPos) { //RADIANS
-    float curLen = 0.;
-    int seg = 0;
+    static float curLen = 0.;
+    static int seg = 0;
 
-    while (curLen < xPos) {
+    while (seg - 1 >= 0 && curLen - xPos >= _segmentMap[seg - 1].length) {
+        curLen -= _segmentMap[seg - 1].length;
+        seg--;
+        }
+
+    while (curLen < xPos && (unsigned int)seg < _segmentMap.size()) {
         curLen += _segmentMap[seg].length;
         seg++;
+        }
+
+    if ((unsigned int)seg >= _segmentMap.size() || seg < 0) {
+        cout << "!! Reading out of road : halting !!" << endl;
+        exit(EXIT_FAILURE);
         }
 
     return glm::mat3(_segmentMap[seg].xAxis, _segmentMap[seg].yAxis, _segmentMap[seg].zAxis);
