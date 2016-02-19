@@ -35,7 +35,7 @@ class Map : public Model {
         void forward(float);
         std::vector<glm::vec3>& getMap();
         glm::vec3 getWorldCoordinates(glm::vec3);
-        glm::vec2 getWorldAngles(float); //THETA, PHI
+        glm::mat3 getWorldOrientation(float); //THETA, PHI
     private:
         void fillModel(int vertex, glm::vec4 v);
         void fillTex(int, float);

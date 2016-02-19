@@ -54,6 +54,7 @@ enum Axes { xAxis, yAxis, zAxis };
 #define FPS_TICKS (CLOCKS_PER_SEC * FPS_INTERVAL)
 
 glm::vec3 toCartesian(glm::vec3 v);
+glm::vec3 toSpherical(glm::vec3 v);
 typedef std::chrono::high_resolution_clock Clock;
 
 class Map;

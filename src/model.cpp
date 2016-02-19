@@ -190,3 +190,9 @@ void Model::scale(vec3 sc) {
 void Model::resetMatrix() {
     _modelMatrix = glm::mat4(1.);
     }
+
+void Model::setOrientation(glm::mat3 axes) {
+    _modelMatrix[0] = glm::vec4(axes[0], 0.);
+    _modelMatrix[1] = glm::vec4(axes[1], 0.);
+    _modelMatrix[2] = glm::vec4(axes[2], 0.);
+    }

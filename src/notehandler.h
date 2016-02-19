@@ -6,6 +6,7 @@
 #include "../libs/glm/glm.hpp"
 #include "../libs/glm/gtx/transform.hpp"
 #include "../libs/glm/gtc/type_ptr.hpp"
+#include "../libs/glm/gtx/euler_angles.hpp"
 
 #include "map.h"
 

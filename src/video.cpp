@@ -176,9 +176,17 @@ void Video::render(GLuint id, int size, Texture& tex, glm::mat4 model) {
 
 glm::vec3 toCartesian(glm::vec3 v) {
     glm::vec3 res(0.);
-    res[0] = v[0] * cos(v[1]) * sin(v[2] + PI / 2);
-    res[1] = v[0] * sin(v[1]) * sin(v[2] + PI / 2);
-    res[2] = v[0] * cos(v[2] + PI / 2);
+    res[0] = v[0] * cos(v[1]) * sin(v[2] + PI / 2.);
+    res[1] = v[0] * sin(v[1]) * sin(v[2] + PI / 2.);
+    res[2] = v[0] * cos(v[2] + PI / 2.);
+    return res;
+    }
+
+glm::vec3 toSpherical(glm::vec3 v) {
+    glm::vec3 res(0.);
+    res[0] = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+    res[1] = atan(v.y / v.x); //THETA
+    res[2] = (acos(v.z / res[0]) - PI / 2.); //PHI
     return res;
     }
 

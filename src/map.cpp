@@ -118,16 +118,14 @@ glm::vec3 Map::getWorldCoordinates(glm::vec3 roadCoord) {
            - roadCoord.y * _segmentMap[seg].yAxis + roadCoord.z * _segmentMap[seg].zAxis;
     }
 
-glm::vec2 Map::getWorldAngles(float xPos) { //RADIANS
-    float curLen = 0., phi = 0., theta = 0.;
+glm::mat3 Map::getWorldOrientation(float xPos) { //RADIANS
+    float curLen = 0.;
     int seg = 0;
 
     while (curLen < xPos) {
-        phi += _transMap[seg][2];
-        theta += _transMap[seg][1];
         curLen += _segmentMap[seg].length;
         seg++;
         }
 
-    return glm::vec2(theta, phi);
+    return glm::mat3(_segmentMap[seg].xAxis, _segmentMap[seg].yAxis, _segmentMap[seg].zAxis);
     }
