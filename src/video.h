@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <chrono>
 
 //Projection parameters
 #define NEAR 0.1
@@ -35,6 +36,10 @@
 #define FPS_GOAL 60
 
 #define SENSITIVITY ((float)0.1) //Mouse sensitivity
+
+#define SHIP_CAMERA_BEHIND 2.
+#define SHIP_CAMERA_HEIGHT (1.4)
+#define SHIP_CAMERA_GROUNDPOINT 5.
 
 enum Axes { xAxis, yAxis, zAxis };
 
@@ -49,6 +54,9 @@ enum Axes { xAxis, yAxis, zAxis };
 #define FPS_TICKS (CLOCKS_PER_SEC * FPS_INTERVAL)
 
 glm::vec3 toCartesian(glm::vec3 v);
+typedef std::chrono::high_resolution_clock Clock;
+
+class Map;
 
 class Video {
     public:
@@ -60,9 +68,13 @@ class Video {
         void rotateCamera(int, float);
         void cameraTranslate(int, float);
         glm::vec2 getCursor();
+        void switchFreeFly();
+        void shipCamera(float, Map&);
 
     private:
         void setCamera();
+        void setCamera(glm::vec3);
+        bool _freeFly;
         GLFWwindow* _window;
         Shader _shader;
         glm::mat4 _projection;
@@ -71,4 +83,6 @@ class Video {
         glm::vec3 _position;
     };
 
+
+#include "map.h"
 #endif

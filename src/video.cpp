@@ -67,6 +67,7 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
     _orientationX = glm::vec3(1, 0, 0);
     _orientationY = glm::vec3(1, PI / 2, 0);
     _orientationZ = glm::vec3(1, 0, -PI / 2);
+    _freeFly = true;
     setCamera();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
@@ -86,11 +87,38 @@ GLFWwindow* Video::win() {
     return _window;
     }
 
+void Video::switchFreeFly() {
+    static auto prev = Clock::now();
+    auto now = Clock::now();
+    float diff = (float)chrono::duration_cast<chrono::duration<float>>(now - prev).count();
+
+    if (diff >= .5) {
+        prev = now;
+        _freeFly = !_freeFly;
+        }
+    }
+
 void Video::setCamera() {
     _view = glm::lookAt(_position, _position + toCartesian(_orientationX), glm::vec3(0, 0, 1));
     }
 
+void Video::setCamera(glm::vec3 toLook) {
+    _view = glm::lookAt(_position, toLook, glm::vec3(0, 0, 1));
+    }
+
+void Video::shipCamera(float shipPos, Map& map) {
+    if (_freeFly)
+        return;
+
+    _position = map.getWorldCoordinates(glm::vec3(shipPos - SHIP_CAMERA_BEHIND, 0, SHIP_CAMERA_HEIGHT));
+    glm::vec3 lookAt = map.getWorldCoordinates(glm::vec3(shipPos + SHIP_CAMERA_GROUNDPOINT, 0, 0));
+    setCamera(lookAt);
+    }
+
 void Video::rotateCamera(int axis, float value) {
+    if (!_freeFly)
+        return;
+
     value = glm::radians(value);
 
     if (axis == yAxis) {
@@ -112,6 +140,9 @@ void Video::rotateCamera(int axis, float value) {
     }
 
 void Video::cameraTranslate(int axis, float value) {
+    if (!_freeFly)
+        return;
+
     if (axis == xAxis)
         _position += value * toCartesian(_orientationX);
 

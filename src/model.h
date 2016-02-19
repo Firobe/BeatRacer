@@ -7,7 +7,6 @@
 #include "../libs/glm/gtx/transform.hpp"
 #include "../libs/glm/gtc/type_ptr.hpp"
 
-#include "video.h"
 #include "texture.h"
 #include <cstdlib>
 #include <iostream>
@@ -15,6 +14,8 @@
 #include <string>
 #include <fstream>
 #include <new>
+
+class Video;
 
 class Model {
     public:
@@ -41,4 +42,5 @@ class Model {
     };
 
 
+#include "video.h"
 #endif

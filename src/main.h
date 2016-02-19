@@ -7,10 +7,10 @@
 #include <string>
 #include <cmath>
 
-#include "video.h"
-#include "audio.h"
 #include "map.h"
+#include "audio.h"
 #include "ship.h"
+#include "video.h"
 #include "notehandler.h"
 
 #endif

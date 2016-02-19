@@ -41,6 +41,9 @@ int main(int argc, char** argv) {
         if (keys[GLFW_KEY_LEFT])
             ship.turn(2);
 
+        if (keys[GLFW_KEY_SPACE])
+            video.switchFreeFly();
+
         if (keys[GLFW_KEY_W])
             video.cameraTranslate(xAxis, 0.2);
 
@@ -57,9 +60,10 @@ int main(int argc, char** argv) {
             while (!keys[GLFW_KEY_RIGHT_CONTROL]) glfwWaitEvents();
 
         //General operations
+        ship.manage();
+        video.shipCamera(ship.getAbsPos(), map);
         audio.changePitch(5 * ship.getSpeed());
         audio.sync();
-        ship.manage();
 
         //Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

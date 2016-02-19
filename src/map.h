@@ -25,6 +25,8 @@ struct Segment {
     float length;
     };
 
+class Model;
+
 class Map : public Model {
     public:
         Map();
