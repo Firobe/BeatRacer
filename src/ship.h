@@ -24,6 +24,7 @@ class Ship {
         void thrust(float);
         float getSpeed();
         float getAbsPos();
+        glm::vec3 getVertical();
     protected:
         void move(float);
 

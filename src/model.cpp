@@ -22,6 +22,10 @@ void Model::load(string name) {
     loadV();
     }
 
+glm::mat4 Model::getMatrix() {
+    return _modelMatrix;
+    }
+
 void Model::loadTexture(string path) {
     _texture.setPath("res/tex/" + path + ".png");
 

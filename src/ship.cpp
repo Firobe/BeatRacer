@@ -23,6 +23,10 @@ void Ship::draw(Video& v) {
     _model.draw(v);
     }
 
+glm::vec3 Ship::getVertical() {
+    return glm::vec3(_model.getMatrix()[2]);
+    }
+
 void Ship::turn(float angle) { //Angle in degrees
     _model.rotate((float)glm::radians(angle), glm::vec3(0., 0., 1.));
     _orientation += angle;
@@ -105,7 +109,7 @@ void Ship::move(float x) { //x MUST be positive
     _model.translate(glm::vec3(x, 0., 0.)); //Movement of remaining distance
     _model.rotate(glm::radians(_inertiaAngle - _orientation), glm::vec3(0., 0., -1.));
     _abSpeed += deltaX;
-    _absPos += deltaX;
+    _absPos += _abSpeed;
     _roadPosition.x += deltaX; //Adding remaining absolute distance
     _roadPosition.y += - x * sin(glm::radians(_inertiaAngle)); //Adding remaining Y-position
     }

@@ -27,6 +27,7 @@ class Model {
         void translate(glm::vec3); //Translate the model by (x, y, z)
         void rotate(float angle, glm::vec3 axis); //Rotate the model by angle around axis
         void scale(glm::vec3); //Scale the model by (x, y, z)
+        glm::mat4 getMatrix();
     protected:
         void loadTexture(std::string);
         virtual void loadModel(std::string);

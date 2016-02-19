@@ -102,17 +102,17 @@ void Video::setCamera() {
     _view = glm::lookAt(_position, _position + toCartesian(_orientationX), glm::vec3(0, 0, 1));
     }
 
-void Video::setCamera(glm::vec3 toLook) {
-    _view = glm::lookAt(_position, toLook, glm::vec3(0, 0, 1));
+void Video::setCamera(glm::vec3 toLook, glm::vec3 vertical) {
+    _view = glm::lookAt(_position, toLook, vertical);
     }
 
-void Video::shipCamera(float shipPos, Map& map) {
+void Video::shipCamera(float shipPos, glm::vec3 vertical, Map& map) {
     if (_freeFly)
         return;
 
     _position = map.getWorldCoordinates(glm::vec3(shipPos - SHIP_CAMERA_BEHIND, 0, SHIP_CAMERA_HEIGHT));
     glm::vec3 lookAt = map.getWorldCoordinates(glm::vec3(shipPos + SHIP_CAMERA_GROUNDPOINT, 0, 0));
-    setCamera(lookAt);
+    setCamera(lookAt, vertical);
     }
 
 void Video::rotateCamera(int axis, float value) {

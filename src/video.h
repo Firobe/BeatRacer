@@ -69,11 +69,11 @@ class Video {
         void cameraTranslate(int, float);
         glm::vec2 getCursor();
         void switchFreeFly();
-        void shipCamera(float, Map&);
+        void shipCamera(float, glm::vec3, Map&);
 
     private:
         void setCamera();
-        void setCamera(glm::vec3);
+        void setCamera(glm::vec3, glm::vec3);
         bool _freeFly;
         GLFWwindow* _window;
         Shader _shader;
