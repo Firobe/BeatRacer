@@ -60,12 +60,14 @@ void Ship::manage() {
         dec *= DECCELERATION;
         _speed -= dec;
         }
+
+    putOnRoad(); //Bringing the bastard back
     }
 
 void Ship::move(float x) { //x MUST be positive
     float deltaX = x * cos(glm::radians(_inertiaAngle));
     float diff, adv;
-    _abSpeed = 0;
+    _abSpeed = 0; //We are going to evaluate the X-distance the ship is making during this move
 
     //PHYSICS MADAFAKA
     while (_roadPosition.x + deltaX >= _map[_curSegment][0]) {
@@ -86,6 +88,7 @@ void Ship::move(float x) { //x MUST be positive
         //Entering in next segment
         _curSegment++;
         _roadPosition.x = - tan(_map[_curSegment][1]) * _roadPosition.y; //Adding delta-X caused by imbrication of segments
+        _abSpeed -= tan(_map[_curSegment][1]) * _roadPosition.y; //Idem
         _orientation -= glm::degrees(_map[_curSegment][1]); //Opposite orientation is added : new road-relative orientation
         _inertiaAngle -= glm::degrees(_map[_curSegment][1]); //Opposite orientation is added : new road-relative orientation
 
@@ -108,12 +111,23 @@ void Ship::move(float x) { //x MUST be positive
     _model.rotate(glm::radians(_inertiaAngle - _orientation), glm::vec3(0., 0., 1.));
     _model.translate(glm::vec3(x, 0., 0.)); //Movement of remaining distance
     _model.rotate(glm::radians(_inertiaAngle - _orientation), glm::vec3(0., 0., -1.));
-    _abSpeed += deltaX;
-    _absPos += _abSpeed;
     _roadPosition.x += deltaX; //Adding remaining absolute distance
+    _abSpeed += deltaX; //Idem
     _roadPosition.y += - x * sin(glm::radians(_inertiaAngle)); //Adding remaining Y-position
+    _absPos += _abSpeed; //Updating general X-position
     }
 
-float Ship::getAbsPos() {
-    return _absPos;
+glm::vec2 Ship::getAbsPos() {
+    return glm::vec2(_absPos, _roadPosition.y);
+    }
+
+void Ship::putOnRoad() {
+    if (abs(_roadPosition.y) < ROAD_WIDTH)
+        return;
+
+    _model.rotate((float)glm::radians(_orientation), glm::vec3(0., 0., -1.));
+    _model.translate(glm::vec3(0., -((_roadPosition.y > 0. ? 1. : -1.) * ROAD_WIDTH - _roadPosition.y), 0.));
+    _roadPosition.y = (_roadPosition.y > 0. ? 1 : -1) * ROAD_WIDTH;
+    _model.rotate((float)glm::radians(_orientation), glm::vec3(0., 0., 1.));
+    _speed.y = 0;
     }

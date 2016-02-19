@@ -23,10 +23,11 @@ class Ship {
         void manage(); //Perform physic actions, should be called at each frame
         void thrust(float);
         float getSpeed();
-        float getAbsPos();
+        glm::vec2 getAbsPos();
         glm::vec3 getVertical();
     protected:
         void move(float);
+        void putOnRoad();
 
         std::vector<glm::vec3>& _map; //Reference to the map vector
         Model _model;

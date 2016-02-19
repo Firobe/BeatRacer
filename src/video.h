@@ -37,8 +37,8 @@
 
 #define SENSITIVITY ((float)0.1) //Mouse sensitivity
 
-#define SHIP_CAMERA_BEHIND 2.
-#define SHIP_CAMERA_HEIGHT (1.4)
+#define SHIP_CAMERA_BEHIND 3.
+#define SHIP_CAMERA_HEIGHT (1.7)
 #define SHIP_CAMERA_GROUNDPOINT 5.
 
 enum Axes { xAxis, yAxis, zAxis };
@@ -69,7 +69,7 @@ class Video {
         void cameraTranslate(int, float);
         glm::vec2 getCursor();
         void switchFreeFly();
-        void shipCamera(float, glm::vec3, Map&);
+        void shipCamera(glm::vec2, glm::vec3, Map&);
 
     private:
         void setCamera();
@@ -81,6 +81,7 @@ class Video {
         glm::mat4 _view;
         glm::vec3 _orientationX, _orientationY, _orientationZ;
         glm::vec3 _position;
+        Clock::time_point _lastSwitch;
     };
 
 

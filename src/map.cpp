@@ -115,7 +115,7 @@ glm::vec3 Map::getWorldCoordinates(glm::vec3 roadCoord) {
         }
 
     return _segmentMap[seg].origin + (roadCoord.x - curLen) * _segmentMap[seg].xAxis
-           + roadCoord.y * _segmentMap[seg].yAxis + roadCoord.z * _segmentMap[seg].zAxis;
+           - roadCoord.y * _segmentMap[seg].yAxis + roadCoord.z * _segmentMap[seg].zAxis;
     }
 
 glm::vec2 Map::getWorldAngles(float xPos) { //RADIANS

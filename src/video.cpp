@@ -67,7 +67,8 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
     _orientationX = glm::vec3(1, 0, 0);
     _orientationY = glm::vec3(1, PI / 2, 0);
     _orientationZ = glm::vec3(1, 0, -PI / 2);
-    _freeFly = true;
+    _freeFly = false;
+    _lastSwitch = Clock::now();
     setCamera();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
@@ -88,12 +89,11 @@ GLFWwindow* Video::win() {
     }
 
 void Video::switchFreeFly() {
-    static auto prev = Clock::now();
     auto now = Clock::now();
-    float diff = (float)chrono::duration_cast<chrono::duration<float>>(now - prev).count();
+    float diff = (float)chrono::duration_cast<chrono::duration<float>>(now - _lastSwitch).count();
 
     if (diff >= .5) {
-        prev = now;
+        _lastSwitch = now;
         _freeFly = !_freeFly;
         }
     }
@@ -106,12 +106,12 @@ void Video::setCamera(glm::vec3 toLook, glm::vec3 vertical) {
     _view = glm::lookAt(_position, toLook, vertical);
     }
 
-void Video::shipCamera(float shipPos, glm::vec3 vertical, Map& map) {
+void Video::shipCamera(glm::vec2 shipPos, glm::vec3 vertical, Map& map) {
     if (_freeFly)
         return;
 
-    _position = map.getWorldCoordinates(glm::vec3(shipPos - SHIP_CAMERA_BEHIND, 0, SHIP_CAMERA_HEIGHT));
-    glm::vec3 lookAt = map.getWorldCoordinates(glm::vec3(shipPos + SHIP_CAMERA_GROUNDPOINT, 0, 0));
+    _position = map.getWorldCoordinates(glm::vec3(shipPos.x - SHIP_CAMERA_BEHIND, shipPos.y, SHIP_CAMERA_HEIGHT));
+    glm::vec3 lookAt = map.getWorldCoordinates(glm::vec3(shipPos.x + SHIP_CAMERA_GROUNDPOINT, 0, 0));
     setCamera(lookAt, vertical);
     }
 
