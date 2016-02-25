@@ -1,6 +1,7 @@
 #ifndef NOTE_H
 #define NOTE_H
 
+#include <stdexcept>
 #include "model.h"
 #define GLM_FORCE_RADIANS
 #include "../libs/glm/glm.hpp"

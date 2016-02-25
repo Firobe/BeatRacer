@@ -75,14 +75,14 @@ bool Shader::buildShader(GLuint &shader, GLenum type, string const &src) {
     shader = glCreateShader(type);
 
     if (shader == 0) {
-        cout << "No (" << type << ") type shader." << endl;
+        cerr << "No (" << type << ") type shader." << endl;
         return false;
         }
 
     ifstream file(src.c_str());
 
     if (!file) {
-        cout << "Can't open " << src << endl;
+        cerr << "Can't open " << src << endl;
         glDeleteShader(shader);
         return false;
         }

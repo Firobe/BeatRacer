@@ -29,15 +29,18 @@ glm::mat4 Model::getMatrix() {
 void Model::loadTexture(string path) {
     _texture.setPath("res/tex/" + path + ".png");
 
-    if (!_texture.load()) {
-        cout << "Can't open " << path << " texture file, falling back to default texture" << endl;
+    try {
+        if (!_texture.load())
+            throw runtime_error("Unable to open res/tex/" + path + ".png");
+        }
+    catch (exception const& ex) {
+        cerr << "WARNING : " << ex.what() << endl;
+        cerr << "Falling back to default texture" << endl;
         _textured = false;
         _texture.setPath("res/tex/default.png");
 
-        if (!_texture.load()) {
-            cout << "!! Cannot open default texture : halting !!" << endl;
-            exit(EXIT_FAILURE);
-            }
+        if (!_texture.load())
+            throw runtime_error("Unable to open default texture");
         }
     }
 

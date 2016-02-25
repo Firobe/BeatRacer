@@ -24,6 +24,7 @@
 #include <ctime>
 #include <iostream>
 #include <chrono>
+#include <stdexcept>
 
 //Projection parameters
 #define NEAR 0.1

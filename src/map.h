@@ -16,6 +16,7 @@
 #include <string>
 #include <fstream>
 #include <cmath>
+#include <stdexcept>
 
 #define ROAD_WIDTH 2.
 

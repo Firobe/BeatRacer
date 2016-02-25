@@ -21,10 +21,8 @@ void Map::loadModel(string path) {
     path = "res/map/" + path + ".map";
     map.open(path.c_str());
 
-    if (!map.is_open()) {
-        cout << "!! Can't open " << path << " : halting !!" << endl;
-        exit(EXIT_FAILURE);
-        }
+    if (!map.is_open())
+	throw runtime_error("Unable to open " + path);
 
     while (getline(map, buffer)) {
         sscanf(buffer.c_str(), "%f,%f,%f:%d", &temp[0], &temp[1], &temp[2], &todo);
@@ -38,13 +36,8 @@ void Map::loadModel(string path) {
     _segmentMap.resize(_transMap.size());
     map.close();
     _vertexNb = 6 * _transMap.size();
-    _mapModel = new(std::nothrow) float[3 * _vertexNb];
-    _mapTex = new(std::nothrow) float[2 * _vertexNb];
-
-    if (_mapModel == NULL || _mapTex == NULL) {
-        cout << "!! Can't allocate map memory : halting !!" << endl;
-        exit(EXIT_FAILURE);
-        }
+    _mapModel = new float[3 * _vertexNb];
+    _mapTex = new float[2 * _vertexNb];
 
     mat4 tmpmod = mat4(1.);
     float cursor = 0;
@@ -119,10 +112,8 @@ glm::vec3 Map::getWorldCoordinates(glm::vec3 roadCoord) {
         seg++;
         }
 
-    if ((unsigned int)seg >= _segmentMap.size() || seg < 0) {
-        cout << "!! Reading out of road : halting !!" << endl;
-        exit(EXIT_FAILURE);
-        }
+    if ((unsigned int)seg >= _segmentMap.size() || seg < 0)
+	throw out_of_range("Out of map range");
 
     return _segmentMap[seg].origin + (roadCoord.x - curLen) * _segmentMap[seg].xAxis
            - roadCoord.y * _segmentMap[seg].yAxis + roadCoord.z * _segmentMap[seg].zAxis;
@@ -142,10 +133,8 @@ glm::mat3 Map::getWorldOrientation(float xPos) { //RADIANS
         seg++;
         }
 
-    if ((unsigned int)seg >= _segmentMap.size() || seg < 0) {
-        cout << "!! Reading out of road : halting !!" << endl;
-        exit(EXIT_FAILURE);
-        }
+    if ((unsigned int)seg >= _segmentMap.size() || seg < 0)
+	throw out_of_range("Out of map range");
 
     return glm::mat3(_segmentMap[seg].xAxis, _segmentMap[seg].yAxis, _segmentMap[seg].zAxis);
     }

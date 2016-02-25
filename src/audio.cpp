@@ -26,17 +26,13 @@ Audio::Audio() {
     alutInitWithoutContext(NULL, NULL);
     _device = alcOpenDevice(NULL);
 
-    if (!_device) {
-        cout << "!! Can't open default audio device : halting !!" << endl;
-        exit(EXIT_FAILURE);
-        }
+    if (!_device)
+        throw runtime_error("OpenAL : can't open default audio device");
 
     _context = alcCreateContext(_device, NULL);
 
-    if (!alcMakeContextCurrent(_context)) {
-        cout << "!! (OpenAL) Failed to make context current : halting !!" << endl;
-        exit(EXIT_FAILURE);
-        }
+    if (!alcMakeContextCurrent(_context))
+	throw runtime_error("OpenAL : failed to make context current");
 
     alGenSources((ALuint)1, &_source);
     alSourcef(_source, AL_PITCH, 1);

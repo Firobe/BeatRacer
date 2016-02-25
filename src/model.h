@@ -14,6 +14,7 @@
 #include <string>
 #include <fstream>
 #include <new>
+#include <stdexcept>
 
 class Video;
 

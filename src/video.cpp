@@ -29,10 +29,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 Video::Video(int width, int height, void* pointer, string a, string b) : _shader(a, b) {
     glfwSetErrorCallback(error_callback);
 
-    if (!glfwInit()) {
-        cout << "!! Can't initialize GLFW : halting !!" << endl;
-        exit(EXIT_FAILURE);
-        }
+    if (!glfwInit())
+	throw runtime_error("Unable to initialize GLFW");
 
     glfwWindowHint(GLFW_SAMPLES, 4); //Anti-aliasing
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -40,11 +38,8 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     _window = glfwCreateWindow(width, height, "BeatRacer", NULL, NULL);
 
-    if (!_window) {
-        glfwTerminate();
-        cout << "!! Can't create window : halting !!" << endl;
-        exit(EXIT_FAILURE);
-        }
+    if (!_window)
+	throw runtime_error("Unable to create window");
 
     glfwSetWindowUserPointer(_window, pointer);
     glfwMakeContextCurrent(_window);
@@ -52,10 +47,8 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
     glewExperimental = GL_TRUE;
     GLenum init(glewInit());
 
-    if (init != GLEW_OK) {
-        cout << "!! Can't initialize GLEW : halting !!" << endl;
-        exit(EXIT_FAILURE);
-        }
+    if (init != GLEW_OK)
+	throw ("Unable to initialize GLEW");
 
 #endif
     glfwSwapInterval(VERTICAL_SYNC);

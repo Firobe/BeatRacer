@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <vector>
+#include <stdexcept>
 
 #define SHIP_HEIGHT (0.4)
 #define SHIP_ROUTINE_AMPLITUDE (0.05)

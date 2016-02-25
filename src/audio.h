@@ -11,6 +11,7 @@
 #include <iostream>
 #include <ctime>
 #include <chrono>
+#include <stdexcept>
 
 #define SAMPLES_PER_SECOND 44100
 

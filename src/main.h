@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <cmath>
+#include <exception>
 
 #include "map.h"
 #include "audio.h"

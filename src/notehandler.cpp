@@ -12,10 +12,8 @@ NoteHandler::NoteHandler(string path, Map& map)  {
     path = "res/map/" + path + ".nt";
     input.open(path.c_str());
 
-    if (!input.is_open()) {
-        cout << "!! Can't open " << path << " : halting !!" << endl;
-        exit(EXIT_FAILURE);
-        }
+    if (!input.is_open())
+	throw runtime_error("Unable to open " + path);
 
     while (getline(input, buffer)) {
         sscanf(buffer.c_str(), "%f,%d", &pos, &col);
