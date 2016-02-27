@@ -22,7 +22,7 @@ void Map::loadModel(string path) {
     map.open(path.c_str());
 
     if (!map.is_open())
-	throw runtime_error("Unable to open " + path);
+        throw runtime_error("Unable to open " + path);
 
     while (getline(map, buffer)) {
         sscanf(buffer.c_str(), "%f,%f,%f:%d", &temp[0], &temp[1], &temp[2], &todo);
@@ -113,7 +113,7 @@ glm::vec3 Map::getWorldCoordinates(glm::vec3 roadCoord) {
         }
 
     if ((unsigned int)seg >= _segmentMap.size() || seg < 0)
-	throw out_of_range("Out of map range");
+        throw out_of_range("Out of map range");
 
     return _segmentMap[seg].origin + (roadCoord.x - curLen) * _segmentMap[seg].xAxis
            - roadCoord.y * _segmentMap[seg].yAxis + roadCoord.z * _segmentMap[seg].zAxis;
@@ -134,7 +134,7 @@ glm::mat3 Map::getWorldOrientation(float xPos) { //RADIANS
         }
 
     if ((unsigned int)seg >= _segmentMap.size() || seg < 0)
-	throw out_of_range("Out of map range");
+        throw out_of_range("Out of map range");
 
     return glm::mat3(_segmentMap[seg].xAxis, _segmentMap[seg].yAxis, _segmentMap[seg].zAxis);
     }

@@ -35,7 +35,6 @@ void Model::loadTexture(string path) {
         }
     catch (exception const& ex) {
         cerr << "WARNING : " << ex.what() << endl;
-        cerr << "Falling back to default texture" << endl;
         _textured = false;
         _texture.setPath("res/tex/default.png");
 

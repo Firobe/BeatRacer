@@ -13,5 +13,6 @@
 #include "ship.h"
 #include "video.h"
 #include "notehandler.h"
+#include "keymanager.h"
 
 #endif

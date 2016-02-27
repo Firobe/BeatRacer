@@ -3,7 +3,7 @@
 using namespace std;
 
 static void error_callback(int error, const char* description) {
-    cerr << description;
+    cerr << description << endl;
     }
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -16,21 +16,21 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     if (key == GLFW_KEY_RIGHT_CONTROL && action == GLFW_PRESS)
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-
-    void* data = glfwGetWindowUserPointer(window);
-    bool* keys = (bool*) data;
-
     if (key == GLFW_KEY_UNKNOWN)
         return;
 
-    keys[key] = (action == GLFW_PRESS || action == GLFW_REPEAT);
+    if (action == GLFW_PRESS)
+        KeyManager::get().press(key);
+
+    if (action == GLFW_RELEASE)
+        KeyManager::get().release(key);
     }
 
-Video::Video(int width, int height, void* pointer, string a, string b) : _shader(a, b) {
+Video::Video(int width, int height, string a, string b) : _shader(a, b) {
     glfwSetErrorCallback(error_callback);
 
     if (!glfwInit())
-	throw runtime_error("Unable to initialize GLFW");
+        throw runtime_error("Unable to initialize GLFW");
 
     glfwWindowHint(GLFW_SAMPLES, 4); //Anti-aliasing
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -39,16 +39,15 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
     _window = glfwCreateWindow(width, height, "BeatRacer", NULL, NULL);
 
     if (!_window)
-	throw runtime_error("Unable to create window");
+        throw runtime_error("Unable to create window");
 
-    glfwSetWindowUserPointer(_window, pointer);
     glfwMakeContextCurrent(_window);
 #ifdef WIN32
     glewExperimental = GL_TRUE;
     GLenum init(glewInit());
 
     if (init != GLEW_OK)
-	throw ("Unable to initialize GLEW");
+        throw ("Unable to initialize GLEW");
 
 #endif
     glfwSwapInterval(VERTICAL_SYNC);
@@ -61,7 +60,6 @@ Video::Video(int width, int height, void* pointer, string a, string b) : _shader
     _orientationY = glm::vec3(1, PI / 2, 0);
     _orientationZ = glm::vec3(1, 0, -PI / 2);
     _freeFly = false;
-    _lastSwitch = Clock::now();
     setCamera();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
@@ -82,13 +80,7 @@ GLFWwindow* Video::win() {
     }
 
 void Video::switchFreeFly() {
-    auto now = Clock::now();
-    float diff = (float)chrono::duration_cast<chrono::duration<float>>(now - _lastSwitch).count();
-
-    if (diff >= .5) {
-        _lastSwitch = now;
-        _freeFly = !_freeFly;
-        }
+    _freeFly = !_freeFly;
     }
 
 void Video::setCamera() {

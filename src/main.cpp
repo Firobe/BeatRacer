@@ -3,15 +3,11 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    bool keys[400];
-
-    for (int i = 0 ; i < 400 ; i++) keys[i] = false;
-
     glm::vec2 pos;
 
     //Init Audio/Video/Text
     try {
-        Video video(1000, 800, (void*)keys,
+        Video video(1000, 800,
                     "res/shaders/shaderVERT.vert", "res/shaders/shaderFRAG.frag");
         Audio audio;
         audio.loadBuffer("res/test.wav");
@@ -30,35 +26,35 @@ int main(int argc, char** argv) {
             video.rotateCamera(zAxis, pos[0]);
             video.rotateCamera(yAxis, pos[1]);
 
-            if (keys[GLFW_KEY_UP])
+            if (KeyManager::check(GLFW_KEY_UP))
                 ship.thrust(ACCELERATION);
 
-            if (keys[GLFW_KEY_DOWN])
+            if (KeyManager::check(GLFW_KEY_DOWN))
                 ship.thrust(-ACCELERATION);
 
-            if (keys[GLFW_KEY_RIGHT])
+            if (KeyManager::check(GLFW_KEY_RIGHT))
                 ship.turn(-2);
 
-            if (keys[GLFW_KEY_LEFT])
+            if (KeyManager::check(GLFW_KEY_LEFT))
                 ship.turn(2);
 
-            if (keys[GLFW_KEY_SPACE])
+            if (KeyManager::check(GLFW_KEY_SPACE, true))
                 video.switchFreeFly();
 
-            if (keys[GLFW_KEY_W])
+            if (KeyManager::check(GLFW_KEY_W))
                 video.cameraTranslate(xAxis, 0.2);
 
-            if (keys[GLFW_KEY_S])
+            if (KeyManager::check(GLFW_KEY_S))
                 video.cameraTranslate(xAxis, -0.2);
 
-            if (keys[GLFW_KEY_A])
+            if (KeyManager::check(GLFW_KEY_A))
                 video.cameraTranslate(yAxis, 0.2);
 
-            if (keys[GLFW_KEY_D])
+            if (KeyManager::check(GLFW_KEY_D))
                 video.cameraTranslate(yAxis, -0.2);
 
-            if (keys[GLFW_KEY_LEFT_CONTROL])
-                while (!keys[GLFW_KEY_RIGHT_CONTROL]) glfwWaitEvents();
+            if (KeyManager::check(GLFW_KEY_LEFT_CONTROL))
+                while (!KeyManager::check(GLFW_KEY_RIGHT_CONTROL)) glfwWaitEvents();
 
             //General operations
             ship.manage();
@@ -76,7 +72,7 @@ int main(int argc, char** argv) {
             }
         }
     catch (exception const& ex) {
-        cerr << endl << "ERROR : " << ex.what() << endl;
+        cerr << "ERROR : " << ex.what() << endl;
         return EXIT_FAILURE;
         }
 

@@ -89,7 +89,7 @@ void Ship::move(float x) { //x MUST be positive
         _curSegment++;
 
         if ((unsigned int)_curSegment >= _map.size())
-	    throw out_of_range("Out of map range");
+            throw out_of_range("Out of map range");
 
         _roadPosition.x = - tan(_map[_curSegment][1]) * _roadPosition.y; //Adding delta-X caused by imbrication of segments
         _abSpeed -= tan(_map[_curSegment][1]) * _roadPosition.y; //Idem
@@ -115,6 +115,7 @@ void Ship::move(float x) { //x MUST be positive
     _model.rotate(glm::radians(_inertiaAngle - _orientation), glm::vec3(0., 0., 1.));
     _model.translate(glm::vec3(x, 0., 0.)); //Movement of remaining distance
     _model.rotate(glm::radians(_inertiaAngle - _orientation), glm::vec3(0., 0., -1.));
+
     _roadPosition.x += deltaX; //Adding remaining absolute distance
     _abSpeed += deltaX; //Idem
     _roadPosition.y += - x * sin(glm::radians(_inertiaAngle)); //Adding remaining Y-position

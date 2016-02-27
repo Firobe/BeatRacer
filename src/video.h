@@ -20,10 +20,10 @@
 #include "../libs/glm/ext.hpp"
 #include "shader.h"
 #include "texture.h"
+#include "keymanager.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
-#include <chrono>
 #include <stdexcept>
 
 //Projection parameters
@@ -56,13 +56,12 @@ enum Axes { xAxis, yAxis, zAxis };
 
 glm::vec3 toCartesian(glm::vec3 v);
 glm::vec3 toSpherical(glm::vec3 v);
-typedef std::chrono::high_resolution_clock Clock;
 
 class Map;
 
 class Video {
     public:
-        Video(int, int, void*, std::string, std::string);
+        Video(int, int, std::string, std::string);
         ~Video();
         void refresh();
         GLFWwindow* win();
@@ -83,7 +82,6 @@ class Video {
         glm::mat4 _view;
         glm::vec3 _orientationX, _orientationY, _orientationZ;
         glm::vec3 _position;
-        Clock::time_point _lastSwitch;
     };
 
 
