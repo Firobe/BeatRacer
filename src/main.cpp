@@ -11,8 +11,8 @@ int main(int argc, char** argv) {
 		Audio audio;
 		audio.loadBuffer("res/test.wav");
 		Map map;
-		map.load("road");
-		NoteHandler notehandler("pouet", map);
+		map.load("test");
+		NoteHandler notehandler("test", map);
 		audio.playSource();
 		Ship ship(map.getMap());
 
