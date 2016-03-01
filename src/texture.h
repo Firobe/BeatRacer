@@ -14,6 +14,7 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include <iostream>
+#include <stdexcept>
 
 class Texture {
     public:
@@ -22,7 +23,7 @@ class Texture {
         ~Texture();
         GLuint getID();
         bool empty();
-        bool load();
+        void load();
         void setPath(std::string);
     private:
         std::string _path;

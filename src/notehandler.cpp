@@ -10,10 +10,9 @@ NoteHandler::NoteHandler(string path, Map& map)  {
     _model.load("note");
     _timingBar.load("timingbar");
     path = "res/map/" + path + ".nt";
-    input.open(path.c_str());
-
-    if (!input.is_open())
-	throw runtime_error("Unable to open " + path);
+    input.open(path);
+	if(!input)
+		throw runtime_error("Unable to open " + path);
 
     while (getline(input, buffer)) {
         sscanf(buffer.c_str(), "%f,%d", &pos, &col);

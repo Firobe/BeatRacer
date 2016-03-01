@@ -16,6 +16,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <stdexcept>
 
 class Shader {
     public:
@@ -24,8 +25,8 @@ class Shader {
         Shader(std::string srcVert, std::string srcFrag);
         ~Shader();
         Shader& operator=(Shader const& toCp);
-        bool load();
-        bool buildShader(GLuint& shader, GLenum type, std::string const& src);
+        void load();
+        void buildShader(GLuint& shader, GLenum type, std::string const& src);
         GLuint getProgramID() const;
     private:
         GLuint _vertexID;

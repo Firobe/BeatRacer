@@ -28,13 +28,12 @@ void Texture::setPath(string str) {
     _path = str;
     }
 
-bool Texture::load() {
+void Texture::load() {
     int compN;
     unsigned char* data = stbi_load(_path.c_str(), &_width, &_height, &compN, 0);
 
-    if (data == NULL) {
-        return false;
-        }
+    if (data == NULL)
+        throw runtime_error("Unable to open "+ _path);
 
     //Flipping texture
     unsigned char* flipData = new unsigned char[_width * _height * compN];
@@ -53,5 +52,4 @@ bool Texture::load() {
 
     stbi_image_free(data);
     delete[] flipData;
-    return true;
     }

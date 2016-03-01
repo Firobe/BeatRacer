@@ -29,7 +29,7 @@ Shader& Shader::operator=(Shader const &toCp) {
     return *this;
     }
 
-bool Shader::load() {
+void Shader::load() {
     if (glIsShader(_vertexID) == GL_TRUE)
         glDeleteShader(_vertexID);
 
@@ -39,12 +39,8 @@ bool Shader::load() {
     if (glIsProgram(_programID) == GL_TRUE)
         glDeleteProgram(_programID);
 
-    if (!buildShader(_vertexID, GL_VERTEX_SHADER, _srcVert))
-        return false;
-
-    if (!buildShader(_fragmentID, GL_FRAGMENT_SHADER, _srcFrag))
-        return false;
-
+    buildShader(_vertexID, GL_VERTEX_SHADER, _srcVert);
+    buildShader(_fragmentID, GL_FRAGMENT_SHADER, _srcFrag);
     _programID = glCreateProgram();
     glAttachShader(_programID, _vertexID);
     glAttachShader(_programID, _fragmentID);
@@ -61,31 +57,23 @@ bool Shader::load() {
         char *error = new char[errSize + 1];
         glGetShaderInfoLog(_programID, errSize, &errSize, error);
         error[errSize] = '\0';
-        cout << error << endl;
+		string err = "Shader linking failure\n--> " + string(error);
         delete[] error;
-        glDeleteProgram(_programID);
-        return false;
+		throw runtime_error(err);
         }
-    else
-        return true;
     }
 
 
-bool Shader::buildShader(GLuint &shader, GLenum type, string const &src) {
+void Shader::buildShader(GLuint &shader, GLenum type, string const &src) {
     shader = glCreateShader(type);
 
-    if (shader == 0) {
-        cerr << "No (" << type << ") type shader." << endl;
-        return false;
-        }
+    if (shader == 0)
+		throw invalid_argument("Wrong shader type : " + to_string(type));
 
-    ifstream file(src.c_str());
+    ifstream file(src);
 
-    if (!file) {
-        cerr << "Can't open " << src << endl;
-        glDeleteShader(shader);
-        return false;
-        }
+    if (!file)
+		throw runtime_error("Unable to open " + src);
 
     string line;
     string srcC;
@@ -93,7 +81,6 @@ bool Shader::buildShader(GLuint &shader, GLenum type, string const &src) {
     while (getline(file, line))
         srcC += line + '\n';
 
-    file.close();
     const GLchar* srcStr = srcC.c_str();
     glShaderSource(shader, 1, &srcStr, 0);
     glCompileShader(shader);
@@ -106,13 +93,10 @@ bool Shader::buildShader(GLuint &shader, GLenum type, string const &src) {
         char *error = new char[errSize + 1];
         glGetShaderInfoLog(shader, errSize, &errSize, error);
         error[errSize] = '\0';
-        cout << error << endl;
+		string err = to_string(type) + " type shader build failure\n--> " + string(error);
         delete[] error;
-        glDeleteShader(shader);
-        return false;
+		throw runtime_error(err);
         }
-    else
-        return true;
     }
 
 GLuint Shader::getProgramID() const {
