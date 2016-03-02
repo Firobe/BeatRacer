@@ -6,5 +6,5 @@ uniform float speed;
 out vec4 out_Color;
 
 void main(){
-	out_Color = texture(tex0, texCoord) * speed;
+	out_Color = texture(tex0, texCoord) * vec4(1., 1. - speed, 1., 1.);
 }
