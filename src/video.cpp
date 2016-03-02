@@ -26,7 +26,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         KeyManager::get().release(key);
     }
 
-Video::Video(int width, int height, string a, string b) : _shader(a, b) {
+Video::Video(int width, int height, string a, string b) {
     glfwSetErrorCallback(error_callback);
 
     if (!glfwInit())
@@ -53,7 +53,8 @@ Video::Video(int width, int height, string a, string b) : _shader(a, b) {
     glfwSwapInterval(VERTICAL_SYNC);
     glfwSetKeyCallback(_window, key_callback);
     glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    _shader.load();
+	_shaderArray.push_back( Shader(a, b));
+    _shaderArray[0].load();
     _projection = glm::perspective(FOV, (double) width / height, NEAR, FAR);
     _position = glm::vec3(-5, 0, 0.1);
     _orientationX = glm::vec3(1, 0, 0);
@@ -100,6 +101,10 @@ void Video::shipCamera(glm::vec2 shipPos, glm::vec3 vertical, Map& map) {
     setCamera(lookAt, vertical);
     }
 
+void Video::addShader(string a, string b){
+	_shaderArray.push_back( Shader(a, b));
+}
+
 void Video::rotateCamera(int axis, float value) {
     if (!_freeFly)
         return;
@@ -140,11 +145,11 @@ void Video::cameraTranslate(int axis, float value) {
     setCamera();
     }
 
-void Video::render(GLuint id, int size, Texture& tex, glm::mat4 model) {
-    glUseProgram(_shader.getProgramID());
+void Video::render(GLuint id, int size, Texture& tex, Model* mod, glm::mat4 model, int shaderNb) {
+    glUseProgram(_shaderArray[shaderNb].getProgramID());
+	mod->uniformize(_shaderArray[shaderNb].getProgramID());
     glm::mat4 modViewProj = _projection * _view * model;
-    glUniformMatrix4fv(glGetUniformLocation(_shader.getProgramID(), "modViewProj"), 1, GL_FALSE, glm::value_ptr(modViewProj));
-
+    glUniformMatrix4fv(glGetUniformLocation(_shaderArray[shaderNb].getProgramID(), "modViewProj"), 1, GL_FALSE, glm::value_ptr(modViewProj));
     glBindVertexArray(id);
 
     if (!tex.empty())

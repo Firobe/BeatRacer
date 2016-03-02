@@ -6,14 +6,14 @@ int main(int argc, char** argv) {
 	try {
 		glm::vec2 pos;
 		//Init Audio/Video/Text
-		Video video(1000, 800,
-				"res/shaders/shaderVERT.vert", "res/shaders/shaderFRAG.frag");
+		Video video(1000, 800, "default.vert", "default.frag");
+		video.addShader("default.vert", "ship.frag");
 		Audio audio;
 		audio.loadBuffer("res/test.wav");
 		Map map;
 		map.load("test");
 		NoteHandler notehandler("test", map);
-		audio.playSource();
+		//audio.playSource();
 		Ship ship(map.getMap());
 
 		//Main loop

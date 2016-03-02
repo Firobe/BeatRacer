@@ -9,6 +9,9 @@ Model::Model() : _modelMatrix(1.) {
 	_textured = true;
 	_mapModel = NULL;
 	_mapTex = NULL;
+	_uniform = NULL;
+	_uniformStructure.empty();
+	_shaderNb = 0;
 }
 
 Model::~Model() {
@@ -18,6 +21,8 @@ Model::~Model() {
 		delete[] _mapModel;
 	if(_mapTex != NULL)
 		delete[] _mapTex;
+	if(_uniform != NULL)
+		delete[] _uniform;
 }
 
 void Model::load(string name) {
@@ -160,12 +165,16 @@ void Model::loadModel(string path) {
 
 }
 
+void Model::setShaderNb(int nb){
+	_shaderNb = nb;
+}
+
 void Model::draw(Video& video) {
-	video.render(_vaoID, _vertexNb, _texture, _modelMatrix);
+	video.render(_vaoID, _vertexNb, _texture, this, _modelMatrix, _shaderNb);
 }
 
 void Model::draw(Video& video, glm::mat4& modelMatrix) {
-	video.render(_vaoID, _vertexNb, _texture, modelMatrix);
+	video.render(_vaoID, _vertexNb, _texture, this, modelMatrix, _shaderNb);
 }
 
 void Model::translate(vec3 tr) {
@@ -188,4 +197,27 @@ void Model::setOrientation(glm::mat3 axes) {
 	_modelMatrix[0] = glm::vec4(axes[0], 0.);
 	_modelMatrix[1] = glm::vec4(axes[1], 0.);
 	_modelMatrix[2] = glm::vec4(axes[2], 0.);
+}
+
+void Model::uniformize(int shaderID){
+	unsigned int i = 0, i2 = 0;
+	while( i2 < _uniformStructure.size() ){
+		int location = glGetUniformLocation(shaderID, _uniformStructure[i2].name.c_str());
+		switch(_uniformStructure[i2].size){
+			case 4:
+				glUniform4fv(location, 1, _uniform + i);
+				break;
+			case 3:
+				glUniform3fv(location, 1, _uniform + i);
+				break;
+			case 2:
+				glUniform2fv(location, 1, _uniform + i);
+				break;
+			case 1:
+				glUniform1fv(location, 1, _uniform + i);
+				break;
+		}
+		i += _uniformStructure[i2].size;
+		i2 ++;
+	}
 }

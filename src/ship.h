@@ -15,11 +15,10 @@
 #define DECCELERATION (0.0005)
 #define ACCELERATION (0.005)
 
-class Ship {
+class Ship : public Model {
     public:
         Ship(std::vector<glm::vec3>&);
         ~Ship();
-        void draw(Video&);
         void turn(float); //Angle in degrees
         void manage(); //Perform physic actions, should be called at each frame
         void thrust(float);

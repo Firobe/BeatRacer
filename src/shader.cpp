@@ -12,7 +12,7 @@ Shader::Shader(Shader const &toCp) {
 
 
 Shader::Shader(string srcVert, string srcFrag) : _vertexID(0), _fragmentID(0), _programID(0),
-    _srcVert(srcVert), _srcFrag(srcFrag) {
+    _srcVert("res/shaders/"+srcVert), _srcFrag("res/shaders/"+srcFrag) {
     }
 
 

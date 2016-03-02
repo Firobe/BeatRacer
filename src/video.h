@@ -21,6 +21,7 @@
 #include "shader.h"
 #include "texture.h"
 #include "keymanager.h"
+#include "model.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -65,19 +66,20 @@ class Video {
         ~Video();
         void refresh();
         GLFWwindow* win();
-        void render(GLuint id, int, Texture&, glm::mat4 = glm::mat4(1.));
+        void render(GLuint id, int, Texture&, Model*, glm::mat4 = glm::mat4(1.), int = 0);
         void rotateCamera(int, float);
         void cameraTranslate(int, float);
         glm::vec2 getCursor();
         void switchFreeFly();
         void shipCamera(glm::vec2, glm::vec3, Map&);
+		void addShader(std::string, std::string);
 
     private:
         void setCamera();
         void setCamera(glm::vec3, glm::vec3);
         bool _freeFly;
         GLFWwindow* _window;
-        Shader _shader;
+		std::vector<Shader> _shaderArray;
         glm::mat4 _projection;
         glm::mat4 _view;
         glm::vec3 _orientationX, _orientationY, _orientationZ;

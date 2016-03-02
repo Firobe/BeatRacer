@@ -18,6 +18,13 @@
 
 class Video;
 
+typedef struct UniformValue UniformValue;
+
+struct UniformValue{
+	int size;
+	std::string name;
+};
+
 class Model {
     public:
         Model();
@@ -31,6 +38,8 @@ class Model {
         void setOrientation(glm::mat3);
         void resetMatrix();
         glm::mat4 getMatrix();
+		void uniformize(int);
+		void setShaderNb(int);
     protected:
         void loadTexture(std::string);
         virtual void loadModel(std::string);
@@ -43,6 +52,10 @@ class Model {
         GLuint _vboID, _vaoID;
         int _vertexNb;
         bool _textured;
+
+		int _shaderNb;
+		float* _uniform;
+		std::vector<UniformValue> _uniformStructure;
     };
 
 
