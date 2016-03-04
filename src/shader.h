@@ -17,6 +17,7 @@
 #include <string>
 #include <fstream>
 #include <stdexcept>
+#include <sstream>
 
 class Shader {
     public:

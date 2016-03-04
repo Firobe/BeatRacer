@@ -66,9 +66,11 @@ void Shader::load() {
 
 void Shader::buildShader(GLuint &shader, GLenum type, string const &src) {
     shader = glCreateShader(type);
+	stringstream typeSs;
+	typeSs << type;
 
     if (shader == 0)
-		throw invalid_argument("Wrong shader type : " + to_string(type));
+		throw invalid_argument("Wrong shader type : " + typeSs.str());
 
     ifstream file(src);
 
@@ -93,7 +95,7 @@ void Shader::buildShader(GLuint &shader, GLenum type, string const &src) {
         char *error = new char[errSize + 1];
         glGetShaderInfoLog(shader, errSize, &errSize, error);
         error[errSize] = '\0';
-		string err = to_string(type) + " type shader build failure\n--> " + string(error);
+		string err = typeSs.str() + " type shader build failure\n--> " + string(error);
         delete[] error;
 		throw runtime_error(err);
         }
