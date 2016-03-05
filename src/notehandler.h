@@ -11,16 +11,22 @@
 
 #include "map.h"
 
+#define NOTE_ERROR_MAX 42.
+
 class NoteHandler {
     public:
         NoteHandler(std::string, Map&);
         ~NoteHandler();
         void draw(Video&);
         void placeBar(float, Map&);
+        void checkNotes();
     private:
+        float _barPosition;
+        std::vector<int> _currentNote;
+        std::vector<float> _currentScore;
         Model _model;
         std::vector<glm::mat4> _matrices;
-        std::vector<glm::vec2> _notes; //Vector of (position, column)
+        std::vector<std::vector<float>> _notes; //Vector of (position, column)
         Model _timingBar;
     };
 
