@@ -146,6 +146,8 @@ void Video::cameraTranslate(int axis, float value) {
     }
 
 void Video::render(GLuint id, int size, Texture& tex, Model* mod, glm::mat4 model, int shaderNb) {
+	if((unsigned int)shaderNb >= _shaderArray.size())
+		throw runtime_error("Unknown shader");
     glUseProgram(_shaderArray[shaderNb].getProgramID());
 	mod->uniformize(_shaderArray[shaderNb].getProgramID());
     glm::mat4 modViewProj = _projection * _view * model;

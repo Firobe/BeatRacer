@@ -11,7 +11,16 @@
 
 #include "map.h"
 
-#define NOTE_ERROR_MAX 42.
+#define NOTE_ERROR_MAX 0.2
+#define NOTE_FAILURE -1
+#define NOTE_SUCESS 1
+
+typedef struct Note Note;
+struct Note{
+	glm::mat4 matrix;
+	float pos;
+	int state;
+};
 
 class NoteHandler {
     public:
@@ -22,11 +31,10 @@ class NoteHandler {
         void checkNotes();
     private:
         float _barPosition;
-        std::vector<int> _currentNote;
+        std::vector<unsigned int> _currentNote;
         std::vector<float> _currentScore;
         Model _model;
-        std::vector<glm::mat4> _matrices;
-        std::vector<std::vector<float>> _notes; //Vector of (position, column)
+        std::vector<std::vector<Note>> _notes;
         Model _timingBar;
     };
 

@@ -9,8 +9,6 @@ Model::Model() : _modelMatrix(1.) {
 	_textured = true;
 	_mapModel = NULL;
 	_mapTex = NULL;
-	_uniform = NULL;
-	_uniformStructure.empty();
 	_shaderNb = 0;
 }
 
@@ -21,8 +19,6 @@ Model::~Model() {
 		delete[] _mapModel;
 	if(_mapTex != NULL)
 		delete[] _mapTex;
-	if(_uniform != NULL)
-		delete[] _uniform;
 }
 
 void Model::load(string name) {
@@ -47,6 +43,27 @@ void Model::loadTexture(string path) {
 		_texture.setPath("res/tex/default.png");
 		_texture.load();
 	}
+}
+
+void Model::addUniform(string name, int size){
+	_uniform.resize(_uniform.size() + size);
+	_uniformStructure.push_back( (UniformValue) {.size = size, .name = name });
+}
+
+
+void Model::setUniform(string name, float value, int i){
+	unsigned int j = 0;
+	unsigned int ind = 0;
+	while(j < _uniformStructure.size() && _uniformStructure[j].name != name){
+		ind += _uniformStructure[j].size;
+		j++;
+	}
+
+	if(j >= _uniformStructure.size())
+		throw range_error("Uniform variable " + name + " unkown");
+	if(i >= _uniformStructure[j].size)
+		throw range_error("Out of uniform variable " + name + " bounds");
+	_uniform[ind + i] = value;
 }
 
 void Model::loadV() {
@@ -205,16 +222,16 @@ void Model::uniformize(int shaderID){
 		int location = glGetUniformLocation(shaderID, _uniformStructure[i2].name.c_str());
 		switch(_uniformStructure[i2].size){
 			case 4:
-				glUniform4fv(location, 1, _uniform + i);
+				glUniform4fv(location, 1, _uniform.data() + i);
 				break;
 			case 3:
-				glUniform3fv(location, 1, _uniform + i);
+				glUniform3fv(location, 1, _uniform.data() + i);
 				break;
 			case 2:
-				glUniform2fv(location, 1, _uniform + i);
+				glUniform2fv(location, 1, _uniform.data() + i);
 				break;
 			case 1:
-				glUniform1fv(location, 1, _uniform + i);
+				glUniform1fv(location, 1, _uniform.data() + i);
 				break;
 		}
 		i += _uniformStructure[i2].size;

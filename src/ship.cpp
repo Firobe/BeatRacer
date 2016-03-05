@@ -17,8 +17,7 @@ Ship::Ship(vector<glm::vec3>& map): _map(map) {
     _curSegment = 0;
 
 	//To send to shaders
-	_uniformStructure.push_back( (UniformValue) {.size = 1, .name = "speed" });
-	_uniform = new float[1];
+	addUniform("speed", 1);
     }
 
 Ship::~Ship() {
@@ -65,6 +64,7 @@ void Ship::manage() {
     putOnRoad(); //Bringing the bastard back
 	
 	//Setting uniforms
+	setUniform("speed", _abSpeed);
 	_uniform[0] = _abSpeed;
 	if(_uniform[0] > 1.)
 		_uniform[0] = 1.;

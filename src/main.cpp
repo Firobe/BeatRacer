@@ -8,6 +8,7 @@ int main(int argc, char** argv) {
 		//Init Audio/Video/Text
 		Video video(1000, 800, "default.vert", "default.frag");
 		video.addShader("default.vert", "ship.frag");
+		video.addShader("default.vert", "note.frag");
 		Audio audio;
 		audio.loadBuffer("res/test.wav");
 		Map map;

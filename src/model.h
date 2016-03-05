@@ -40,6 +40,8 @@ class Model {
         glm::mat4 getMatrix();
 		void uniformize(int);
 		void setShaderNb(int);
+		void addUniform(std::string, int);
+		void setUniform(std::string, float, int = 0);
     protected:
         void loadTexture(std::string);
         virtual void loadModel(std::string);
@@ -54,7 +56,7 @@ class Model {
         bool _textured;
 
 		int _shaderNb;
-		float* _uniform;
+		std::vector<float> _uniform;
 		std::vector<UniformValue> _uniformStructure;
     };
 
