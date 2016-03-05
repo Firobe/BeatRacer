@@ -12,8 +12,9 @@
 #define SHIP_HEIGHT (0.4)
 #define SHIP_ROUTINE_AMPLITUDE (0.05)
 #define SHIP_ROUTINE_STEP (3.)
-#define DECCELERATION (0.0005)
-#define ACCELERATION (0.005)
+#define DECCELERATION (0.0085)
+#define ACCELERATION (0.001)
+#define SPEED_CAP (0.1)
 
 class Ship : public Model {
     public:

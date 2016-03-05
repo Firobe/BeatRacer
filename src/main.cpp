@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
 		Map map;
 		map.load("test");
 		NoteHandler notehandler("test", map);
-		//audio.playSource();
+		audio.playSource();
 		Ship ship(map.getMap());
 
 		//Main loop

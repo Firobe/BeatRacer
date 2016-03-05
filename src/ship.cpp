@@ -51,6 +51,10 @@ void Ship::manage() {
     translate(glm::vec3(0., 0., _roadPosition.z));
 
     float hypo = sqrt(_speed.x * _speed.x + _speed.y * _speed.y);
+	if(hypo > SPEED_CAP){
+		_speed *= SPEED_CAP / hypo;
+		hypo = SPEED_CAP;
+	}
 
     if (hypo != 0.) {
         _inertiaAngle = glm::degrees(asin(_speed.y / hypo));
