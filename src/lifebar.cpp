@@ -18,3 +18,10 @@ void LifeBar::draw(Video& video){
 	video.render2D(_vaoID, _vertexNb, _texture, this, _modelMatrix, _shaderNb);
 }
 
+float LifeBar::getValue(){
+    return _value;
+}
+
+void LifeBar::setValue(float newValue){
+    _value = newValue;
+}

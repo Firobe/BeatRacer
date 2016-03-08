@@ -5,6 +5,8 @@ class LifeBar : public Model {
 		LifeBar();
 		~LifeBar();
 		void draw(Video&);
+		float getValue();
+		void setValue(float);
 	private:
 		float _value;
 };
