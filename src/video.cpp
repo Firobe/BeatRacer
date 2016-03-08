@@ -42,7 +42,7 @@ Video::Video(int width, int height, string a, string b) {
         throw runtime_error("Unable to create window");
 
     glfwMakeContextCurrent(_window);
-#ifdef WIN32
+#ifdef _WIN32
     glewExperimental = GL_TRUE;
     GLenum init(glewInit());
 

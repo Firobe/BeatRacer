@@ -1,7 +1,7 @@
 #ifndef VIDEO__H
 #define VIDEO__H
 
-#ifdef WIN32
+#ifdef _WIN32
 #define GLEW_BUILD GLEW_STATIC
 #include <GL/glew.h>
 #define GLFW_INCLUDE_NONE
