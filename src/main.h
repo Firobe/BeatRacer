@@ -14,5 +14,6 @@
 #include "video.h"
 #include "notehandler.h"
 #include "keymanager.h"
+#include "lifebar.h"
 
 #endif

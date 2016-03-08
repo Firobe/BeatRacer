@@ -67,6 +67,7 @@ class Video {
         void refresh();
         GLFWwindow* win();
         void render(GLuint id, int, Texture&, Model*, glm::mat4 = glm::mat4(1.), int = 0);
+        void render2D(GLuint id, int, Texture&, Model*, glm::mat4 = glm::mat4(1.), int = 0);
         void rotateCamera(int, float);
         void cameraTranslate(int, float);
         glm::vec2 getCursor();
@@ -80,7 +81,7 @@ class Video {
         bool _freeFly;
         GLFWwindow* _window;
 		std::vector<Shader> _shaderArray;
-        glm::mat4 _projection;
+        glm::mat4 _projection, _projection2D;
         glm::mat4 _view;
         glm::vec3 _orientationX, _orientationY, _orientationZ;
         glm::vec3 _position;

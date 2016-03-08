@@ -16,6 +16,7 @@ int main(int argc, char** argv) {
 		NoteHandler notehandler("test", map);
 		audio.playSource();
 		Ship ship(map.getMap());
+		LifeBar bar;
 
 		//Main loop
 		while (!glfwWindowShouldClose(video.win())) {
@@ -69,6 +70,7 @@ int main(int argc, char** argv) {
 			map.draw(video);
 			ship.draw(video);
 			notehandler.draw(video);
+			bar.draw(video);
 			video.refresh();
 		}
 	}
