@@ -56,7 +56,6 @@ Video::Video(int width, int height, string a, string b) {
 	_shaderArray.push_back( Shader(a, b));
 	_shaderArray[0].load();
 	_projection = glm::perspective(FOV, (double) width / height, NEAR, FAR);
-	_projection2D = glm::ortho(0, width, 0, height);
 	_position = glm::vec3(-5, 0, 0.1);
 	_orientationX = glm::vec3(1, 0, 0);
 	_orientationY = glm::vec3(1, PI / 2, 0);
@@ -173,7 +172,7 @@ void Video::render2D(GLuint id, int size, Texture& tex, Model* mod, glm::mat4 mo
 	glDisable(GL_DEPTH_TEST);
 	glUseProgram(_shaderArray[shaderNb].getProgramID());
 	mod->uniformize(_shaderArray[shaderNb].getProgramID());
-	glm::mat4 modViewProj = _projection2D * model;
+	glm::mat4 modViewProj = model;
 	glUniformMatrix4fv(glGetUniformLocation(_shaderArray[shaderNb].getProgramID(), "modViewProj"), 1, GL_FALSE, glm::value_ptr(modViewProj));
 	glBindVertexArray(id);
 

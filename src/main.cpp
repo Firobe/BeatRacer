@@ -9,6 +9,7 @@ int main(int argc, char** argv) {
 		Video video(1000, 800, "default.vert", "default.frag");
 		video.addShader("default.vert", "ship.frag");
 		video.addShader("default.vert", "note.frag");
+		video.addShader("2d.vert", "default.frag");
 		Audio audio;
 		audio.loadBuffer("res/test.wav");
 		Map map;

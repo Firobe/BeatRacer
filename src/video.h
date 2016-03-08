@@ -81,7 +81,7 @@ class Video {
         bool _freeFly;
         GLFWwindow* _window;
 		std::vector<Shader> _shaderArray;
-        glm::mat4 _projection, _projection2D;
+        glm::mat4 _projection;
         glm::mat4 _view;
         glm::vec3 _orientationX, _orientationY, _orientationZ;
         glm::vec3 _position;

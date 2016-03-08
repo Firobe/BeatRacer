@@ -7,8 +7,8 @@ LifeBar::LifeBar() {
 	addUniform("value", 1);
 	setUniform("value", 0.);
 	_value = 0.;
-	
-	scale(glm::vec3(100, 100, 0.));
+	_shaderNb = 3;
+	scale(glm::vec3(800, 600, 0));
 }
 
 LifeBar::~LifeBar(){
