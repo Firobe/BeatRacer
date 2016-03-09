@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
 			notehandler.placeBar(ship.getAbsPos().x, map);
 			notehandler.checkNotes();
 			video.shipCamera(ship.getAbsPos(), ship.getVertical(), map);
-			bar.setValue(ship.getAbsPos().x*10);
+			bar.setValue(ship.getSpeed()*10000);
 			audio.changePitch(5 * ship.getSpeed());
 			audio.sync();
 
