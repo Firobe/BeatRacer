@@ -1,5 +1,6 @@
 #include "audio.h"
 #include "video.h"
+#include "../libs/stb_vorbis.c"
 #include <string.h>
 #include <stdexcept>
 #include <cstdlib>
@@ -30,7 +31,6 @@ using namespace std;
 
 Audio::Audio() {
 	_correction = 1;
-	alutInitWithoutContext(NULL, NULL);
 	_device = alcOpenDevice(NULL);
 
 	if (!_device)
@@ -52,21 +52,20 @@ Audio::Audio() {
 Audio::~Audio() {
 	alDeleteSources(1, &_source);
 	alDeleteBuffers(1, &_buffer);
-	alutExit();
 	alcMakeContextCurrent(NULL);
 	alcDestroyContext(_context);
 	alcCloseDevice(_device);
 }
 
 void Audio::loadBuffer(string name) {
-	ALsizei size;
-	ALfloat freq;
-	ALenum format;
+    int samples, sample_rate, channels;
+    short* data;
 	alGenBuffers((ALuint)1, &_buffer);
-	ALvoid* data = alutLoadMemoryFromFile(name.c_str(), &format, &size, &freq);
-	if (data == NULL)
-		throw runtime_error("Unable to open/load " + name);
-	alBufferData(_buffer, format, data, size, freq);
+
+	samples = stb_vorbis_decode_filename(name.c_str(), &channels, &sample_rate, &data);
+	if(samples <= 0)
+        throw runtime_error("Unable to open " + name);
+	alBufferData(_buffer, AL_FORMAT_STEREO16, data, channels * samples * sizeof(short), sample_rate);
 	alSourcei(_source, AL_BUFFER, _buffer);
 	free(data);
 }

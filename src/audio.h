@@ -3,7 +3,6 @@
 
 #include <AL/al.h>
 #include <AL/alc.h>
-#include <AL/alut.h>
 #include <string>
 
 #define SAMPLES_PER_SECOND 44100

@@ -11,13 +11,13 @@ int main(int argc, char** argv) {
 		video.addShader("default.vert", "note.frag");
 		video.addShader("2d.vert", "default.frag");
 		Audio audio;
-		audio.loadBuffer("res/test.wav");
+		audio.loadBuffer("res/test.ogg");
 		Map map;
 		map.load("test");
 		NoteHandler notehandler("test", map);
-		//audio.playSource();
 		Ship ship(map.getMap());
 		LifeBar bar(glm::vec2(1000., 800.));
+		audio.playSource();
 
 		//Main loop
 		while (!glfwWindowShouldClose(video.win())) {
@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
 			notehandler.checkNotes();
 			video.shipCamera(ship.getAbsPos(), ship.getVertical(), map);
 			bar.setValue(ship.getSpeed()*10000);
-			audio.changePitch(5 * ship.getSpeed());
+			audio.changePitch(17 * ship.getSpeed());
 			audio.sync();
 
 			//Render
