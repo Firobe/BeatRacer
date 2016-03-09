@@ -3,18 +3,12 @@
 
 #define GLM_FORCE_RADIANS
 #include "../libs/glm/glm.hpp"
-#include "../libs/glm/ext.hpp"
 #include "../libs/glm/gtx/transform.hpp"
-#include "../libs/glm/gtc/type_ptr.hpp"
 
 #include "texture.h"
 #include <cstdlib>
-#include <iostream>
 #include <vector>
 #include <string>
-#include <fstream>
-#include <new>
-#include <stdexcept>
 
 class Video;
 
@@ -25,13 +19,13 @@ struct UniformValue{
 	std::string name;
 };
 
-class Model {
+class Model { //ABSTRACT
     public:
         Model();
         ~Model();
         void load(std::string); //Load texture and model
-        virtual void draw(Video&); //Render the model
-        virtual void draw(Video&, glm::mat4&); //Render the model
+        virtual void draw(Video&) = 0; //Render the model
+        virtual void draw(Video&, glm::mat4&) = 0; //Render the model
         void translate(glm::vec3); //Translate the model by (x, y, z)
         void rotate(float angle, glm::vec3 axis); //Rotate the model by angle around axis
         void scale(glm::vec3); //Scale the model by (x, y, z)
@@ -44,8 +38,8 @@ class Model {
 		void setUniform(std::string, float, int = 0);
     protected:
         void loadTexture(std::string);
-        virtual void loadModel(std::string);
-        void loadV();
+        virtual void loadModel(std::string) = 0;
+        virtual void loadV() = 0;
 
         Texture _texture;
         glm::mat4 _modelMatrix;
@@ -60,6 +54,4 @@ class Model {
 		std::vector<UniformValue> _uniformStructure;
     };
 
-
-#include "video.h"
 #endif

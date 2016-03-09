@@ -2,7 +2,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG
 #include "../libs/stb_image.h"
-
+#include <stdexcept>
 
 using namespace std;
 

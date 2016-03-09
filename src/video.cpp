@@ -1,6 +1,12 @@
 #include "video.h"
+#include "map.h"
+#include "model3d.h"
+#include "model2d.h"
+#include <stdexcept>
+#include <iostream>
 
 using namespace std;
+enum Axes { xAxis, yAxis, zAxis };
 
 static void error_callback(int error, const char* description) {
 	cerr << description << endl;
@@ -145,7 +151,7 @@ void Video::cameraTranslate(int axis, float value) {
 	setCamera();
 }
 
-void Video::render(GLuint id, int size, Texture& tex, Model* mod, glm::mat4 model, int shaderNb) {
+void Video::render(GLuint id, int size, Texture& tex, Model3D* mod, glm::mat4 model, int shaderNb) {
 	if((unsigned int)shaderNb >= _shaderArray.size())
 		throw runtime_error("Unknown shader");
 	glUseProgram(_shaderArray[shaderNb].getProgramID());
@@ -166,7 +172,7 @@ void Video::render(GLuint id, int size, Texture& tex, Model* mod, glm::mat4 mode
 	glUseProgram(0);
 }
 
-void Video::render2D(GLuint id, int size, Texture& tex, Model* mod, glm::mat4 model, int shaderNb) {
+void Video::render2D(GLuint id, int size, Texture& tex, Model2D* mod, glm::mat4 model, int shaderNb) {
 	if((unsigned int)shaderNb >= _shaderArray.size())
 		throw runtime_error("Unknown shader");
 	glDisable(GL_DEPTH_TEST);

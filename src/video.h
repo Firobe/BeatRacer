@@ -15,17 +15,10 @@
 
 #define GLM_FORCE_RADIANS
 #include "../libs/glm/glm.hpp"
-#include "../libs/glm/gtx/transform.hpp"
 #include "../libs/glm/gtc/type_ptr.hpp"
-#include "../libs/glm/ext.hpp"
 #include "shader.h"
 #include "texture.h"
 #include "keymanager.h"
-#include "model.h"
-#include <cstdlib>
-#include <ctime>
-#include <iostream>
-#include <stdexcept>
 
 //Projection parameters
 #define NEAR 0.1
@@ -43,7 +36,6 @@
 #define SHIP_CAMERA_HEIGHT (1.7)
 #define SHIP_CAMERA_GROUNDPOINT 5.
 
-enum Axes { xAxis, yAxis, zAxis };
 
 #ifndef BUFFER_OFFSET
 #define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
@@ -59,6 +51,8 @@ glm::vec3 toCartesian(glm::vec3 v);
 glm::vec3 toSpherical(glm::vec3 v);
 
 class Map;
+class Model3D;
+class Model2D;
 
 class Video {
     public:
@@ -66,8 +60,8 @@ class Video {
         ~Video();
         void refresh();
         GLFWwindow* win();
-        void render(GLuint id, int, Texture&, Model*, glm::mat4 = glm::mat4(1.), int = 0);
-        void render2D(GLuint id, int, Texture&, Model*, glm::mat4 = glm::mat4(1.), int = 0);
+        void render(GLuint id, int, Texture&, Model3D*, glm::mat4 = glm::mat4(1.), int = 0);
+        void render2D(GLuint id, int, Texture&, Model2D*, glm::mat4 = glm::mat4(1.), int = 0);
         void rotateCamera(int, float);
         void cameraTranslate(int, float);
         glm::vec2 getCursor();
@@ -87,6 +81,4 @@ class Video {
         glm::vec3 _position;
     };
 
-
-#include "map.h"
 #endif

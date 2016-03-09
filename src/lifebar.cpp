@@ -1,21 +1,16 @@
 #include "lifebar.h"
+#include "video.h"
 
 using namespace std;
 
-LifeBar::LifeBar() {
+LifeBar::LifeBar(glm::vec2 screen) : Model2D(screen){
 	load("lifebar");
-	addUniform("value", 1);
-	setUniform("value", 0.);
 	_value = 0.;
-	_shaderNb = 3;
-	scale(glm::vec3(800, 600, 0));
+	//place(glm::vec2(200, 200));
+	setSize(glm::vec2(100., 100.));
 }
 
 LifeBar::~LifeBar(){
-}
-
-void LifeBar::draw(Video& video){
-	video.render2D(_vaoID, _vertexNb, _texture, this, _modelMatrix, _shaderNb);
 }
 
 float LifeBar::getValue(){

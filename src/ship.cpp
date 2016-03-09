@@ -1,4 +1,6 @@
 #include "ship.h"
+#include "map.h"
+#include <stdexcept>
 
 using namespace std;
 

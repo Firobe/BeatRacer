@@ -1,4 +1,11 @@
 #include "audio.h"
+#include "video.h"
+#include <string.h>
+#include <stdexcept>
+#include <cstdlib>
+#include <chrono>
+
+typedef std::chrono::high_resolution_clock Clock;
 
 using namespace std;
 
@@ -70,12 +77,6 @@ void Audio::playSource() {
 
 void Audio::changePitch(float pitch) {
 	_pitch = pitch;
-}
-
-void Audio::printPosition() {
-	ALfloat nSec;
-	alGetSourcef(_source, AL_SAMPLE_OFFSET, &nSec);
-	cout << "Position at 10. : " << nSec << endl;
 }
 
 void Audio::sync() {

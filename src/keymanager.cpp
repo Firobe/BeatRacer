@@ -1,4 +1,7 @@
 #include "keymanager.h"
+#include <stdexcept>
+#include <sstream>
+#include <string>
 
 using namespace std;
 

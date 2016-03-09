@@ -1,10 +1,13 @@
-#include "model.h"
+#include "model2d.h"
+#define GLM_FORCE_RADIANS
+#include "../libs/glm/glm.hpp"
 
-class LifeBar : public Model {
+class Video;
+
+class LifeBar : public Model2D {
 	public:
-		LifeBar();
+		LifeBar(glm::vec2);
 		~LifeBar();
-		void draw(Video&);
 		float getValue();
 		void setValue(float);
 	private:

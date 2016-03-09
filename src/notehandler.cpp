@@ -1,5 +1,8 @@
 #include "notehandler.h"
 #include "keymanager.h"
+#include "map.h"
+#include <stdexcept>
+#include <fstream>
 
 using namespace std;
 

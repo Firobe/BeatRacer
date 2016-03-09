@@ -3,20 +3,10 @@
 
 #define GLM_FORCE_RADIANS
 #include "../libs/glm/glm.hpp"
-#include "../libs/glm/ext.hpp"
-#include "../libs/glm/gtx/transform.hpp"
-#include "../libs/glm/gtc/type_ptr.hpp"
 
-#include "model.h"
-#include "video.h"
-#include "texture.h"
-#include <cstdlib>
-#include <iostream>
+#include "model3d.h"
 #include <vector>
 #include <string>
-#include <fstream>
-#include <cmath>
-#include <stdexcept>
 
 #define ROAD_WIDTH 2.
 
@@ -26,9 +16,7 @@ struct Segment {
     float length;
     };
 
-class Model;
-
-class Map : public Model {
+class Map : public Model3D {
     public:
         Map();
         ~Map();

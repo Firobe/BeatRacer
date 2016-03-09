@@ -1,11 +1,8 @@
 #ifndef KEYMANAGER__H
 #define KEYMANAGER__H
 
-#include <string>
-#include <stdexcept>
-#include <sstream>
-#include <chrono>
 #include <vector>
+#include <chrono>
 
 #define KEY_NUMBER 400
 

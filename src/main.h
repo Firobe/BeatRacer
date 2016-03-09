@@ -16,4 +16,6 @@
 #include "keymanager.h"
 #include "lifebar.h"
 
+enum Axes { xAxis, yAxis, zAxis };
+
 #endif

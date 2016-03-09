@@ -15,9 +15,9 @@ int main(int argc, char** argv) {
 		Map map;
 		map.load("test");
 		NoteHandler notehandler("test", map);
-		audio.playSource();
+		//audio.playSource();
 		Ship ship(map.getMap());
-		LifeBar bar;
+		LifeBar bar(glm::vec2(1000., 800.));
 
 		//Main loop
 		while (!glfwWindowShouldClose(video.win())) {

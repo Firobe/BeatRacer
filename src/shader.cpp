@@ -1,6 +1,10 @@
 #include "shader.h"
+#include <fstream>
+#include <stdexcept>
+#include <sstream>
 
 using namespace std;
+
 Shader::Shader() : _vertexID(0), _fragmentID(0), _programID(0), _srcVert(), _srcFrag() {
     }
 

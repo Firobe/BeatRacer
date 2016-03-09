@@ -1,9 +1,16 @@
 #include "map.h"
+#include "video.h"
+#include <cstdlib>
+#include <fstream>
+#include <cmath>
+#include <stdexcept>
+
+enum Axes { xAxis, yAxis, zAxis };
 
 using namespace std;
 using namespace glm;
 
-Map::Map() : Model() {
+Map::Map() : Model3D() {
 }
 
 Map::~Map() {
