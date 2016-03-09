@@ -17,7 +17,9 @@ Model2D::~Model2D() {
 }
 
 void Model2D::setSize(glm::vec2 newSize){
-	scale(glm::vec3(newSize.x / _curScale.x, newSize.y / _curScale.y, 0.));
+	if(newSize.x == 0 || newSize.y == 0)
+		return;
+	scale(glm::vec3( newSize.x / _curScale.x, newSize.y / _curScale.y, 0.));
 	_curScale = newSize;
 }
 
@@ -49,7 +51,7 @@ void Model2D::loadV() {
 	glBindVertexArray(_vaoID);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _vboID);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(0);
 
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(size1));
@@ -61,7 +63,7 @@ void Model2D::loadV() {
 }
 
 void Model2D::loadModel(string path) {
-	_vertexNb = 12;
+	_vertexNb = 6;
 
 	_mapModel = new float[_vertexNb * 2];
 	_mapTex = new float[_vertexNb * 2];
@@ -74,7 +76,7 @@ void Model2D::loadModel(string path) {
 	_mapModel[8] = 1.; _mapModel[9] = 0.;
 	_mapModel[10] = 0.; _mapModel[11] = 0.;
 
-	for(int i = 0 ; i < 12 ; i++)
+	for(int i = 0 ; i < 2 * _vertexNb ; i++)
 		_mapTex[i] = _mapModel[i];
 }
 

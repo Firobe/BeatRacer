@@ -99,6 +99,8 @@ void Model::uniformize(int shaderID){
 	unsigned int i = 0, i2 = 0;
 	while( i2 < _uniformStructure.size() ){
 		int location = glGetUniformLocation(shaderID, _uniformStructure[i2].name.c_str());
+		if(location == -1)
+			throw runtime_error("Uniform variable '" + _uniformStructure[i2].name + "' does not exist in the shader");
 		switch(_uniformStructure[i2].size){
 			case 4:
 				glUniform4fv(location, 1, _uniform.data() + i);
