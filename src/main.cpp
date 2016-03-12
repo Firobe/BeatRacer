@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
 		map.load("test");
 		Ship ship(map.getMap());
 		LifeBar bar(glm::vec2(1000., 800.));
-		NoteHandler notehandler("test", map, bar);
+		NoteHandler notehandler("test", map, bar, ship);
 		audio.playSource();
 
 		//Main loop

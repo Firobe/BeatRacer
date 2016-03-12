@@ -2,12 +2,13 @@
 #include "keymanager.h"
 #include "map.h"
 #include "lifebar.h"
+#include "ship.h"
 #include <stdexcept>
 #include <fstream>
 
 using namespace std;
 
-NoteHandler::NoteHandler(string path, Map& map, LifeBar& lifebar) : _currentNote(4, 0) , _currentScore(4, 0) , _notes(4), _lifebar(lifebar) {
+NoteHandler::NoteHandler(string path, Map& map, LifeBar& lifebar, Ship& ship) : _currentNote(4, 0) , _currentScore(4, 0) , _notes(4), _lifebar(lifebar), _ship(ship){
 	string buffer;
 	ifstream input;
 	float pos;
@@ -81,6 +82,9 @@ void NoteHandler::checkNotes(){
 				_currentNote[col]++;
 				_combo = 0;
 				diff -= 5;
+				if(_lifebar.getValue() < 30){
+                    _ship.turn(45);
+				}
 			}
 			else
 				if(touches2[col]){

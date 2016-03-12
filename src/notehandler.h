@@ -10,6 +10,7 @@
 class Map;
 class Video;
 class LifeBar;
+class Ship;
 
 typedef struct Note Note;
 struct Note{
@@ -20,7 +21,7 @@ struct Note{
 
 class NoteHandler {
     public:
-        NoteHandler(std::string, Map&, LifeBar&);
+        NoteHandler(std::string, Map&, LifeBar&, Ship&);
         ~NoteHandler();
         void draw(Video&);
         void placeBar(float, Map&);
@@ -36,6 +37,7 @@ class NoteHandler {
 		float _score, _precision;
 		int _combo;
 		LifeBar& _lifebar;
+		Ship& _ship;
     };
 
 
