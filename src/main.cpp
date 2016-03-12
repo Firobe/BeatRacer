@@ -14,9 +14,9 @@ int main(int argc, char** argv) {
 		audio.loadBuffer("res/test.ogg");
 		Map map;
 		map.load("test");
-		NoteHandler notehandler("test", map);
 		Ship ship(map.getMap());
 		LifeBar bar(glm::vec2(1000., 800.));
+		NoteHandler notehandler("test", map, bar);
 		audio.playSource();
 
 		//Main loop
@@ -63,7 +63,6 @@ int main(int argc, char** argv) {
 			notehandler.placeBar(ship.getAbsPos().x, map);
 			notehandler.checkNotes();
 			video.shipCamera(ship.getAbsPos(), ship.getVertical(), map);
-			bar.setValue(ship.getSpeed()*10000);
 			audio.changePitch(17 * ship.getSpeed());
 			audio.sync();
 

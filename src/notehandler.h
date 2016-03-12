@@ -9,6 +9,7 @@
 
 class Map;
 class Video;
+class LifeBar;
 
 typedef struct Note Note;
 struct Note{
@@ -19,7 +20,7 @@ struct Note{
 
 class NoteHandler {
     public:
-        NoteHandler(std::string, Map&);
+        NoteHandler(std::string, Map&, LifeBar&);
         ~NoteHandler();
         void draw(Video&);
         void placeBar(float, Map&);
@@ -31,6 +32,10 @@ class NoteHandler {
         Model3D _model;
         std::vector<std::vector<Note>> _notes;
         Model3D _timingBar;
+
+		float _score, _precision;
+		int _combo;
+		LifeBar& _lifebar;
     };
 
 

@@ -18,6 +18,6 @@ float LifeBar::getValue(){
 }
 
 void LifeBar::setValue(float newValue){
-    _value = newValue;
+    _value = newValue < 0 ? 0 : newValue;
 	setSize(glm::vec2(newValue, BAR_HEIGHT));
 }
