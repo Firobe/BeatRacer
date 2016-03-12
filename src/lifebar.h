@@ -12,6 +12,8 @@ class LifeBar : public Model2D {
 		~LifeBar();
 		float getValue();
 		void setValue(float);
+		void draw(Video&);
 	private:
 		float _value;
+		Model2D _back;
 };
