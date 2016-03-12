@@ -20,7 +20,7 @@ class Ship : public Model3D {
         void manage(); //Perform physic actions, should be called at each frame
         void thrust(float);
         float getSpeed();
-        glm::vec2 getAbsPos();
+        glm::vec3 getAbsPos();
         glm::vec3 getVertical();
     protected:
         void move(float);
@@ -38,6 +38,8 @@ class Ship : public Model3D {
         glm::vec2 _speed;
         float _inertiaAngle;
         float _abSpeed;
+
+		bool _gameOver;
     };
 
 #endif

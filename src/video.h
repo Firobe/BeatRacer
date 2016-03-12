@@ -66,7 +66,7 @@ class Video {
         void cameraTranslate(int, float);
         glm::vec2 getCursor();
         void switchFreeFly();
-        void shipCamera(glm::vec2, glm::vec3, Map&);
+        void shipCamera(glm::vec3, glm::vec3, Map&);
 		void addShader(std::string, std::string);
 
     private:

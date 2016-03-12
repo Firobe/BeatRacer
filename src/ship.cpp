@@ -7,6 +7,7 @@ using namespace std;
 Ship::Ship(vector<glm::vec3>& map): _map(map) {
     load("spaceship");
 	_shaderNb = 1;
+	_gameOver = false;
     translate(glm::vec3(0., 0., SHIP_HEIGHT));
     _roadPosition = glm::vec3(0., 0., SHIP_HEIGHT);
     _orientation = 0.;
@@ -43,6 +44,11 @@ float Ship::getSpeed() {
     }
 
 void Ship::manage() {
+	if(_gameOver){
+		translate(glm::vec3(0., 0., -1));
+		_roadPosition.z -= 1.;
+		return;
+	}
     translate(glm::vec3(0., 0., -_roadPosition.z));
     _counter += SHIP_ROUTINE_STEP;
 
@@ -134,14 +140,14 @@ void Ship::move(float x) { //x MUST be positive
     _absPos += _abSpeed; //Updating general X-position
     }
 
-glm::vec2 Ship::getAbsPos() {
-    return glm::vec2(_absPos, _roadPosition.y);
+glm::vec3 Ship::getAbsPos() {
+    return glm::vec3(_absPos, _roadPosition.y, _roadPosition.z);
     }
 
 void Ship::putOnRoad() {
     if (abs(_roadPosition.y) < ROAD_WIDTH)
         return;
-
+	_gameOver = true;
     rotate((float)glm::radians(_orientation), glm::vec3(0., 0., -1.));
     translate(glm::vec3(0., -((_roadPosition.y > 0. ? 1. : -1.) * ROAD_WIDTH - _roadPosition.y), 0.));
     _roadPosition.y = (_roadPosition.y > 0. ? 1 : -1) * ROAD_WIDTH;
