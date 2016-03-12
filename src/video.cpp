@@ -70,6 +70,8 @@ Video::Video(int width, int height, string a, string b) {
 	setCamera();
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 Video::~Video() {
@@ -175,7 +177,6 @@ void Video::render(GLuint id, int size, Texture& tex, Model3D* mod, glm::mat4 mo
 void Video::render2D(GLuint id, int size, Texture& tex, Model2D* mod, glm::mat4 model, int shaderNb) {
 	if((unsigned int)shaderNb >= _shaderArray.size())
 		throw runtime_error("Unknown shader");
-	glDisable(GL_DEPTH_TEST);
 	glUseProgram(_shaderArray[shaderNb].getProgramID());
 	mod->uniformize(_shaderArray[shaderNb].getProgramID());
 	glm::mat4 modViewProj = model;
@@ -192,7 +193,6 @@ void Video::render2D(GLuint id, int size, Texture& tex, Model2D* mod, glm::mat4 
 
 	glBindVertexArray(0);
 	glUseProgram(0);
-	glEnable(GL_DEPTH_TEST);
 }
 
 glm::vec3 toCartesian(glm::vec3 v) {

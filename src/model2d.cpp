@@ -9,8 +9,10 @@ using namespace std;
 Model2D::Model2D(glm::vec2 screen) : Model(), _screen(screen), _curScale(1., 1.) {
 	_shaderNb = 3;
 	addUniform("screen", 2);
+	addUniform("calpha", 1);
 	setUniform("screen", screen.x, 0);
 	setUniform("screen", screen.y, 1);
+	setUniform("calpha", 1.);
 }
 
 Model2D::~Model2D() {
