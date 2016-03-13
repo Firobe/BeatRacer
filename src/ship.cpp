@@ -69,12 +69,12 @@ void Ship::manage() {
         move(hypo);
         _speed = glm::vec2(hypo * cos(glm::radians(_inertiaAngle)), hypo * sin(glm::radians(_inertiaAngle)));
         glm::vec2 dec(_speed);
-        dec *= DECCELERATION;
+        dec *= DECCELERATION * hypo;
         _speed -= dec;
         }
 
     putOnRoad(); //Bringing the bastard back
-	
+
 	//Setting uniforms
 	setUniform("speed", _abSpeed);
 	_uniform[0] = _abSpeed;

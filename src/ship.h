@@ -8,9 +8,9 @@
 #define SHIP_HEIGHT (0.4)
 #define SHIP_ROUTINE_AMPLITUDE (0.05)
 #define SHIP_ROUTINE_STEP (3.)
-#define DECCELERATION (0.0155)
-#define ACCELERATION (0.001)
-#define SPEED_CAP (0.1)
+#define DECCELERATION (0.15)
+#define ACCELERATION (0.002)
+#define SPEED_CAP (99999)
 
 class Ship : public Model3D {
     public:
