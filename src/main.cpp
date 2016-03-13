@@ -28,19 +28,35 @@ int main(int argc, char** argv) {
 			video.rotateCamera(zAxis, pos[0]);
 			video.rotateCamera(yAxis, pos[1]);
 
-			if (KeyManager::check(GLFW_KEY_UP))
+			if (KeyManager::check(GLFW_KEY_UP)){
+                if(KeyManager::check(GLFW_KEY_SPACE)){
+                    ship.thrust(2 * ACCELERATION);
+                    bar.setValue(bar.getValue() - 0.2);
+                }
+            else
 				ship.thrust(ACCELERATION);
+			}
 
 			if (KeyManager::check(GLFW_KEY_DOWN))
 				ship.thrust(-ACCELERATION);
 
-			if (KeyManager::check(GLFW_KEY_RIGHT))
+			if (KeyManager::check(GLFW_KEY_RIGHT)){
+                if(KeyManager::check(GLFW_KEY_SPACE)){
+                    ship.turn(-5);
+                    bar.setValue(bar.getValue() - 0.1);
+                }
 				ship.turn(-2);
+			}
 
-			if (KeyManager::check(GLFW_KEY_LEFT))
+			if (KeyManager::check(GLFW_KEY_LEFT)){
+                if(KeyManager::check(GLFW_KEY_SPACE)){
+                    ship.turn(5);
+                    bar.setValue(bar.getValue() - 0.1);
+                }
 				ship.turn(2);
+			}
 
-			if (KeyManager::check(GLFW_KEY_SPACE, true))
+			if (KeyManager::check(GLFW_KEY_LEFT_ALT, true))
 				video.switchFreeFly();
 
 			if (KeyManager::check(GLFW_KEY_W))
