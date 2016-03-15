@@ -34,9 +34,9 @@ int main(int argc, char** argv) {
 			video.rotateCamera(zAxis, pos[0]);
 			video.rotateCamera(yAxis, pos[1]);
 
-			if(bar.getValue() >= 0. && KeyManager::check(GLFW_KEY_SPACE) && KeyManager::check(GLFW_KEY_UP, true))
+			if(bar.getValue() >= 0. && KeyManager::check(GLFW_KEY_SPACE) && KeyManager::check(GLFW_KEY_UP))
 				superSpeed = true;
-			if(bar.getValue() <= 0. || (KeyManager::check(GLFW_KEY_SPACE) && KeyManager::check(GLFW_KEY_DOWN, true)))
+			if(bar.getValue() <= 0. || (KeyManager::check(GLFW_KEY_SPACE) && KeyManager::check(GLFW_KEY_DOWN)))
 				superSpeed = false;
 
 			if (!superSpeed && KeyManager::check(GLFW_KEY_DOWN, true))
