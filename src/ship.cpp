@@ -43,6 +43,10 @@ float Ship::getSpeed() {
     return _abSpeed;
     }
 
+void Ship::setFriction(float pitchGoal){
+        _frictionCoef = (ACCELERATION / std::pow(SPEED_REFERENCE * pitchGoal, DECCELERATION_FACTOR));
+}
+
 void Ship::manage() {
 	if(_gameOver){
 		translate(glm::vec3(0., 0., -1));
@@ -64,7 +68,7 @@ void Ship::manage() {
         move(hypo);
         _speed = glm::vec2(hypo * cos(glm::radians(_inertiaAngle)), hypo * sin(glm::radians(_inertiaAngle)));
         glm::vec2 dec(_speed);
-        dec *= (ACCELERATION / std::pow(SPEED_REFERENCE, DECCELERATION_FACTOR)) * std::pow(hypo, DECCELERATION_FACTOR);
+		dec *= _frictionCoef * std::pow(hypo, DECCELERATION_FACTOR);
         _speed -= dec;
         }
 

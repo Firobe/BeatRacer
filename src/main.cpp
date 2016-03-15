@@ -1,10 +1,15 @@
 #include "main.h"
+#define PITCH_MAX 1.20
+#define PITCH_SUPERMAX 1.3
+#define PITCH_MIN 0.8
+#define PITCH_STEP 0.05
 
 using namespace std;
 
 int main(int argc, char** argv) {
 	try {
 		glm::vec2 pos;
+		float pitchGoal = 1.;
 		//Init Audio/Video/Text
 		Video video(1000, 800, "default.vert", "default.frag");
 		video.addShader("default.vert", "ship.frag");
@@ -28,31 +33,36 @@ int main(int argc, char** argv) {
 			video.rotateCamera(zAxis, pos[0]);
 			video.rotateCamera(yAxis, pos[1]);
 
-			if (KeyManager::check(GLFW_KEY_UP)){
-                if(KeyManager::check(GLFW_KEY_SPACE)){
-                    ship.thrust(2 * ACCELERATION);
-                    bar.setValue(bar.getValue() - 0.2);
-                }
-            else
-				ship.thrust(ACCELERATION);
+			if (KeyManager::check(GLFW_KEY_DOWN, true))
+				pitchGoal = (pitchGoal - PITCH_STEP <= PITCH_MIN) ?  PITCH_MIN : pitchGoal - PITCH_STEP;
+
+			if (KeyManager::check(GLFW_KEY_UP, true)){
+				if(KeyManager::check(GLFW_KEY_SPACE)){
+					ship.setFriction(PITCH_SUPERMAX);
+					bar.setValue(bar.getValue() - 0.2);
+				}
+				else
+					pitchGoal = (pitchGoal + PITCH_STEP >= PITCH_MAX) ? PITCH_MAX : pitchGoal + PITCH_STEP;
 			}
 
-			if (KeyManager::check(GLFW_KEY_DOWN))
-				ship.thrust(-ACCELERATION);
+			if(!KeyManager::check(GLFW_KEY_SPACE))
+				ship.setFriction(pitchGoal);
+
+			ship.thrust(ACCELERATION);
 
 			if (KeyManager::check(GLFW_KEY_RIGHT)){
-                if(KeyManager::check(GLFW_KEY_SPACE)){
-                    ship.turn(-5);
-                    bar.setValue(bar.getValue() - 0.1);
-                }
+				if(KeyManager::check(GLFW_KEY_SPACE)){
+					ship.turn(-5);
+					bar.setValue(bar.getValue() - 0.1);
+				}
 				ship.turn(-2);
 			}
 
 			if (KeyManager::check(GLFW_KEY_LEFT)){
-                if(KeyManager::check(GLFW_KEY_SPACE)){
-                    ship.turn(5);
-                    bar.setValue(bar.getValue() - 0.1);
-                }
+				if(KeyManager::check(GLFW_KEY_SPACE)){
+					ship.turn(5);
+					bar.setValue(bar.getValue() - 0.1);
+				}
 				ship.turn(2);
 			}
 
@@ -79,7 +89,7 @@ int main(int argc, char** argv) {
 			notehandler.placeBar(ship.getAbsPos().x, map);
 			notehandler.checkNotes();
 			video.shipCamera(ship.getAbsPos(), ship.getVertical(), map);
-			audio.changePitch(17 * ship.getSpeed());
+			audio.changePitch(ship.getSpeed() / SPEED_REFERENCE);
 			audio.sync();
 
 			//Render

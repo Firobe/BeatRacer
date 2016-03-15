@@ -19,6 +19,7 @@ class Ship : public Model3D {
         void turn(float); //Angle in degrees
         void manage(); //Perform physic actions, should be called at each frame
         void thrust(float);
+		void setFriction(float);
         float getSpeed();
         glm::vec3 getAbsPos();
         glm::vec3 getVertical();
@@ -38,6 +39,7 @@ class Ship : public Model3D {
         glm::vec2 _speed;
         float _inertiaAngle;
         float _abSpeed;
+		float _frictionCoef;
 
 		bool _gameOver;
     };
