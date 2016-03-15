@@ -10,7 +10,7 @@
 #define SHIP_ROUTINE_STEP (3.)
 #define DECCELERATION_FACTOR (2.5) //p
 #define ACCELERATION (0.01) //a
-#define SPEED_REFERENCE (0.05) // v
+#define SPEED_REFERENCE (0.1) // v
 
 class Ship : public Model3D {
     public:

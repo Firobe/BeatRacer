@@ -68,7 +68,7 @@ void Ship::manage() {
         move(hypo);
         _speed = glm::vec2(hypo * cos(glm::radians(_inertiaAngle)), hypo * sin(glm::radians(_inertiaAngle)));
         glm::vec2 dec(_speed);
-		dec *= _frictionCoef * std::pow(hypo, DECCELERATION_FACTOR);
+		dec *= _frictionCoef * std::pow(hypo, DECCELERATION_FACTOR - 1);
         _speed -= dec;
         }
 

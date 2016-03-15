@@ -10,6 +10,7 @@ int main(int argc, char** argv) {
 	try {
 		glm::vec2 pos;
 		float pitchGoal = 1.;
+		bool superSpeed = false;
 		//Init Audio/Video/Text
 		Video video(1000, 800, "default.vert", "default.frag");
 		video.addShader("default.vert", "ship.frag");
@@ -33,19 +34,23 @@ int main(int argc, char** argv) {
 			video.rotateCamera(zAxis, pos[0]);
 			video.rotateCamera(yAxis, pos[1]);
 
-			if (KeyManager::check(GLFW_KEY_DOWN, true))
+			if(bar.getValue() >= 0. && KeyManager::check(GLFW_KEY_SPACE) && KeyManager::check(GLFW_KEY_UP, true))
+				superSpeed = true;
+			if(bar.getValue() <= 0. || (KeyManager::check(GLFW_KEY_SPACE) && KeyManager::check(GLFW_KEY_DOWN, true)))
+				superSpeed = false;
+
+			if (!superSpeed && KeyManager::check(GLFW_KEY_DOWN, true))
 				pitchGoal = (pitchGoal - PITCH_STEP <= PITCH_MIN) ?  PITCH_MIN : pitchGoal - PITCH_STEP;
 
-			if (KeyManager::check(GLFW_KEY_UP, true)){
-				if(KeyManager::check(GLFW_KEY_SPACE)){
-					ship.setFriction(PITCH_SUPERMAX);
-					bar.setValue(bar.getValue() - 0.2);
-				}
-				else
-					pitchGoal = (pitchGoal + PITCH_STEP >= PITCH_MAX) ? PITCH_MAX : pitchGoal + PITCH_STEP;
-			}
+			if (!superSpeed && KeyManager::check(GLFW_KEY_UP, true))
+				pitchGoal = (pitchGoal + PITCH_STEP >= PITCH_MAX) ? PITCH_MAX : pitchGoal + PITCH_STEP;
 
-			if(!KeyManager::check(GLFW_KEY_SPACE))
+			if(superSpeed){
+				ship.setFriction(PITCH_SUPERMAX);
+				bar.setValue(bar.getValue() - 0.2);
+
+			}
+			else
 				ship.setFriction(pitchGoal);
 
 			ship.thrust(ACCELERATION);
