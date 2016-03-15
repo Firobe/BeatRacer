@@ -1,7 +1,7 @@
 # BeatRacer
 Projet GCC
 ## Dépendances
-OpenGL 3.3, OpenAL, GLFW 3 (GLM et stb_image déjà incluses)
+OpenGL 3.3, OpenAL, freeALUT, GLFW 3 (GLM et stb_image déjà incluses)
 
 ## Map
   RHO_1,THETA_1,PHI_1:NB_1  

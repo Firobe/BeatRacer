@@ -59,17 +59,12 @@ void Ship::manage() {
     translate(glm::vec3(0., 0., _roadPosition.z));
 
     float hypo = sqrt(_speed.x * _speed.x + _speed.y * _speed.y);
-	if(hypo > SPEED_CAP){
-		_speed *= SPEED_CAP / hypo;
-		hypo = SPEED_CAP;
-	}
-
     if (hypo != 0.) {
         _inertiaAngle = glm::degrees(asin(_speed.y / hypo));
         move(hypo);
         _speed = glm::vec2(hypo * cos(glm::radians(_inertiaAngle)), hypo * sin(glm::radians(_inertiaAngle)));
         glm::vec2 dec(_speed);
-        dec *= DECCELERATION * hypo;
+        dec *= (ACCELERATION / std::pow(SPEED_REFERENCE, DECCELERATION_FACTOR)) * std::pow(hypo, DECCELERATION_FACTOR);
         _speed -= dec;
         }
 
