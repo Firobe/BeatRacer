@@ -11,6 +11,7 @@ int main(int argc, char** argv) {
 		glm::vec2 pos;
 		float pitchGoal = 1.;
 		bool superSpeed = false;
+		stringstream ss;
 		//Init Audio/Video/Text
 		Video video(1000, 800, "default.vert", "default.frag");
 		video.addShader("default.vert", "ship.frag");
@@ -23,6 +24,10 @@ int main(int argc, char** argv) {
 		Ship ship(map.getMap());
 		LifeBar bar(glm::vec2(1000., 800.));
 		NoteHandler notehandler("test", map, bar, ship);
+		Text font(glm::vec2(1000, 800), 32.);
+		font.load("atari");
+		font.place(glm::vec2(100, 100));
+		font.setSize(glm::vec2(512, 512));
 		audio.playSource();
 
 		//Main loop
@@ -103,6 +108,10 @@ int main(int argc, char** argv) {
 			ship.draw(video);
 			notehandler.draw(video);
 			bar.draw(video);
+			font.draw(video);
+			ss.str("");
+			ss.clear();
+			ss << "x" << pitchGoal;
 			video.refresh();
 		}
 	}

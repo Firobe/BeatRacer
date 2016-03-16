@@ -21,9 +21,9 @@ class Texture {
         ~Texture();
         GLuint getID();
         bool empty();
-        void load();
+        virtual void load();
         void setPath(std::string);
-    private:
+    protected:
         std::string _path;
         GLuint _id;
         int _width, _height;

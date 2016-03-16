@@ -37,7 +37,7 @@ class Model { //ABSTRACT
 		void addUniform(std::string, int);
 		void setUniform(std::string, float, int = 0);
     protected:
-        void loadTexture(std::string);
+        virtual void loadTexture(std::string);
         virtual void loadModel(std::string) = 0;
         virtual void loadV() = 0;
 

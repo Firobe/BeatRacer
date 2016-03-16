@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <cmath>
+#include <sstream>
 #include <exception>
 
 #include "map.h"
@@ -15,6 +16,7 @@
 #include "notehandler.h"
 #include "keymanager.h"
 #include "lifebar.h"
+#include "text.h"
 
 enum Axes { xAxis, yAxis, zAxis };
 
