@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
 		NoteHandler notehandler("test", map, bar, ship);
 		Text font(glm::vec2(1000, 800), 10.);
 		font.load("atari");
-		font.setSize(glm::vec2(100, 100));
+		font.setSize(glm::vec2(300, 300));
 		audio.playSource();
 
 		//Main loop

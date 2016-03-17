@@ -1,5 +1,5 @@
 COMPILER = g++
-ADD_CFLAGS = -Wall -g -std=c++11 -Wno-unused-variable -Wno-unused-but-set-variable
+ADD_CFLAGS = -Wall -g -std=c++11 -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-function
 LIBS = glu openal glfw3
 NO_PKG_LIBS =
 CXXFLAGS = `pkg-config --static --cflags $(LIBS)` $(ADD_CFLAGS)
