@@ -6,8 +6,7 @@
 
 #include <string>
 
-#define BITMAP_SIZE 512
-
+#define BITMAP_SIZE (128)
 class Bitmap : public Texture{
     public:
 		Bitmap();
@@ -17,6 +16,7 @@ class Bitmap : public Texture{
 		void setHeight(float);
     private:
 		stbtt_bakedchar _cdata[96];
+		stbtt_fontinfo _font;
 		float _fontHeight;
     };
 

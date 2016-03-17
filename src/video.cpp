@@ -4,6 +4,7 @@
 #include "model2d.h"
 #include <stdexcept>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 enum Axes { xAxis, yAxis, zAxis };
@@ -80,6 +81,12 @@ Video::~Video() {
 }
 
 void Video::refresh() {
+	GLenum err;
+	if((err = glGetError()) != GL_NO_ERROR){
+		stringstream ss;
+		ss << "0x" << std::hex << err;
+		throw runtime_error("OpenGL issue " + ss.str());
+	}
 	glfwSwapBuffers(_window);
 	glfwPollEvents();
 }

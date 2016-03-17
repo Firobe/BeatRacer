@@ -24,10 +24,9 @@ int main(int argc, char** argv) {
 		Ship ship(map.getMap());
 		LifeBar bar(glm::vec2(1000., 800.));
 		NoteHandler notehandler("test", map, bar, ship);
-		Text font(glm::vec2(1000, 800), 32.);
+		Text font(glm::vec2(1000, 800), 10.);
 		font.load("atari");
-		font.place(glm::vec2(100, 100));
-		font.setSize(glm::vec2(512, 512));
+		font.setSize(glm::vec2(100, 100));
 		audio.playSource();
 
 		//Main loop
