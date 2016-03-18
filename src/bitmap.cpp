@@ -68,3 +68,8 @@ void Bitmap::load(){
 	delete[] buffer;
 }
 
+stbtt_aligned_quad Bitmap::charTexCoord(char carac, float* xpos, float* ypos){
+	stbtt_aligned_quad ret;
+	stbtt_GetBakedQuad(_cdata, BITMAP_SIZE, BITMAP_SIZE, carac - 32, xpos, ypos, &ret, true);
+	return ret;
+}

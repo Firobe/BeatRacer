@@ -70,16 +70,23 @@ void Model2D::loadModel(string path) {
 	_mapModel = new float[_vertexNb * 2];
 	_mapTex = new float[_vertexNb * 2];
 
-	_mapModel[0] = 0.; _mapModel[1] = 0.;
-	_mapModel[2] = 0.; _mapModel[3] = 1.;
-	_mapModel[4] = 1.; _mapModel[5] = 1.;
+	quadCoords(_mapModel, 0., 1., 0., 1.);
+	quadCoords(_mapTex, 0., 1., 0., 1.);
+}
 
-	_mapModel[6] = 1.; _mapModel[7] = 1.;
-	_mapModel[8] = 1.; _mapModel[9] = 0.;
-	_mapModel[10] = 0.; _mapModel[11] = 0.;
+void quadCoords(float* data, float x1, float x2, float y1, float y2, bool revert){
+	if(revert){
+		float tmp = y1;
+		y1 = y2;
+		y2 = tmp;
+	}
+	data[0] = x1; data[1] = y1;
+	data[2] = x1; data[3] = y2;
+	data[4] = x2; data[5] = y2;
 
-	for(int i = 0 ; i < 2 * _vertexNb ; i++)
-		_mapTex[i] = _mapModel[i];
+	data[6] = x2; data[7] = y2;
+	data[8] = x2; data[9] = y1;
+	data[10] = x1; data[11] = y1;
 }
 
 void Model2D::draw(Video& video) {

@@ -24,9 +24,9 @@ int main(int argc, char** argv) {
 		Ship ship(map.getMap());
 		LifeBar bar(glm::vec2(1000., 800.));
 		NoteHandler notehandler("test", map, bar, ship);
-		Text font(glm::vec2(1000, 800), 40.);
+		Text font(glm::vec2(1000, 800), 60.);
 		font.load("atari");
-		font.setSize(glm::vec2(300, 300));
+		//font.setSize(glm::vec2(300, 300));
 		audio.playSource();
 
 		//Main loop
@@ -111,6 +111,7 @@ int main(int argc, char** argv) {
 			ss.str("");
 			ss.clear();
 			ss << "x" << pitchGoal;
+			font.drawString(glm::vec2(100., 100.), ss.str(), video);
 			video.refresh();
 		}
 	}

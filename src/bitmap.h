@@ -14,6 +14,7 @@ class Bitmap : public Texture{
         ~Bitmap();
 		void load();	
 		void setHeight(float);
+		stbtt_aligned_quad charTexCoord(char, float*, float*);
     private:
 		stbtt_bakedchar _cdata[96];
 		stbtt_fontinfo _font;

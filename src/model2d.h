@@ -24,4 +24,5 @@ class Model2D : public Model {
 		glm::vec2 _screen, _curScale;
     };
 
+void quadCoords(float* data, float x1, float x2, float y1, float y2, bool revert = false);
 #endif
