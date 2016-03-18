@@ -7,6 +7,7 @@ using namespace std;
 
 Text::Text(glm::vec2 screen, float h) : Model2D(screen) {
     _bitmap.setHeight(h);
+	_shaderNb = 4;
     }
 
 Text::~Text() {

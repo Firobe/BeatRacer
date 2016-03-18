@@ -17,6 +17,7 @@ int main(int argc, char** argv) {
 		video.addShader("default.vert", "ship.frag");
 		video.addShader("default.vert", "note.frag");
 		video.addShader("2d.vert", "2d.frag");
+		video.addShader("2d.vert", "text.frag");
 		Audio audio;
 		audio.loadBuffer("res/test.ogg");
 		Map map;
@@ -111,7 +112,7 @@ int main(int argc, char** argv) {
 			ss.str("");
 			ss.clear();
 			ss << "x" << pitchGoal;
-			font.drawString(glm::vec2(100., 100.), ss.str(), video);
+			font.drawString(glm::vec2(10., 42.), ss.str(), video);
 			video.refresh();
 		}
 	}
