@@ -83,6 +83,10 @@ void NoteHandler::checkNotes(){
 				_currentNote[col]++;
 				_combo = 0;
 				diff -= 5;
+                if(_lifebar.getValue() < 30){
+                    std::uniform_real_distribution<> rot (-(30 - _lifebar.getValue()), 30 - _lifebar.getValue());
+                    _ship.turn(30);
+                }
 			}
 			else{
 				if(touches2[col]){
@@ -104,13 +108,13 @@ void NoteHandler::checkNotes(){
                         diff -= 5;
                         _combo = 0;
                     }
+                if(_notes[col][_currentNote[col]].state == NOTE_FAILURE && _lifebar.getValue() < 30){
+                    std::uniform_real_distribution<> rot (-(30 - _lifebar.getValue()), 30 - _lifebar.getValue());
+                    _ship.turn(30);
+                }
 					_currentNote[col]++;
 				}
 			}
-            if(_notes[col][_currentNote[col]-1].state == NOTE_FAILURE && _lifebar.getValue() < 30){
-                std::uniform_real_distribution<> rot (-(30 - _lifebar.getValue()), 30 - _lifebar.getValue());
-                _ship.turn(30);
-            }
 		}
 	}
 	_lifebar.setValue( _lifebar.getValue() + diff );
