@@ -30,6 +30,9 @@ void Bitmap::load(){
 	unsigned int size = filesize(_path.c_str());
 	unsigned char* buffer = new unsigned char[size];
 	unsigned char bitm[BITMAP_SIZE * BITMAP_SIZE];
+	unsigned char flipData[BITMAP_SIZE * BITMAP_SIZE];
+	_width = BITMAP_SIZE;
+	_height = BITMAP_SIZE;
 	FILE* file = NULL;
 	file = fopen(_path.c_str(), "rb");
 
@@ -51,17 +54,13 @@ void Bitmap::load(){
 	if( bitm == NULL )
 		throw runtime_error("Unable to make bitmap");
 
-	for(int i = 0 ; i < BITMAP_SIZE ; i++){
-		for(int x = 0 ; x < BITMAP_SIZE ; x++){
-			printf("%c", bitm[x+i*BITMAP_SIZE]>>5 ? '1' : ' ');
-		}
-		printf("\n");
-	}
+	for (int i = 0 ; i < _height ; i++)
+		for (int j = 0 ; j < _width ; j++)
+			flipData[(_height - 1 - i) * _width + j] = bitm[i * _width + j];
 
 	glGenTextures(1, &_id);
 	glBindTexture(GL_TEXTURE_2D, _id);
-	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BITMAP_SIZE, BITMAP_SIZE, 0, GL_RED, GL_UNSIGNED_BYTE, bitm);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, BITMAP_SIZE, BITMAP_SIZE, 0, GL_RED, GL_UNSIGNED_BYTE, flipData);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);

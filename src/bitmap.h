@@ -6,7 +6,7 @@
 
 #include <string>
 
-#define BITMAP_SIZE (128)
+#define BITMAP_SIZE (512)
 class Bitmap : public Texture{
     public:
 		Bitmap();
