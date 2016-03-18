@@ -8,7 +8,7 @@
 
 using namespace std;
 
-NoteHandler::NoteHandler(string path, Map& map, LifeBar& lifebar, Ship& ship) : _currentNote(4, 0) , _currentScore(4, 0) , _notes(4), _lifebar(lifebar), _ship(ship){
+NoteHandler::NoteHandler(string path, Map& map, LifeBar& lifebar, Ship& ship) : _currentNote(4, 0), _notes(4), _lifebar(lifebar), _ship(ship){
 	string buffer;
 	ifstream input;
 	float pos;
@@ -69,34 +69,48 @@ void NoteHandler::checkNotes(){
 	int touches[4] = {GLFW_KEY_F, GLFW_KEY_G, GLFW_KEY_H, GLFW_KEY_J};
 	bool touches2[4];
 	int diff = 0;
+    int quality = 0;
+    int noteIndex = 1;
 	for(int i = 0 ; i < 4 ; i++) touches2[i] = KeyManager::check(touches[i], true);
 	for (int col = 0; col < 4; col++){
 		if(_currentNote[col] >= _notes[col].size())
 			continue;
 		if (_barPosition - _notes[col][_currentNote[col]].pos < -NOTE_ERROR_MAX)
-			_currentScore[col] = 0.;
+			continue;
 		else{
 			if(_barPosition - _notes[col][_currentNote[col]].pos > NOTE_ERROR_MAX){
-				_currentScore[col] = -1.;
 				_notes[col][_currentNote[col]].state = NOTE_FAILURE;
 				_currentNote[col]++;
 				_combo = 0;
 				diff -= 5;
-				if(_lifebar.getValue() < 30){
-                    _ship.turn(45);
+			}
+			else{
+				if(touches2[col]){
+                    quality = 0;
+                    while (abs(_barPosition - _notes[col][_currentNote[col]].pos) < NOTE_DELTA * (1-quality/4))
+                        quality++;
+                    noteIndex = 1;
+                    for(int i = 0; i < 4; i++)
+                            noteIndex += _currentNote[i];
+                    _precision =+ ((quality * 0.25) - _precision) / noteIndex;
+                    if (quality > 0){
+                        _notes[col][_currentNote[col]].state = NOTE_SUCESS;
+                        _combo++;
+                        diff += 1;
+                        _score += (_combo + 1) * quality * SCORE_REFERENCE;
+                    }
+                    else{
+                        _notes[col][_currentNote[col]].state = NOTE_FAILURE;
+                        diff -= 5;
+                        _combo = 0;
+                    }
+					_currentNote[col]++;
 				}
 			}
-			else
-				if(touches2[col]){
-					_currentScore[col] = 1;
-					_notes[col][_currentNote[col]].state = NOTE_SUCESS;
-					_currentNote[col]++;
-					_combo++;
-					_score += _combo + 1;
-					diff += 1;
-				}
-				else
-					_currentScore[col] = 0;
+            if(_notes[col][_currentNote[col]-1].state == NOTE_FAILURE && _lifebar.getValue() < 30){
+                std::uniform_real_distribution<> rot (-(30 - _lifebar.getValue()), 30 - _lifebar.getValue());
+                _ship.turn(30);
+            }
 		}
 	}
 	_lifebar.setValue( _lifebar.getValue() + diff );

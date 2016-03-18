@@ -2,10 +2,13 @@
 #define NOTE_H
 
 #include "model3d.h"
+#include <random>
 
-#define NOTE_ERROR_MAX 0.2
+#define NOTE_ERROR_MAX 1
+#define NOTE_DELTA 0.4
 #define NOTE_FAILURE -1
 #define NOTE_SUCESS 1
+#define SCORE_REFERENCE 25
 
 class Map;
 class Video;
@@ -29,7 +32,6 @@ class NoteHandler {
     private:
         float _barPosition;
         std::vector<unsigned int> _currentNote;
-        std::vector<float> _currentScore;
         Model3D _model;
         std::vector<std::vector<Note>> _notes;
         Model3D _timingBar;
