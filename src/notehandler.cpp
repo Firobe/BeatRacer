@@ -29,7 +29,8 @@ NoteHandler::NoteHandler(string path, Map& map, LifeBar& lifebar, Ship& ship) : 
 
 	Note def = {.matrix = glm::mat4(1.), .pos = 0., .state = 0};
 	while (getline(input, buffer)) {
-		sscanf(buffer.c_str(), "%f,%d", &pos, &col);
+		if( sscanf(buffer.c_str(), "%f,%d", &pos, &col) != 2)
+			throw runtime_error("Bad note format : \"" + buffer + "\"");
 		for (int i = 0; i < 4; i++) {
 			if (col % 2) {
 				_notes[i].push_back(def);

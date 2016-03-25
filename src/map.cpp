@@ -31,7 +31,8 @@ void Map::loadModel(string path) {
 		throw runtime_error("Unable to open " + path);
 
 	while (getline(map, buffer)) {
-		sscanf(buffer.c_str(), "%f,%f,%f:%d", &temp[0], &temp[1], &temp[2], &todo);
+		if(sscanf(buffer.c_str(), "%f,%f,%f:%d", &temp[0], &temp[1], &temp[2], &todo) != 4)
+			throw runtime_error("Bad map format : \"" + buffer + "\"");
 		temp[1] = radians(temp[1]);
 		temp[2] = -radians(temp[2]);
 
