@@ -166,7 +166,7 @@ void editorLoop(Video& video, Audio& audio, string mapName) {
 
     ////////////MAIN LOOP/////////
     while (!glfwWindowShouldClose(video.win())) {
-		video.dirCamera(glm::vec3(dir[0], dir[1], dir[2]), glm::vec3(0, 0, 1));
+		video.dirCamera(glm::vec3(-dir[0], dir[2], dir[1]), glm::vec3(0, 0, 1));
 
         //User-interface operations
         glfwPollEvents();
