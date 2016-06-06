@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
         TwTerminate();
         }
     catch (exception const& ex) {
-        cerr << "ERROR : " << ex.what() << endl;
+        cout << "ERROR : " << ex.what() << endl;
         return EXIT_FAILURE;
         }
 
@@ -154,12 +154,13 @@ void editorLoop(Video& video, Audio& audio, string mapName) {
 	double dir[3] = {1,1,0};
     Map map;
     map.load(mapName);
-    Ship ship(map.getMap());
     Text font(glm::vec2(1000, 800), 60.);
     font.load("atari");
     TwWindowSize(1000, 800);
     TwBar* tbar = TwNewBar("TweakBar");
     TwAddVarRW(tbar, "Direction", TW_TYPE_DIR3D, &dir, "");
+	freopen("/dev/null", "w", stderr);
+	cerr << "Bonjour";
 	video.twRedirect();
         //font.setSize(glm::vec2(300, 300));
 

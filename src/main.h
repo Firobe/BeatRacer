@@ -8,8 +8,7 @@
 #include <cmath>
 #include <sstream>
 #include <exception>
-
-#define GLFW_CDECL
+#include <stdio.h>
 #include <AntTweakBar.h>
 
 #include "map.h"
