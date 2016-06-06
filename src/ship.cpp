@@ -147,9 +147,12 @@ void Ship::putOnRoad() {
     if (abs(_roadPosition.y) < ROAD_WIDTH)
         return;
 	_gameOver = true;
+	//Code for invisible walls on road borders
+	/*
     rotate((float)glm::radians(_orientation), glm::vec3(0., 0., -1.));
     translate(glm::vec3(0., -((_roadPosition.y > 0. ? 1. : -1.) * ROAD_WIDTH - _roadPosition.y), 0.));
     _roadPosition.y = (_roadPosition.y > 0. ? 1 : -1) * ROAD_WIDTH;
     rotate((float)glm::radians(_orientation), glm::vec3(0., 0., 1.));
+	*/
     _speed.y = 0;
     }

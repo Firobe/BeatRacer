@@ -9,6 +9,9 @@
 #include <sstream>
 #include <exception>
 
+#define GLFW_CDECL
+#include <AntTweakBar.h>
+
 #include "map.h"
 #include "audio.h"
 #include "ship.h"
@@ -19,5 +22,7 @@
 #include "text.h"
 
 enum Axes { xAxis, yAxis, zAxis };
+void gameLoop(Video&, Audio&, std::string);
+void editorLoop(Video&, Audio&, std::string);
 
 #endif

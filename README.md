@@ -14,8 +14,9 @@ OpenGL 3.3+, OpenAL, GLFW 3
 Haut/Bas : changer de palier de vitesse (vaisseau et musique)  
 Droite/Gauche : rotation du vaisseau  
 Espace + Haut : initie le boost (use la barre)  
-Espace + Bas : arrête le boost
+Espace + Bas : arrête le boost  
 Espace + Gauche/Droite : rotation du vaisseau plus violente  
+WXCV :touches notes  
 Alt : passage en caméra libre (contrôlable avec ZQDS)
 Ctrl gauche : libérer le curseur  
 Ctrl droit : lier le curseur  

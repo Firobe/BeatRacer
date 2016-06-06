@@ -2,6 +2,9 @@
 #include "map.h"
 #include "model3d.h"
 #include "model2d.h"
+
+#define GLFW_CDECL
+#include <AntTweakBar.h>
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
@@ -13,7 +16,14 @@ static void error_callback(int error, const char* description) {
 	cerr << description << endl;
 }
 
+inline void TwEventMouseButtonGLFW3(GLFWwindow* window, int button, int action, int mods){TwEventMouseButtonGLFW(button, action);}
+inline void TwEventMousePosGLFW3(GLFWwindow* window, double xpos, double ypos){TwMouseMotion(int(xpos), int(ypos));}
+inline void TwEventMouseWheelGLFW3(GLFWwindow* window, double xoffset, double yoffset){TwEventMouseWheelGLFW(yoffset);}
+inline void TwEventKeyGLFW3(GLFWwindow* window, int key, int scancode, int action, int mods){TwEventKeyGLFW(key, action);}
+inline void TwEventCharGLFW3(GLFWwindow* window, unsigned int codepoint){TwEventCharGLFW(codepoint, GLFW_PRESS);}
+
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	TwEventKeyGLFW(key, action);
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 
@@ -31,6 +41,14 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 	if (action == GLFW_RELEASE)
 		KeyManager::get().release(key);
+}
+
+void Video::twRedirect(){
+	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    glfwSetMouseButtonCallback(_window, TwEventMouseButtonGLFW3);
+    glfwSetCursorPosCallback(_window, TwEventMousePosGLFW3);
+    glfwSetScrollCallback(_window, TwEventMouseWheelGLFW3);
+    glfwSetCharCallback(_window, TwEventCharGLFW3);
 }
 
 Video::Video(int width, int height, string a, string b) {
@@ -105,6 +123,10 @@ void Video::setCamera() {
 
 void Video::setCamera(glm::vec3 toLook, glm::vec3 vertical) {
 	_view = glm::lookAt(_position, toLook, vertical);
+}
+
+void Video::dirCamera(glm::vec3 dir, glm::vec3 vertical){
+	_view = glm::lookAt(_position, _position + dir, vertical);
 }
 
 void Video::shipCamera(glm::vec3 shipPos, glm::vec3 vertical, Map& map) {

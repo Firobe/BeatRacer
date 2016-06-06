@@ -1,7 +1,6 @@
 #include "audio.h"
 #include "video.h"
 #include "../libs/stb_vorbis.c"
-#include <string.h>
 #include <stdexcept>
 #include <cstdlib>
 #include <chrono>

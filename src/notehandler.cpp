@@ -67,7 +67,7 @@ void NoteHandler::placeBar(float pos, Map& map) {
 }
 
 void NoteHandler::checkNotes(){
-	int touches[4] = {GLFW_KEY_F, GLFW_KEY_G, GLFW_KEY_H, GLFW_KEY_J};
+	int touches[4] = {GLFW_KEY_Z, GLFW_KEY_X, GLFW_KEY_C, GLFW_KEY_V};
 	bool touches2[4];
 	int diff = 0;
     int quality = 0;

@@ -68,7 +68,8 @@ class Video {
         void switchFreeFly();
         void shipCamera(glm::vec3, glm::vec3, Map&);
 		void addShader(std::string, std::string);
-
+		void twRedirect();
+		void dirCamera(glm::vec3, glm::vec3);
     private:
         void setCamera();
         void setCamera(glm::vec3, glm::vec3);
