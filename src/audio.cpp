@@ -77,7 +77,7 @@ void Audio::changePitch(float pitch) {
 	_pitch = pitch;
 }
 
-void Audio::sync() {
+float Audio::sync() {
 	static auto prev = Clock::now();
 	auto now = Clock::now();
 	float diff = (float)chrono::duration_cast<chrono::duration<float>>(now - prev).count();
@@ -90,4 +90,5 @@ void Audio::sync() {
 	_correction = (float)FPS_INTERVAL / diff ;
 	prev = now;
 	alSourcef(_source, AL_PITCH, _pitch * _correction);
+	return FPS_GOAL * _correction;
 }

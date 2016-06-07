@@ -134,7 +134,8 @@ void gameLoop(Video& video, Audio& audio) {
         notehandler.checkNotes();
         video.shipCamera(ship.getAbsPos(), ship.getVertical(), map);
         audio.changePitch(ship.getSpeed() / SPEED_REFERENCE);
-        audio.sync();
+        ss.str("");
+		ss << audio.sync();
 
         //Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -142,7 +143,7 @@ void gameLoop(Video& video, Audio& audio) {
         ship.draw(video);
         notehandler.draw(video);
         bar.draw(video);
-        font.draw(video);
+        font.drawString(glm::vec2(screen_width - 300, 40), ss.str(), video);
         ss.str("");
         ss << "x" << pitchGoal;
         font.drawString(glm::vec2(10., 42.), ss.str(), video);
@@ -152,7 +153,12 @@ void gameLoop(Video& video, Audio& audio) {
 
 void editorLoop(Video& video, Audio& audio) {
     Map map;
-	struct Disco {Video& video; Audio& audio; Map& map;} send = {video, audio, map};
+    stringstream ss;
+    struct Disco {
+        Video& video;
+        Audio& audio;
+        Map& map;
+        } send = {video, audio, map};
     unsigned int curSector = 0, oldSector = 1;
     glm::vec4 sector(1., 0, 0, 1);
     glm::vec4 oldSec = sector;
@@ -178,11 +184,11 @@ void editorLoop(Video& video, Audio& audio) {
     TwAddButton(tbar, "Save map", [](void* m) {
         ((Map*)m)->write(mapName);
         }, &map, "");
-	TwAddButton(tbar, "Save and try", [](void* v){
-			struct Disco* s = (Disco*) v;
-			s->map.write(mapName);
-			gameLoop(s->video, s->audio);
-			}, &send, "");
+    TwAddButton(tbar, "Save and try", [](void* v) {
+        struct Disco* s = (Disco*) v;
+        s->map.write(mapName);
+        gameLoop(s->video, s->audio);
+        }, &send, "");
     freopen("/dev/null", "w", stderr);
     video.twRedirect();
     //font.setSize(glm::vec2(300, 300));
@@ -201,10 +207,12 @@ void editorLoop(Video& video, Audio& audio) {
         glfwPollEvents();
 
         //General operations
-        //audio.sync();
+        ss.str("");
+        ss << audio.sync(); //FPS CONTROL
+
         if (oldSector != curSector) {
-			sector = map.getSegment(curSector);
-			oldSector = curSector;
+            sector = map.getSegment(curSector);
+            oldSector = curSector;
             }
 
         map.setMapSeg(curSector, sector);
@@ -212,6 +220,7 @@ void editorLoop(Video& video, Audio& audio) {
         //Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         map.draw(video);
+        font.drawString(glm::vec2(screen_width - 300, 40), ss.str(), video);
         TwDraw();
         video.refresh();
         }

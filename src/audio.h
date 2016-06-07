@@ -15,7 +15,7 @@ class Audio {
         void loadBuffer(std::string);
         void playSource();
         void changePitch(float);
-        void sync();
+        float sync();
         ~Audio();
     private:
         ALCdevice* _device;
