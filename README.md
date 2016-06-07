@@ -1,7 +1,6 @@
 # BeatRacer
-Projet GCC
 ## Dépendances
-OpenGL 3.3+, OpenAL, GLFW 3
+OpenGL 3.3+, OpenAL, GLFW 3, AntTweakBar (éditeur)
 
 ## Map
   RHO\_1,THETA\_1,PHI\_1:NB\_1  
@@ -17,7 +16,7 @@ Espace + Haut : initie le boost (use la barre)
 Espace + Bas : arrête le boost  
 Espace + Gauche/Droite : rotation du vaisseau plus violente  
 WXCV :touches notes  
-Alt : passage en caméra libre (contrôlable avec ZQDS)
+Alt : passage en caméra libre (contrôlable avec ZQDS)  
 Ctrl gauche : libérer le curseur  
 Ctrl droit : lier le curseur  
 Echap : quitter
