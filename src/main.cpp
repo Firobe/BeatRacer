@@ -152,6 +152,7 @@ void gameLoop(Video& video, Audio& audio) {
 
 void editorLoop(Video& video, Audio& audio) {
     Map map;
+	struct Disco {Video& video; Audio& audio; Map& map;} send = {video, audio, map};
     unsigned int curSector = 0, oldSector = 1;
     glm::vec4 sector(1., 0, 0, 1);
     glm::vec4 oldSec = sector;
@@ -177,6 +178,11 @@ void editorLoop(Video& video, Audio& audio) {
     TwAddButton(tbar, "Save map", [](void* m) {
         ((Map*)m)->write(mapName);
         }, &map, "");
+	TwAddButton(tbar, "Save and try", [](void* v){
+			struct Disco* s = (Disco*) v;
+			s->map.write(mapName);
+			gameLoop(s->video, s->audio);
+			}, &send, "");
     freopen("/dev/null", "w", stderr);
     video.twRedirect();
     //font.setSize(glm::vec2(300, 300));
