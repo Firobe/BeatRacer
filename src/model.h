@@ -36,15 +36,15 @@ class Model { //ABSTRACT
 		void setShaderNb(int);
 		void addUniform(std::string, int);
 		void setUniform(std::string, float, int = 0);
-    protected:
-        virtual void loadTexture(std::string);
         virtual void loadModel(std::string) = 0;
         virtual void loadV() = 0;
+    protected:
+        virtual void loadTexture(std::string);
 
         Texture _texture;
         glm::mat4 _modelMatrix;
-        float* _mapModel; //Vertices (te be rendered as triangles)
-        float* _mapTex; //Texture coordinates
+		std::vector<float> _mapModel; //Vertices (te be rendered as triangles)
+		std::vector<float> _mapTex; //Texture coordinates
         GLuint _vboID, _vaoID;
         int _vertexNb;
         bool _textured;

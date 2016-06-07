@@ -15,9 +15,8 @@ class Model3D : public Model {
         ~Model3D();
         virtual void draw(Video&); //Render the model
         virtual void draw(Video&, glm::mat4&); //Render the model
-    protected:
-        virtual void loadModel(std::string);
         virtual void loadV();
+        virtual void loadModel(std::string);
     };
 
 #endif

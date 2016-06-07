@@ -23,8 +23,8 @@ void Model3D::loadV() {
 	glGenBuffers(1, &_vboID);
 	glBindBuffer(GL_ARRAY_BUFFER, _vboID);
 	glBufferData(GL_ARRAY_BUFFER, size1 + size2, 0, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, size1, _mapModel);
-	glBufferSubData(GL_ARRAY_BUFFER, size1, size2, _mapTex);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, size1, &_mapModel[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, size1, size2, &_mapTex[0]);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	//VAO
@@ -114,8 +114,8 @@ void Model3D::loadModel(string path) {
 
 	fclose(file);
 	_vertexNb = vInd.size();
-	_mapModel = new float[_vertexNb * 3];
-	_mapTex = new float[_vertexNb * 2];
+	_mapModel.resize(_vertexNb * 3);
+	_mapTex.resize(_vertexNb * 2);
 
 
 	//Processing data

@@ -10,18 +10,12 @@ Model::Model() : _modelMatrix(1.) {
 	_vboID = 0;
 	_vaoID = 0;
 	_textured = true;
-	_mapModel = NULL;
-	_mapTex = NULL;
 	_shaderNb = 0;
 }
 
 Model::~Model() {
 	glDeleteBuffers(1, &_vboID);
 	glDeleteVertexArrays(1, &_vaoID);
-	if(_mapModel != NULL)
-		delete[] _mapModel;
-	if(_mapTex != NULL)
-		delete[] _mapTex;
 }
 
 void Model::load(string name) {

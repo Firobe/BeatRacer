@@ -41,8 +41,8 @@ void Model2D::loadV() {
 	glGenBuffers(1, &_vboID);
 	glBindBuffer(GL_ARRAY_BUFFER, _vboID);
 	glBufferData(GL_ARRAY_BUFFER, size1 + size2, 0, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, size1, _mapModel);
-	glBufferSubData(GL_ARRAY_BUFFER, size1, size2, _mapTex);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, size1, &_mapModel[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, size1, size2, &_mapTex[0]);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	//VAO
@@ -67,14 +67,14 @@ void Model2D::loadV() {
 void Model2D::loadModel(string path) {
 	_vertexNb = 6;
 
-	_mapModel = new float[_vertexNb * 2];
-	_mapTex = new float[_vertexNb * 2];
+	_mapModel.resize(_vertexNb * 2);
+	_mapTex.resize(_vertexNb * 2);
 
 	quadCoords(_mapModel, 0., 1., 0., 1.);
 	quadCoords(_mapTex, 0., 1., 0., 1.);
 }
 
-void quadCoords(float* data, float x1, float x2, float y1, float y2, bool revert){
+void quadCoords(vector<float>& data, float x1, float x2, float y1, float y2, bool revert){
 	if(revert){
 		float tmp = y1;
 		y1 = y2;

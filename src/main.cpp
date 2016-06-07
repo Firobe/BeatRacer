@@ -5,10 +5,10 @@
 #define PITCH_STEP 0.05
 
 using namespace std;
+string mapName;
 
 int main(int argc, char** argv) {
     try {
-        string mapName;
         int choice;
         ///////////////MENU////////////
         cout << "BeatRacer (InDev)\n========================\nMap name : ";
@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
         Audio audio;
         audio.loadBuffer("res/" + mapName + ".ogg");
 
-        Video video(1000, 800, "default.vert", "default.frag");
+        Video video("default.vert", "default.frag");
         video.addShader("default.vert", "ship.frag");
         video.addShader("default.vert", "note.frag");
         video.addShader("2d.vert", "2d.frag");
@@ -35,9 +35,9 @@ int main(int argc, char** argv) {
         TwInit(TW_OPENGL, NULL);
 
         if (choice == 1)
-            gameLoop(video, audio, mapName);
-		else
-			editorLoop(video, audio, mapName);
+            gameLoop(video, audio);
+        else
+            editorLoop(video, audio);
 
         TwTerminate();
         }
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
     return EXIT_SUCCESS;
     }
 
-void gameLoop(Video& video, Audio& audio, string mapName) {
+void gameLoop(Video& video, Audio& audio) {
     stringstream ss;
     glm::vec2 pos;
     float pitchGoal = 1.;
@@ -57,9 +57,9 @@ void gameLoop(Video& video, Audio& audio, string mapName) {
     Map map;
     map.load(mapName);
     Ship ship(map.getMap());
-    LifeBar bar(glm::vec2(1000., 800.));
+    LifeBar bar(glm::vec2(screen_width, screen_height));
     NoteHandler notehandler(mapName, map, bar, ship);
-    Text font(glm::vec2(1000, 800), 60.);
+    Text font(glm::vec2(screen_width, screen_height), 60.);
     font.load("atari");
     //font.setSize(glm::vec2(300, 300));
 
@@ -150,30 +150,58 @@ void gameLoop(Video& video, Audio& audio, string mapName) {
         }
     }
 
-void editorLoop(Video& video, Audio& audio, string mapName) {
-	double dir[3] = {1,1,0};
+void editorLoop(Video& video, Audio& audio) {
     Map map;
+    unsigned int curSector = 0, oldSector = 1;
+    glm::vec4 sector(1., 0, 0, 1);
+    glm::vec4 oldSec = sector;
     map.load(mapName);
-    Text font(glm::vec2(1000, 800), 60.);
+    auto segMap = map.getMap();
+    Text font(glm::vec2(screen_width, screen_height), 60.);
     font.load("atari");
-    TwWindowSize(1000, 800);
+    TwWindowSize(screen_width, screen_height);
+    glm::quat dir;
     TwBar* tbar = TwNewBar("TweakBar");
-    TwAddVarRW(tbar, "Direction", TW_TYPE_DIR3D, &dir, "");
-	freopen("/dev/null", "w", stderr);
-	cerr << "Bonjour";
-	video.twRedirect();
-        //font.setSize(glm::vec2(300, 300));
+    TwAddVarRW(tbar, "Camera direction", TW_TYPE_QUAT4F, &dir, " axisx=-z axisy=x axisz=-y ");
+    TwAddButton(tbar, "Reset camera", [](void* v) {
+        *((glm::quat*)v) = glm::quat(1., 0., 0., 0.);
+        }, &dir, "");
+    TwAddVarRW(tbar, "Current sector", TW_TYPE_UINT32, &curSector, "");
+    TwAddVarRW(tbar, "Sector repetition", TW_TYPE_FLOAT, &sector[3], " min=1 ");
+    TwAddVarRW(tbar, "Sector length", TW_TYPE_FLOAT, &sector[0], " min=0. precision=5 step=0.0001 ");
+    TwAddVarRW(tbar, "Sector theta", TW_TYPE_FLOAT, &sector[1], " precision=5 step=0.0001 ");
+    TwAddVarRW(tbar, "Sector phi", TW_TYPE_FLOAT, &sector[2], " precision=5 step=0.0001 ");
+    TwAddButton(tbar, "Reset settings", [](void* v) {
+        *((glm::vec3*)v) = glm::vec3(1., 0., 0.);
+        }, &sector, "");
+    TwAddButton(tbar, "Save map", [](void* m) {
+        ((Map*)m)->write(mapName);
+        }, &map, "");
+    freopen("/dev/null", "w", stderr);
+    video.twRedirect();
+    //font.setSize(glm::vec2(300, 300));
 
     ////////////MAIN LOOP/////////
     while (!glfwWindowShouldClose(video.win())) {
-		video.dirCamera(glm::vec3(-dir[0], dir[2], dir[1]), glm::vec3(0, 0, 1));
+        if (sector != oldSec) {
+            map.loadModel(mapName);
+            map.loadV();
+            oldSec = sector;
+            }
+
+        video.quatCamera(dir);
 
         //User-interface operations
         glfwPollEvents();
 
         //General operations
-        //video.shipCamera(ship.getAbsPos(), ship.getVertical(), map);
-        audio.sync();
+        //audio.sync();
+        if (oldSector != curSector) {
+			sector = map.getSegment(curSector);
+			oldSector = curSector;
+            }
+
+        map.setMapSeg(curSector, sector);
 
         //Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

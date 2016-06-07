@@ -10,6 +10,11 @@
 #include <exception>
 #include <stdio.h>
 #include <AntTweakBar.h>
+#define GLM_FORCE_RADIANS
+#include "../libs/glm/glm.hpp"
+#include "../libs/glm/gtc/type_ptr.hpp"
+#include "../libs/glm/gtc/quaternion.hpp"
+#include "../libs/glm/gtx/quaternion.hpp"
 
 #include "map.h"
 #include "audio.h"
@@ -20,8 +25,10 @@
 #include "lifebar.h"
 #include "text.h"
 
+extern int screen_width;
+extern int screen_height;
 enum Axes { xAxis, yAxis, zAxis };
-void gameLoop(Video&, Audio&, std::string);
-void editorLoop(Video&, Audio&, std::string);
+void gameLoop(Video&, Audio&);
+void editorLoop(Video&, Audio&);
 
 #endif
