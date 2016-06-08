@@ -21,11 +21,11 @@ vector<glm::dvec3>& Map::getMap() {
     return _transMap;
     }
 
-glm::dvec4 Map::getSegment(unsigned int n){
-	if(n < _fileMap.size())
-		return _fileMap[n];
-	else return glm::dvec4(1., 0., 0., 1);
-}
+glm::dvec4 Map::getSegment(unsigned int n) {
+    if (n < _fileMap.size())
+        return _fileMap[n];
+    else return glm::dvec4(1., 0., 0., 1);
+    }
 
 void Map::setMapSeg(unsigned int n, glm::dvec4 seg) {
     if (n >= _fileMap.size())
@@ -34,24 +34,24 @@ void Map::setMapSeg(unsigned int n, glm::dvec4 seg) {
     _fileMap[n] = seg;
     }
 
-void Map::write(string path){
-	path = "res/map/" + path + ".map";
-	ofstream map(path);
-	for(glm::dvec4 v : _fileMap){
-		while(v[1] >= 0.0005 || v[2] >= 0.0005) { v[0] /= 2.; v[1] /= 2. ; v[2] /= 2. ; v[3] *= 2.; }
-		map << v[0] << "," << v[1] << "," << v[2] << ":" << v[3] << endl;
-	}
-}
+void Map::write(string path) {
+    path = "res/map/" + path + ".map";
+    ofstream map(path);
 
-void Map::loadModel(string path) {
+    for (glm::dvec4 v : _fileMap) {
+        map << v[0] << "," << v[1] << "," << v[2] << ":" << v[3] << endl;
+        }
+    }
+
+void Map::loadModel(string in) {
     string buffer;
     ifstream map;
     int todo;
-    path = "res/map/" + path + ".map";
+    string path = "res/map/" + in + ".map";
 
-    if (_fileMap.empty()) {
+    if (in != "editor") {
         dvec4 temp;
-		int todo;
+        int todo;
         map.open(path);
 
         if (!map)
@@ -61,16 +61,27 @@ void Map::loadModel(string path) {
             if (sscanf(buffer.c_str(), "%lf,%lf,%lf:%d", &temp[0], &temp[1], &temp[2], &todo) != 4)
                 throw runtime_error("Bad map format : \"" + buffer + "\"");
 
-			temp[3] = todo;
+            temp[3] = todo;
             _fileMap.push_back(temp);
             }
         }
 
-	_transMap.clear();
-	for(glm::dvec4 v : _fileMap){
-    	for (int i = 0 ; i < v[3] ; i++)
-        	_transMap.push_back(glm::dvec3(v[0], radians(v[1]), -radians(v[2])));
-	}
+    _transMap.clear();
+
+    for (glm::dvec4 v : _fileMap) {
+        if (in != "editor")
+            while (v[1] >= 0.0005 || v[2] >= 0.0005) {
+                v[0] /= 2.;    //On s'assure que les angles sont suffisamment petits
+                v[1] /= 2. ;
+                v[2] /= 2. ;
+                v[3] *= 2.;
+                }
+
+        for (int i = 0 ; i < v[3] ; i++)
+            _transMap.push_back(glm::dvec3(v[0], radians(v[1]), -radians(v[2])));
+        }
+	if(in != "editor")
+		cout << "Map contains " << _transMap.size() << " sectors." << endl;
     _segmentMap.resize(_transMap.size());
     _vertexNb = 6 * _transMap.size();
 

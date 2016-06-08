@@ -196,7 +196,7 @@ void editorLoop(Video& video, Audio& audio) {
     ////////////MAIN LOOP/////////
     while (!glfwWindowShouldClose(video.win())) {
         if (sector != oldSec) {
-            map.loadModel(mapName);
+            map.loadModel("editor");
             map.loadV();
             oldSec = sector;
             }
