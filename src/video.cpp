@@ -107,10 +107,10 @@ Video::Video(string a, string b) {
     _shaderArray.push_back(Shader(a, b));
     _shaderArray[0].load();
     _projection = glm::perspective(FOV, (double) screen_width / screen_height, NEAR, FAR);
-    _position = glm::vec3(-5, 0, 0.1);
-    _orientationX = glm::vec3(1, 0, 0);
-    _orientationY = glm::vec3(1, glm::half_pi<float>(), 0);
-    _orientationZ = glm::vec3(1, 0, -glm::half_pi<float>());
+    _position = glm::dvec3(-5, 0, 0.1);
+    _orientationX = glm::dvec3(1, 0, 0);
+    _orientationY = glm::dvec3(1, glm::half_pi<double>(), 0);
+    _orientationZ = glm::dvec3(1, 0, -glm::half_pi<double>());
     _freeFly = false;
     setCamera();
     glEnable(GL_DEPTH_TEST);
@@ -146,28 +146,28 @@ void Video::switchFreeFly() {
     }
 
 void Video::setCamera() {
-    _view = glm::lookAt(_position, _position + toCartesian(_orientationX), glm::vec3(0, 0, 1));
+    _view = glm::lookAt(_position, _position + toCartesian(_orientationX), glm::dvec3(0, 0, 1));
     }
 
-void Video::setCamera(glm::vec3 toLook, glm::vec3 vertical) {
+void Video::setCamera(glm::dvec3 toLook, glm::dvec3 vertical) {
     _view = glm::lookAt(_position, toLook, vertical);
     }
 
-void Video::dirCamera(glm::vec3 dir, glm::vec3 vertical) {
+void Video::dirCamera(glm::dvec3 dir, glm::dvec3 vertical) {
     _view = glm::lookAt(_position, _position + dir, vertical);
     }
 
 void Video::quatCamera(glm::quat quat) {
     setCamera();
-    _view *= glm::toMat4(quat);
+    _view *= glm::dmat4(glm::toMat4(quat));
     }
 
-void Video::shipCamera(glm::vec3 shipPos, glm::vec3 vertical, Map& map) {
+void Video::shipCamera(glm::dvec3 shipPos, glm::dvec3 vertical, Map& map) {
     if (_freeFly)
         return;
 
-    _position = map.getWorldCoordinates(glm::vec3(shipPos.x - SHIP_CAMERA_BEHIND, shipPos.y, SHIP_CAMERA_HEIGHT));
-    glm::vec3 lookAt = map.getWorldCoordinates(glm::vec3(shipPos.x + SHIP_CAMERA_GROUNDPOINT, 0, shipPos.z));
+    _position = map.getWorldCoordinates(glm::dvec3(shipPos.x - SHIP_CAMERA_BEHIND, shipPos.y, SHIP_CAMERA_HEIGHT));
+    glm::dvec3 lookAt = map.getWorldCoordinates(glm::dvec3(shipPos.x + SHIP_CAMERA_GROUNDPOINT, 0, shipPos.z));
     setCamera(lookAt, vertical);
     }
 
@@ -175,7 +175,7 @@ void Video::addShader(string a, string b) {
     _shaderArray.push_back(Shader(a, b));
     }
 
-void Video::rotateCamera(int axis, float value, bool degree) {
+void Video::rotateCamera(int axis, double value, bool degree) {
     if (!_freeFly)
         return;
 
@@ -183,24 +183,24 @@ void Video::rotateCamera(int axis, float value, bool degree) {
         value = glm::radians(value);
 
     if (axis == yAxis) {
-        _orientationX += glm::vec3(0, 0, value);
-        _orientationZ += glm::vec3(0, 0, value);
+        _orientationX += glm::dvec3(0, 0, value);
+        _orientationZ += glm::dvec3(0, 0, value);
         }
 
     if (axis == zAxis) {
-        _orientationX += glm::vec3(0, value, 0);
-        _orientationY += glm::vec3(0, value, 0);
+        _orientationX += glm::dvec3(0, value, 0);
+        _orientationY += glm::dvec3(0, value, 0);
         }
 
-    if (_orientationX[2] >= glm::half_pi<float>())
-        _orientationX[2] = glm::half_pi<float>() - 0.01;
-    else if (_orientationX[2] <= - glm::half_pi<float>())
-        _orientationX[2] = - glm::half_pi<float>() + 0.01;
+    if (_orientationX[2] >= glm::half_pi<double>())
+        _orientationX[2] = glm::half_pi<double>() - 0.01;
+    else if (_orientationX[2] <= - glm::half_pi<double>())
+        _orientationX[2] = - glm::half_pi<double>() + 0.01;
 
     setCamera();
     }
 
-void Video::cameraTranslate(int axis, float value) {
+void Video::cameraTranslate(int axis, double value) {
     if (!_freeFly)
         return;
 
@@ -216,13 +216,13 @@ void Video::cameraTranslate(int axis, float value) {
     setCamera();
     }
 
-void Video::render(GLuint id, int size, Texture& tex, Model3D* mod, glm::mat4 model, int shaderNb) {
+void Video::render(GLuint id, int size, Texture& tex, Model3D* mod, glm::dmat4 model, int shaderNb) {
     if ((unsigned int)shaderNb >= _shaderArray.size())
         throw runtime_error("Unknown shader");
 
     glUseProgram(_shaderArray[shaderNb].getProgramID());
     mod->uniformize(_shaderArray[shaderNb].getProgramID());
-    glm::mat4 modViewProj = _projection * _view * model;
+    glm::mat4 modViewProj(_projection * _view * model);
     glUniformMatrix4fv(glGetUniformLocation(_shaderArray[shaderNb].getProgramID(), "modViewProj"), 1, GL_FALSE, glm::value_ptr(modViewProj));
     glBindVertexArray(id);
 
@@ -238,14 +238,14 @@ void Video::render(GLuint id, int size, Texture& tex, Model3D* mod, glm::mat4 mo
     glUseProgram(0);
     }
 
-void Video::render2D(GLuint id, int size, Texture& tex, Model2D* mod, glm::mat4 model, int shaderNb) {
+void Video::render2D(GLuint id, int size, Texture& tex, Model2D* mod, glm::dmat4 model, int shaderNb) {
     if ((unsigned int)shaderNb >= _shaderArray.size())
         throw runtime_error("Unknown shader");
 
     glDisable(GL_DEPTH_TEST);
     glUseProgram(_shaderArray[shaderNb].getProgramID());
     mod->uniformize(_shaderArray[shaderNb].getProgramID());
-    glm::mat4 modViewProj = model;
+    glm::mat4 modViewProj(model);
     glUniformMatrix4fv(glGetUniformLocation(_shaderArray[shaderNb].getProgramID(), "modViewProj"), 1, GL_FALSE, glm::value_ptr(modViewProj));
     glBindVertexArray(id);
 
@@ -262,19 +262,19 @@ void Video::render2D(GLuint id, int size, Texture& tex, Model2D* mod, glm::mat4 
     glEnable(GL_DEPTH_TEST);
     }
 
-glm::vec3 toCartesian(glm::vec3 v) {
-    glm::vec3 res(0.);
-    res[0] = v[0] * cos(v[1]) * sin(v[2] + glm::half_pi<float>());
-    res[1] = v[0] * sin(v[1]) * sin(v[2] + glm::half_pi<float>());
-    res[2] = v[0] * cos(v[2] + glm::half_pi<float>());
+glm::dvec3 toCartesian(glm::dvec3 v) {
+    glm::dvec3 res(0.);
+    res[0] = v[0] * cos(v[1]) * sin(v[2] + glm::half_pi<double>());
+    res[1] = v[0] * sin(v[1]) * sin(v[2] + glm::half_pi<double>());
+    res[2] = v[0] * cos(v[2] + glm::half_pi<double>());
     return res;
     }
 
-glm::vec3 toSpherical(glm::vec3 v) {
-    glm::vec3 res(0.);
+glm::dvec3 toSpherical(glm::dvec3 v) {
+    glm::dvec3 res(0.);
     res[0] = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
     res[1] = atan(v.y / v.x); //THETA
-    res[2] = (acos(v.z / res[0]) - glm::half_pi<float>()); //PHI
+    res[2] = (acos(v.z / res[0]) - glm::half_pi<double>()); //PHI
     return res;
     }
 

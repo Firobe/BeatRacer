@@ -14,32 +14,32 @@
 
 class Ship : public Model3D {
     public:
-        Ship(std::vector<glm::vec3>&);
+        Ship(std::vector<glm::dvec3>&);
         ~Ship();
-        void turn(float); //Angle in degrees
+        void turn(double); //Angle in degrees
         void manage(); //Perform physic actions, should be called at each frame
-        void thrust(float);
-		void setFriction(float);
-        float getSpeed();
-        glm::vec3 getAbsPos();
-        glm::vec3 getVertical();
+        void thrust(double);
+		void setFriction(double);
+        double getSpeed();
+        glm::dvec3 getAbsPos();
+        glm::dvec3 getVertical();
     protected:
-        void move(float);
+        void move(double);
         void putOnRoad();
 
-        std::vector<glm::vec3>& _map; //Reference to the map vector
+        std::vector<glm::dvec3>& _map; //Reference to the map vector
         Model3D _model;
         int _curSegment;
-        glm::vec3 _roadPosition; //Road-relative position of the ship, X being the local position in the current segment
-        float _absPos; //Absolute road-relative x-position
-        float _orientation; //Road-relative Z angle
-        float _counter; //Used for the Z-position routine
+        glm::dvec3 _roadPosition; //Road-relative position of the ship, X being the local position in the current segment
+        double _absPos; //Absolute road-relative x-position
+        double _orientation; //Road-relative Z angle
+        double _counter; //Used for the Z-position routine
 
         //INERTIA
-        glm::vec2 _speed;
-        float _inertiaAngle;
-        float _abSpeed;
-		float _frictionCoef;
+        glm::dvec2 _speed;
+        double _inertiaAngle;
+        double _abSpeed;
+		double _frictionCoef;
 
 		bool _gameOver;
     };

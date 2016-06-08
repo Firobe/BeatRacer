@@ -12,8 +12,8 @@
 
 typedef struct Segment Segment;
 struct Segment {
-    glm::vec3 xAxis, yAxis, zAxis, origin;
-    float length;
+    glm::dvec3 xAxis, yAxis, zAxis, origin;
+    double length;
     };
 
 class Map : public Model3D {
@@ -21,19 +21,19 @@ class Map : public Model3D {
         Map();
         ~Map();
         void loadModel(std::string);
-        void forward(float);
-        std::vector<glm::vec3>& getMap();
-        glm::vec3 getWorldCoordinates(glm::vec3);
-        glm::mat3 getWorldOrientation(float); //THETA, PHI
-		void setMapSeg(unsigned int, glm::vec4);
+        void forward(double);
+        std::vector<glm::dvec3>& getMap();
+        glm::dvec3 getWorldCoordinates(glm::dvec3);
+        glm::dmat3 getWorldOrientation(double); //THETA, PHI
+		void setMapSeg(unsigned int, glm::dvec4);
 		void write(std::string);//contains a string
-		glm::vec4 getSegment(unsigned int);
+		glm::dvec4 getSegment(unsigned int);
     private:
-        void fillModel(int vertex, glm::vec4 v);
-        void fillTex(int, float);
+        void fillModel(int vertex, glm::dvec4 v);
+        void fillTex(int, double);
 
-		std::vector<glm::vec4> _fileMap;
-        std::vector<glm::vec3> _transMap;
+		std::vector<glm::dvec4> _fileMap;
+        std::vector<glm::dvec3> _transMap;
         std::vector<Segment> _segmentMap;
     };
 

@@ -24,7 +24,7 @@ void Model::load(string name) {
 	loadV();
 }
 
-glm::mat4 Model::getMatrix() {
+glm::dmat4 Model::getMatrix() {
 	return _modelMatrix;
 }
 
@@ -67,26 +67,26 @@ void Model::setShaderNb(int nb){
 	_shaderNb = nb;
 }
 
-void Model::translate(vec3 tr) {
+void Model::translate(dvec3 tr) {
 	_modelMatrix = glm::translate(_modelMatrix, tr);
 }
 
-void Model::rotate(float angle, vec3 axis) {
+void Model::rotate(double angle, dvec3 axis) {
 	_modelMatrix = glm::rotate(_modelMatrix, angle, axis);
 }
 
-void Model::scale(vec3 sc) {
+void Model::scale(dvec3 sc) {
 	_modelMatrix = glm::scale(_modelMatrix, sc);
 }
 
 void Model::resetMatrix() {
-	_modelMatrix = glm::mat4(1.);
+	_modelMatrix = glm::dmat4(1.);
 }
 
-void Model::setOrientation(glm::mat3 axes) {
-	_modelMatrix[0] = glm::vec4(axes[0], 0.);
-	_modelMatrix[1] = glm::vec4(axes[1], 0.);
-	_modelMatrix[2] = glm::vec4(axes[2], 0.);
+void Model::setOrientation(glm::dmat3 axes) {
+	_modelMatrix[0] = glm::dvec4(axes[0], 0.);
+	_modelMatrix[1] = glm::dvec4(axes[1], 0.);
+	_modelMatrix[2] = glm::dvec4(axes[2], 0.);
 }
 
 void Model::uniformize(int shaderID){

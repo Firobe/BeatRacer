@@ -11,7 +11,7 @@ using namespace std;
 NoteHandler::NoteHandler(string path, Map& map, LifeBar& lifebar, Ship& ship) : _currentNote(4, 0), _notes(4), _lifebar(lifebar), _ship(ship){
 	string buffer;
 	ifstream input;
-	float pos;
+	double pos;
 	int col;
 	_barPosition = 0.;
 	_combo = 0;
@@ -27,19 +27,19 @@ NoteHandler::NoteHandler(string path, Map& map, LifeBar& lifebar, Ship& ship) : 
 	if(!input)
 		throw runtime_error("Unable to open " + path);
 
-	Note def = {.matrix = glm::mat4(1.), .pos = 0., .state = 0};
+	Note def = {.matrix = glm::dmat4(1.), .pos = 0., .state = 0};
 	while (getline(input, buffer)) {
-		if( sscanf(buffer.c_str(), "%f,%d", &pos, &col) != 2)
+		if( sscanf(buffer.c_str(), "%lf,%d", &pos, &col) != 2)
 			throw runtime_error("Bad note format : \"" + buffer + "\"");
 		for (int i = 0; i < 4; i++) {
 			if (col % 2) {
 				_notes[i].push_back(def);
 				_notes[i].back().pos = pos;
-				_notes[i].back().matrix = glm::translate(_notes[i].back().matrix, map.getWorldCoordinates(glm::vec3(pos, (ROAD_WIDTH * (2.*i - 3.)) / 4., 0)));
-				glm::mat3 axes = map.getWorldOrientation(pos);
-				_notes[i].back().matrix[0] = glm::vec4(axes[0], 0.);
-				_notes[i].back().matrix[1] = glm::vec4(axes[1], 0.);
-				_notes[i].back().matrix[2] = glm::vec4(axes[2], 0.);
+				_notes[i].back().matrix = glm::translate(_notes[i].back().matrix, map.getWorldCoordinates(glm::dvec3(pos, (ROAD_WIDTH * (2.*i - 3.)) / 4., 0)));
+				glm::dmat3 axes = map.getWorldOrientation(pos);
+				_notes[i].back().matrix[0] = glm::dvec4(axes[0], 0.);
+				_notes[i].back().matrix[1] = glm::dvec4(axes[1], 0.);
+				_notes[i].back().matrix[2] = glm::dvec4(axes[2], 0.);
 			}
 			col /= 2;
 		}
@@ -61,7 +61,7 @@ void NoteHandler::draw(Video& vid) {
 
 void NoteHandler::placeBar(float pos, Map& map) {
 	_timingBar.resetMatrix();
-	_timingBar.translate(map.getWorldCoordinates(glm::vec3(pos, 0, 0)));
+	_timingBar.translate(map.getWorldCoordinates(glm::dvec3(pos, 0, 0)));
 	_timingBar.setOrientation(map.getWorldOrientation(pos));
 	_barPosition = pos;
 }

@@ -25,13 +25,13 @@ class Model { //ABSTRACT
         ~Model();
         void load(std::string); //Load texture and model
         virtual void draw(Video&) = 0; //Render the model
-        virtual void draw(Video&, glm::mat4&) = 0; //Render the model
-        void translate(glm::vec3); //Translate the model by (x, y, z)
-        void rotate(float angle, glm::vec3 axis); //Rotate the model by angle around axis
-        void scale(glm::vec3); //Scale the model by (x, y, z)
-        void setOrientation(glm::mat3);
+        virtual void draw(Video&, glm::dmat4&) = 0; //Render the model
+        void translate(glm::dvec3); //Translate the model by (x, y, z)
+        void rotate(double angle, glm::dvec3 axis); //Rotate the model by angle around axis
+        void scale(glm::dvec3); //Scale the model by (x, y, z)
+        void setOrientation(glm::dmat3);
         void resetMatrix();
-        glm::mat4 getMatrix();
+        glm::dmat4 getMatrix();
 		void uniformize(int);
 		void setShaderNb(int);
 		void addUniform(std::string, int);
@@ -42,7 +42,7 @@ class Model { //ABSTRACT
         virtual void loadTexture(std::string);
 
         Texture _texture;
-        glm::mat4 _modelMatrix;
+        glm::dmat4 _modelMatrix;
 		std::vector<float> _mapModel; //Vertices (te be rendered as triangles)
 		std::vector<float> _mapTex; //Texture coordinates
         GLuint _vboID, _vaoID;

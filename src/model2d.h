@@ -15,7 +15,7 @@ class Model2D : public Model {
         Model2D(glm::vec2);
         ~Model2D();
         virtual void draw(Video&); //Render the model
-        virtual void draw(Video&, glm::mat4&); //Render the model
+        virtual void draw(Video&, glm::dmat4&); //Render the model
 		void setSize(glm::vec2);
 		void place(glm::vec2);
     protected:

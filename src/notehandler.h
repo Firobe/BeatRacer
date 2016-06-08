@@ -17,7 +17,7 @@ class Ship;
 
 typedef struct Note Note;
 struct Note{
-	glm::mat4 matrix;
+	glm::dmat4 matrix;
 	float pos;
 	int state;
 };
@@ -36,7 +36,7 @@ class NoteHandler {
         std::vector<std::vector<Note>> _notes;
         Model3D _timingBar;
 
-		float _score, _precision;
+		double _score, _precision;
 		int _combo;
 		LifeBar& _lifebar;
 		Ship& _ship;

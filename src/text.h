@@ -16,7 +16,7 @@ class Text : public Model2D{
         ~Text();
 		void drawString(glm::vec2, std::string, Video&);
 		void draw(Video& video);
-		void draw(Video& video, glm::mat4& modelMatrix);
+		void draw(Video& video, glm::dmat4& modelMatrix);
     private:
         void loadTexture(std::string);
 		Bitmap _bitmap;

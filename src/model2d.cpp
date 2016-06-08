@@ -21,14 +21,14 @@ Model2D::~Model2D() {
 void Model2D::setSize(glm::vec2 newSize){
 	if(newSize.x == 0 || newSize.y == 0)
 		return;
-	scale(glm::vec3( newSize.x / _curScale.x, newSize.y / _curScale.y, 0.));
+	scale(glm::dvec3( newSize.x / _curScale.x, newSize.y / _curScale.y, 0.));
 	_curScale = newSize;
 }
 
 void Model2D::place(glm::vec2 pos){
 	resetMatrix();
-	translate(glm::vec3(pos, 0.));
-	scale(glm::vec3(_curScale, 0.));
+	translate(glm::dvec3(pos, 0.));
+	scale(glm::dvec3(_curScale, 0.));
 }
 
 void Model2D::loadV() {
@@ -93,6 +93,6 @@ void Model2D::draw(Video& video) {
 	video.render2D(_vaoID, _vertexNb, _texture, this, _modelMatrix, _shaderNb);
 }
 
-void Model2D::draw(Video& video, glm::mat4& modelMatrix) {
+void Model2D::draw(Video& video, glm::dmat4& modelMatrix) {
 	video.render2D(_vaoID, _vertexNb, _texture, this, modelMatrix, _shaderNb);
 }

@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
 void gameLoop(Video& video, Audio& audio) {
     stringstream ss;
     glm::vec2 pos;
-    float pitchGoal = 1.;
+    double pitchGoal = 1.;
     bool superSpeed = false;
     Map map;
     map.load(mapName);
@@ -160,8 +160,8 @@ void editorLoop(Video& video, Audio& audio) {
         Map& map;
         } send = {video, audio, map};
     unsigned int curSector = 0, oldSector = 1;
-    glm::vec4 sector(1., 0, 0, 1);
-    glm::vec4 oldSec = sector;
+    glm::dvec4 sector(1., 0, 0, 1);
+    glm::dvec4 oldSec = sector;
     map.load(mapName);
     auto segMap = map.getMap();
     Text font(glm::vec2(screen_width, screen_height), 60.);
@@ -174,12 +174,12 @@ void editorLoop(Video& video, Audio& audio) {
         *((glm::quat*)v) = glm::quat(1., 0., 0., 0.);
         }, &dir, "");
     TwAddVarRW(tbar, "Current sector", TW_TYPE_UINT32, &curSector, "");
-    TwAddVarRW(tbar, "Sector repetition", TW_TYPE_FLOAT, &sector[3], " min=1 ");
-    TwAddVarRW(tbar, "Sector length", TW_TYPE_FLOAT, &sector[0], " min=0. precision=5 step=0.0001 ");
-    TwAddVarRW(tbar, "Sector theta", TW_TYPE_FLOAT, &sector[1], " precision=5 step=0.0001 ");
-    TwAddVarRW(tbar, "Sector phi", TW_TYPE_FLOAT, &sector[2], " precision=5 step=0.0001 ");
+    TwAddVarRW(tbar, "Sector repetition", TW_TYPE_DOUBLE, &sector[3], " min=1 ");
+    TwAddVarRW(tbar, "Sector length", TW_TYPE_DOUBLE, &sector[0], " min=0. precision=5 step=0.0001 ");
+    TwAddVarRW(tbar, "Sector theta", TW_TYPE_DOUBLE, &sector[1], " precision=5 step=0.0001 ");
+    TwAddVarRW(tbar, "Sector phi", TW_TYPE_DOUBLE, &sector[2], " precision=5 step=0.0001 ");
     TwAddButton(tbar, "Reset settings", [](void* v) {
-        *((glm::vec3*)v) = glm::vec3(1., 0., 0.);
+        *((glm::dvec4*)v) = glm::dvec4(1., 0., 0., 1.);
         }, &sector, "");
     TwAddButton(tbar, "Save map", [](void* m) {
         ((Map*)m)->write(mapName);

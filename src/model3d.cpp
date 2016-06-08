@@ -133,6 +133,6 @@ void Model3D::draw(Video& video) {
 	video.render(_vaoID, _vertexNb, _texture, this, _modelMatrix, _shaderNb);
 }
 
-void Model3D::draw(Video& video, glm::mat4& modelMatrix) {
+void Model3D::draw(Video& video, glm::dmat4& modelMatrix) {
 	video.render(_vaoID, _vertexNb, _texture, this, modelMatrix, _shaderNb);
 }

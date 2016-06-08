@@ -58,8 +58,8 @@
 #define FPS_INTERVAL (1./FPS_GOAL) //IN MICROSECONDS
 #define FPS_TICKS (CLOCKS_PER_SEC * FPS_INTERVAL)
 
-glm::vec3 toCartesian(glm::vec3 v);
-glm::vec3 toSpherical(glm::vec3 v);
+glm::dvec3 toCartesian(glm::dvec3 v);
+glm::dvec3 toSpherical(glm::dvec3 v);
 
 class Map;
 class Model3D;
@@ -71,27 +71,27 @@ class Video {
         ~Video();
         void refresh();
         GLFWwindow* win();
-        void render(GLuint id, int, Texture&, Model3D*, glm::mat4 = glm::mat4(1.), int = 0);
-        void render2D(GLuint id, int, Texture&, Model2D*, glm::mat4 = glm::mat4(1.), int = 0);
-        void rotateCamera(int, float, bool = true);
-        void cameraTranslate(int, float);
+        void render(GLuint id, int, Texture&, Model3D*, glm::dmat4 = glm::dmat4(1.), int = 0);
+        void render2D(GLuint id, int, Texture&, Model2D*, glm::dmat4 = glm::dmat4(1.), int = 0);
+        void rotateCamera(int, double, bool = true);
+        void cameraTranslate(int, double);
         glm::vec2 getCursor();
         void switchFreeFly();
-        void shipCamera(glm::vec3, glm::vec3, Map&);
+        void shipCamera(glm::dvec3, glm::dvec3, Map&);
 		void addShader(std::string, std::string);
 		void twRedirect();
-		void dirCamera(glm::vec3, glm::vec3);
+		void dirCamera(glm::dvec3, glm::dvec3);
 		void quatCamera(glm::quat);
     private:
         void setCamera();
-        void setCamera(glm::vec3, glm::vec3);
+        void setCamera(glm::dvec3, glm::dvec3);
         bool _freeFly;
         GLFWwindow* _window;
 		std::vector<Shader> _shaderArray;
-        glm::mat4 _projection;
-        glm::mat4 _view;
-        glm::vec3 _orientationX, _orientationY, _orientationZ;
-        glm::vec3 _position;
+        glm::dmat4 _projection;
+        glm::dmat4 _view;
+        glm::dvec3 _orientationX, _orientationY, _orientationZ;
+        glm::dvec3 _position;
     };
 
 #endif

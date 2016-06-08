@@ -22,7 +22,7 @@ void Text::draw(Video& video) {
     video.render2D(_vaoID, _vertexNb, _bitmap, this, _modelMatrix, _shaderNb);
     }
 
-void Text::draw(Video& video, glm::mat4& modelMatrix) {
+void Text::draw(Video& video, glm::dmat4& modelMatrix) {
     video.render2D(_vaoID, _vertexNb, _bitmap, this, modelMatrix, _shaderNb);
     }
 

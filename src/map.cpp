@@ -17,17 +17,17 @@ Map::Map() : Model3D() {
 Map::~Map() {
     }
 
-vector<glm::vec3>& Map::getMap() {
+vector<glm::dvec3>& Map::getMap() {
     return _transMap;
     }
 
-glm::vec4 Map::getSegment(unsigned int n){
+glm::dvec4 Map::getSegment(unsigned int n){
 	if(n < _fileMap.size())
 		return _fileMap[n];
-	else return glm::vec4(1., 0., 0., 1);
+	else return glm::dvec4(1., 0., 0., 1);
 }
 
-void Map::setMapSeg(unsigned int n, glm::vec4 seg) {
+void Map::setMapSeg(unsigned int n, glm::dvec4 seg) {
     if (n >= _fileMap.size())
         _fileMap.resize(n + 1);
 
@@ -37,7 +37,7 @@ void Map::setMapSeg(unsigned int n, glm::vec4 seg) {
 void Map::write(string path){
 	path = "res/map/" + path + ".map";
 	ofstream map(path);
-	for(glm::vec4 v : _fileMap)
+	for(glm::dvec4 v : _fileMap)
 		map << v[0] << "," << v[1] << "," << v[2] << ":" << v[3] << endl;
 }
 
@@ -48,7 +48,7 @@ void Map::loadModel(string path) {
     path = "res/map/" + path + ".map";
 
     if (_fileMap.empty()) {
-        vec4 temp;
+        dvec4 temp;
 		int todo;
         map.open(path);
 
@@ -56,7 +56,7 @@ void Map::loadModel(string path) {
             throw runtime_error("Unable to open " + path);
 
         while (getline(map, buffer)) {
-            if (sscanf(buffer.c_str(), "%f,%f,%f:%d", &temp[0], &temp[1], &temp[2], &todo) != 4)
+            if (sscanf(buffer.c_str(), "%lf,%lf,%lf:%d", &temp[0], &temp[1], &temp[2], &todo) != 4)
                 throw runtime_error("Bad map format : \"" + buffer + "\"");
 
 			temp[3] = todo;
@@ -65,9 +65,9 @@ void Map::loadModel(string path) {
         }
 
 	_transMap.clear();
-	for(glm::vec4 v : _fileMap){
+	for(glm::dvec4 v : _fileMap){
     	for (int i = 0 ; i < v[3] ; i++)
-        	_transMap.push_back(glm::vec3(v[0], radians(v[1]), -radians(v[2])));
+        	_transMap.push_back(glm::dvec3(v[0], radians(v[1]), -radians(v[2])));
 	}
     _segmentMap.resize(_transMap.size());
     _vertexNb = 6 * _transMap.size();
@@ -75,29 +75,29 @@ void Map::loadModel(string path) {
     _mapModel.resize(3 * _vertexNb);
     _mapTex.resize(2 * _vertexNb);
 
-    mat4 tmpmod = mat4(1.);
-    float cursor = 0;
-    vec4 act(0.); //Current origin
+    dmat4 tmpmod = dmat4(1.);
+    double cursor = 0;
+    dvec4 act(0.); //Current origin
 
     for (int s = 0 ; s < (int)_transMap.size() ; s++) { //SEGMENT
-        _segmentMap[s].origin = vec3(act);
+        _segmentMap[s].origin = dvec3(act);
         _segmentMap[s].length = _transMap[s][0];
-        _segmentMap[s].xAxis = vec3(tmpmod[xAxis]);
-        _segmentMap[s].yAxis = vec3(tmpmod[yAxis]);
-        _segmentMap[s].zAxis = vec3(tmpmod[zAxis]);
+        _segmentMap[s].xAxis = dvec3(tmpmod[xAxis]);
+        _segmentMap[s].yAxis = dvec3(tmpmod[yAxis]);
+        _segmentMap[s].zAxis = dvec3(tmpmod[zAxis]);
 
         fillTex(s, cursor);
-        vec4 t = tmpmod[yAxis];
+        dvec4 t = tmpmod[yAxis];
         t *= ROAD_WIDTH;
         //Vertices for first half of the two triangles
         fillModel(6 * s, act - t); //V1 (tmpmod[1] -> Y vector)
         fillModel(6 * s + 5, act - t); //V6
         fillModel(6 * s + 1, act + t);
 
-        act += tmpmod * vec4(toCartesian(_transMap[s]), 0.); //Matricial product of model matrix & orientation vector
-        tmpmod = glm::rotate(tmpmod, _transMap[s][1], vec3(0, 0, 1));
-        tmpmod = glm::rotate(tmpmod, _transMap[s][2], vec3(0, 1, 0));
-        tmpmod = glm::translate(tmpmod, _transMap[s][0] * vec3(1, 0, 0));
+        act += tmpmod * dvec4(toCartesian(_transMap[s]), 0.); //Matricial product of model matrix & orientation vector
+        tmpmod = glm::rotate(tmpmod, _transMap[s][1], dvec3(0, 0, 1));
+        tmpmod = glm::rotate(tmpmod, _transMap[s][2], dvec3(0, 1, 0));
+        tmpmod = glm::translate(tmpmod, _transMap[s][0] * dvec3(1, 0, 0));
         t = tmpmod[yAxis];
         t *= ROAD_WIDTH;
 
@@ -109,17 +109,17 @@ void Map::loadModel(string path) {
         }
     }
 
-void Map::fillModel(int vertex, vec4 v) {
+void Map::fillModel(int vertex, dvec4 v) {
     //writing a vertex into the model array
     _mapModel[vertex * 3] = v[0];
     _mapModel[vertex * 3 + 1] = v[1];
     _mapModel[vertex * 3 + 2] = v[2];
     }
 
-void Map::fillTex(int segment, float cursor) {
+void Map::fillTex(int segment, double cursor) {
     //Texture coordinates
     int cur = 12 * segment;
-    float rho = 1. / ROAD_WIDTH * _transMap[segment][0];
+    double rho = 1. / ROAD_WIDTH * _transMap[segment][0];
     _mapTex[cur] = 1.;
     _mapTex[cur + 1] = cursor;
     _mapTex[cur + 2] = 0.;
@@ -134,8 +134,8 @@ void Map::fillTex(int segment, float cursor) {
     _mapTex[cur + 11] = cursor;
     }
 
-glm::vec3 Map::getWorldCoordinates(glm::vec3 roadCoord) {
-    static float curLen = 0.;
+glm::dvec3 Map::getWorldCoordinates(glm::dvec3 roadCoord) {
+    static double curLen = 0.;
     static int seg = 0;
 
     while (seg - 1 >= 0 && curLen - roadCoord.x >= _segmentMap[seg - 1].length) {
@@ -155,8 +155,8 @@ glm::vec3 Map::getWorldCoordinates(glm::vec3 roadCoord) {
            - roadCoord.y * _segmentMap[seg].yAxis + roadCoord.z * _segmentMap[seg].zAxis;
     }
 
-glm::mat3 Map::getWorldOrientation(float xPos) { //RADIANS
-    static float curLen = 0.;
+glm::dmat3 Map::getWorldOrientation(double xPos) { //RADIANS
+    static double curLen = 0.;
     static int seg = 0;
 
     while (seg - 1 >= 0 && curLen - xPos >= _segmentMap[seg - 1].length) {
@@ -172,5 +172,5 @@ glm::mat3 Map::getWorldOrientation(float xPos) { //RADIANS
     if ((unsigned int)seg >= _segmentMap.size() || seg < 0)
         throw out_of_range("Out of map range");
 
-    return glm::mat3(_segmentMap[seg].xAxis, _segmentMap[seg].yAxis, _segmentMap[seg].zAxis);
+    return glm::dmat3(_segmentMap[seg].xAxis, _segmentMap[seg].yAxis, _segmentMap[seg].zAxis);
     }
