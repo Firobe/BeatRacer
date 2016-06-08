@@ -6,7 +6,7 @@
 #include <vector>
 
 #define SHIP_HEIGHT (0.4)
-#define SHIP_ROUTINE_AMPLITUDE (0.05)
+#define SHIP_ROUTINE_AMPLITUDE (0.00) //0.05
 #define SHIP_ROUTINE_STEP (3.)
 #define DECCELERATION_FACTOR (2.5) //p
 #define ACCELERATION (0.01) //a

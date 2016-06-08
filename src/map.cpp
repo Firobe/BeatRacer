@@ -37,8 +37,10 @@ void Map::setMapSeg(unsigned int n, glm::dvec4 seg) {
 void Map::write(string path){
 	path = "res/map/" + path + ".map";
 	ofstream map(path);
-	for(glm::dvec4 v : _fileMap)
+	for(glm::dvec4 v : _fileMap){
+		while(v[1] >= 0.0005 || v[2] >= 0.0005) { v[0] /= 2.; v[1] /= 2. ; v[2] /= 2. ; v[3] *= 2.; }
 		map << v[0] << "," << v[1] << "," << v[2] << ":" << v[3] << endl;
+	}
 }
 
 void Map::loadModel(string path) {
