@@ -71,9 +71,7 @@ void gameLoop(Video& video, Audio& audio) {
 
         //User-interface operations
         glfwPollEvents();
-        pos = video.getCursor();
-        video.rotateCamera(zAxis, pos[0]);
-        video.rotateCamera(yAxis, pos[1]);
+        //pos = video.getCursor();
 
         if (bar.getValue() > 0. && KeyManager::check(GLFW_KEY_SPACE) && KeyManager::check(GLFW_KEY_UP))
             superSpeed = true;
@@ -90,7 +88,6 @@ void gameLoop(Video& video, Audio& audio) {
         if (superSpeed) {
             ship.setFriction(PITCH_SUPERMAX);
             bar.setValue(bar.getValue() - 0.2);
-
             }
         else
             ship.setFriction(pitchGoal);
@@ -113,21 +110,6 @@ void gameLoop(Video& video, Audio& audio) {
             else ship.turn(2);
             }
 
-        if (KeyManager::check(GLFW_KEY_LEFT_ALT, true))
-            video.switchFreeFly();
-
-        if (KeyManager::check(GLFW_KEY_W))
-            video.cameraTranslate(xAxis, 0.2);
-
-        if (KeyManager::check(GLFW_KEY_S))
-            video.cameraTranslate(xAxis, -0.2);
-
-        if (KeyManager::check(GLFW_KEY_A))
-            video.cameraTranslate(yAxis, 0.2);
-
-        if (KeyManager::check(GLFW_KEY_D))
-            video.cameraTranslate(yAxis, -0.2);
-
         //General operations
         ship.manage();
         notehandler.placeBar(ship.getAbsPos().x, map);
@@ -135,7 +117,7 @@ void gameLoop(Video& video, Audio& audio) {
         video.shipCamera(ship.getAbsPos(), ship.getVertical(), map);
         audio.changePitch(ship.getSpeed() / SPEED_REFERENCE);
         ss.str("");
-		ss << audio.sync();
+        ss << audio.sync();
 
         //Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -162,17 +144,19 @@ void editorLoop(Video& video, Audio& audio) {
     unsigned int curSector = 0, oldSector = 1;
     glm::dvec4 sector(1., 0, 0, 1);
     glm::dvec4 oldSec = sector;
+    double tranSpeed = 0.2;
     map.load(mapName);
     auto segMap = map.getMap();
     Text font(glm::vec2(screen_width, screen_height), 60.);
     font.load("atari");
     TwWindowSize(screen_width, screen_height);
-    glm::quat dir;
+    glm::dquat dir;
     TwBar* tbar = TwNewBar("TweakBar");
-    TwAddVarRW(tbar, "Camera direction", TW_TYPE_QUAT4F, &dir, " axisx=-z axisy=x axisz=-y ");
+    TwAddVarRW(tbar, "Camera rotation", TW_TYPE_QUAT4D, &dir, " axisx=-z axisy=-x axisz=y ");
     TwAddButton(tbar, "Reset camera", [](void* v) {
         *((glm::quat*)v) = glm::quat(1., 0., 0., 0.);
         }, &dir, "");
+    TwAddVarRW(tbar, "Camera speed", TW_TYPE_DOUBLE, &tranSpeed, " min=0. precision=3 step=0.1 ");
     TwAddVarRW(tbar, "Current sector", TW_TYPE_UINT32, &curSector, "");
     TwAddVarRW(tbar, "Sector repetition", TW_TYPE_DOUBLE, &sector[3], " min=1 ");
     TwAddVarRW(tbar, "Sector length", TW_TYPE_DOUBLE, &sector[0], " min=0. precision=5 step=0.0001 ");
@@ -202,6 +186,24 @@ void editorLoop(Video& video, Audio& audio) {
             }
 
         video.quatCamera(dir);
+
+        if (KeyManager::check(GLFW_KEY_W))
+            video.translateCamera(dir, glm::dvec3(tranSpeed, 0, 0));
+
+        if (KeyManager::check(GLFW_KEY_S))
+            video.translateCamera(dir, glm::dvec3(-tranSpeed, 0, 0));
+
+        if (KeyManager::check(GLFW_KEY_D))
+            video.translateCamera(dir, glm::dvec3(0, -tranSpeed, 0));
+
+        if (KeyManager::check(GLFW_KEY_A))
+            video.translateCamera(dir, glm::dvec3(0, +tranSpeed, 0));
+
+        if (KeyManager::check(GLFW_KEY_LEFT_SHIFT))
+            video.translateCamera(dir, glm::dvec3(0, 0, tranSpeed));
+
+        if (KeyManager::check(GLFW_KEY_LEFT_CONTROL))
+            video.translateCamera(dir, glm::dvec3(0, 0, -tranSpeed));
 
         //User-interface operations
         glfwPollEvents();

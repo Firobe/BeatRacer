@@ -41,10 +41,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
 
-    if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS)
+    if (key == GLFW_KEY_LEFT_ALT && action == GLFW_PRESS)
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-    if (key == GLFW_KEY_RIGHT_CONTROL && action == GLFW_PRESS)
+    if (key == GLFW_KEY_RIGHT_ALT && action == GLFW_PRESS)
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (key == GLFW_KEY_UNKNOWN)
@@ -108,11 +108,6 @@ Video::Video(string a, string b) {
     _shaderArray[0].load();
     _projection = glm::perspective(FOV, (double) screen_width / screen_height, NEAR, FAR);
     _position = glm::dvec3(-5, 0, 0.1);
-    _orientationX = glm::dvec3(1, 0, 0);
-    _orientationY = glm::dvec3(1, glm::half_pi<double>(), 0);
-    _orientationZ = glm::dvec3(1, 0, -glm::half_pi<double>());
-    _freeFly = false;
-    setCamera();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_BLEND);
@@ -141,79 +136,22 @@ GLFWwindow* Video::win() {
     return _window;
     }
 
-void Video::switchFreeFly() {
-    _freeFly = !_freeFly;
+void Video::quatCamera(glm::dquat quat) {
+	_view = glm::lookAt(_position, _position + glm::rotate(quat, glm::dvec3(1., 0., 0.)), glm::rotate(quat, glm::dvec3(0., 0., 1.)));
     }
 
-void Video::setCamera() {
-    _view = glm::lookAt(_position, _position + toCartesian(_orientationX), glm::dvec3(0, 0, 1));
-    }
-
-void Video::setCamera(glm::dvec3 toLook, glm::dvec3 vertical) {
-    _view = glm::lookAt(_position, toLook, vertical);
-    }
-
-void Video::dirCamera(glm::dvec3 dir, glm::dvec3 vertical) {
-    _view = glm::lookAt(_position, _position + dir, vertical);
-    }
-
-void Video::quatCamera(glm::quat quat) {
-    setCamera();
-    _view *= glm::dmat4(glm::toMat4(quat));
-    }
+void Video::translateCamera(glm::dquat orientation, glm::dvec3 axis){
+	_position += glm::rotate(orientation, axis);
+}
 
 void Video::shipCamera(glm::dvec3 shipPos, glm::dvec3 vertical, Map& map) {
-    if (_freeFly)
-        return;
-
     _position = map.getWorldCoordinates(glm::dvec3(shipPos.x - SHIP_CAMERA_BEHIND, shipPos.y, SHIP_CAMERA_HEIGHT));
-    glm::dvec3 lookAt = map.getWorldCoordinates(glm::dvec3(shipPos.x + SHIP_CAMERA_GROUNDPOINT, 0, shipPos.z));
-    setCamera(lookAt, vertical);
+    glm::dvec3 toLook = map.getWorldCoordinates(glm::dvec3(shipPos.x + SHIP_CAMERA_GROUNDPOINT, 0, shipPos.z));
+    _view = glm::lookAt(_position, toLook, vertical);
     }
 
 void Video::addShader(string a, string b) {
     _shaderArray.push_back(Shader(a, b));
-    }
-
-void Video::rotateCamera(int axis, double value, bool degree) {
-    if (!_freeFly)
-        return;
-
-    if (degree)
-        value = glm::radians(value);
-
-    if (axis == yAxis) {
-        _orientationX += glm::dvec3(0, 0, value);
-        _orientationZ += glm::dvec3(0, 0, value);
-        }
-
-    if (axis == zAxis) {
-        _orientationX += glm::dvec3(0, value, 0);
-        _orientationY += glm::dvec3(0, value, 0);
-        }
-
-    if (_orientationX[2] >= glm::half_pi<double>())
-        _orientationX[2] = glm::half_pi<double>() - 0.01;
-    else if (_orientationX[2] <= - glm::half_pi<double>())
-        _orientationX[2] = - glm::half_pi<double>() + 0.01;
-
-    setCamera();
-    }
-
-void Video::cameraTranslate(int axis, double value) {
-    if (!_freeFly)
-        return;
-
-    if (axis == xAxis)
-        _position += value * toCartesian(_orientationX);
-
-    if (axis == yAxis)
-        _position += value * toCartesian(_orientationY);
-
-    if (axis == zAxis)
-        _position += value * toCartesian(_orientationZ);
-
-    setCamera();
     }
 
 void Video::render(GLuint id, int size, Texture& tex, Model3D* mod, glm::dmat4 model, int shaderNb) {

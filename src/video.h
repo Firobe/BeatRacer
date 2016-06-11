@@ -73,24 +73,17 @@ class Video {
         GLFWwindow* win();
         void render(GLuint id, int, Texture&, Model3D*, glm::dmat4 = glm::dmat4(1.), int = 0);
         void render2D(GLuint id, int, Texture&, Model2D*, glm::dmat4 = glm::dmat4(1.), int = 0);
-        void rotateCamera(int, double, bool = true);
-        void cameraTranslate(int, double);
         glm::vec2 getCursor();
-        void switchFreeFly();
         void shipCamera(glm::dvec3, glm::dvec3, Map&);
 		void addShader(std::string, std::string);
 		void twRedirect();
-		void dirCamera(glm::dvec3, glm::dvec3);
-		void quatCamera(glm::quat);
+		void quatCamera(glm::dquat);
+		void translateCamera(glm::dquat, glm::dvec3);
     private:
-        void setCamera();
-        void setCamera(glm::dvec3, glm::dvec3);
-        bool _freeFly;
         GLFWwindow* _window;
 		std::vector<Shader> _shaderArray;
         glm::dmat4 _projection;
         glm::dmat4 _view;
-        glm::dvec3 _orientationX, _orientationY, _orientationZ;
         glm::dvec3 _position;
     };
 
