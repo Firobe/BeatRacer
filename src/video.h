@@ -36,7 +36,7 @@
 
 //Display parameters
 #define FULLSCREEN true
-#define VERTICAL_SYNC 0
+#define VERTICAL_SYNC 1
 #define FPS_GOAL 60
 
 //Input parameters
