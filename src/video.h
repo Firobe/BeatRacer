@@ -73,7 +73,6 @@ class Video {
         GLFWwindow* win();
         void render(GLuint id, int, Texture&, Model3D*, glm::dmat4 = glm::dmat4(1.), int = 0);
         void render2D(GLuint id, int, Texture&, Model2D*, glm::dmat4 = glm::dmat4(1.), int = 0);
-        glm::vec2 getCursor();
         void shipCamera(glm::dvec3, glm::dvec3, Map&);
 		void addShader(std::string, std::string);
 		void twRedirect();

@@ -133,17 +133,36 @@ void gameLoop(Video& video, Audio& audio) {
         }
     }
 
+//TW CALLBACKS
+struct Disco {
+    Video& video;
+    Audio& audio;
+    Map& map;
+    };
+void TW_CALL resetCamCall(void* v) {
+    *((glm::quat*)v) = glm::quat(1., 0., 0., 0.);
+    }
+void TW_CALL resetSetCall(void* v) {
+    *((glm::dvec4*)v) = glm::dvec4(1., 0., 0., 1.);
+    }
+void TW_CALL saveCall(void* m) {
+    ((Map*)m)->write(mapName);
+    }
+void TW_CALL saveTryCall(void* v) {
+    struct Disco* s = (Disco*) v;
+    s->map.write(mapName);
+    gameLoop(s->video, s->audio);
+    }
+
 void editorLoop(Video& video, Audio& audio) {
     Map map;
     stringstream ss;
-    struct Disco {
-        Video& video;
-        Audio& audio;
-        Map& map;
-        } send = {video, audio, map};
+    Disco send = {video, audio, map};
     unsigned int curSector = 0, oldSector = 1;
     glm::dvec4 sector(1., 0, 0, 1);
     glm::dvec4 oldSec = sector;
+	glm::dvec2 cursor = KeyManager::mousePosition();
+	glm::dvec2 oldCursor = cursor;
     double tranSpeed = 0.2;
     map.load(mapName);
     auto segMap = map.getMap();
@@ -153,29 +172,18 @@ void editorLoop(Video& video, Audio& audio) {
     glm::dquat dir;
     TwBar* tbar = TwNewBar("TweakBar");
     TwAddVarRW(tbar, "Camera rotation", TW_TYPE_QUAT4D, &dir, " axisx=-z axisy=-x axisz=y ");
-    TwAddButton(tbar, "Reset camera", [](void* v) {
-        *((glm::quat*)v) = glm::quat(1., 0., 0., 0.);
-        }, &dir, "");
+    TwAddButton(tbar, "Reset camera", resetCamCall, &dir, "");
     TwAddVarRW(tbar, "Camera speed", TW_TYPE_DOUBLE, &tranSpeed, " min=0. precision=3 step=0.1 ");
     TwAddVarRW(tbar, "Current sector", TW_TYPE_UINT32, &curSector, "");
     TwAddVarRW(tbar, "Sector repetition", TW_TYPE_DOUBLE, &sector[3], " min=1 ");
     TwAddVarRW(tbar, "Sector length", TW_TYPE_DOUBLE, &sector[0], " min=0. precision=5 step=0.0001 ");
     TwAddVarRW(tbar, "Sector theta", TW_TYPE_DOUBLE, &sector[1], " precision=5 step=0.0001 ");
     TwAddVarRW(tbar, "Sector phi", TW_TYPE_DOUBLE, &sector[2], " precision=5 step=0.0001 ");
-    TwAddButton(tbar, "Reset settings", [](void* v) {
-        *((glm::dvec4*)v) = glm::dvec4(1., 0., 0., 1.);
-        }, &sector, "");
-    TwAddButton(tbar, "Save map", [](void* m) {
-        ((Map*)m)->write(mapName);
-        }, &map, "");
-    TwAddButton(tbar, "Save and try", [](void* v) {
-        struct Disco* s = (Disco*) v;
-        s->map.write(mapName);
-        gameLoop(s->video, s->audio);
-        }, &send, "");
+    TwAddButton(tbar, "Reset settings", resetSetCall, &sector, "");
+    TwAddButton(tbar, "Save map", saveCall, &map, "");
+    TwAddButton(tbar, "Save and try", saveTryCall, &send, "");
     freopen("/dev/null", "w", stderr);
     video.twRedirect();
-    //font.setSize(glm::vec2(300, 300));
 
     ////////////MAIN LOOP/////////
     while (!glfwWindowShouldClose(video.win())) {
@@ -204,6 +212,13 @@ void editorLoop(Video& video, Audio& audio) {
 
         if (KeyManager::check(GLFW_KEY_LEFT_CONTROL))
             video.translateCamera(dir, glm::dvec3(0, 0, -tranSpeed));
+
+		cursor = KeyManager::mousePosition();
+		if(KeyManager::mouseCheck(GLFW_MOUSE_BUTTON_LEFT) && oldCursor != cursor){
+			dir = glm::rotate(dir, glm::radians((oldCursor.y - cursor.y)*FOV / screen_height), glm::dvec3(0, 1, 0));
+			dir = glm::rotate(dir, glm::radians((oldCursor.x - cursor.x)*FOV / screen_width), glm::dvec3(0, 0, -1));
+		}
+		oldCursor = cursor;
 
         //User-interface operations
         glfwPollEvents();

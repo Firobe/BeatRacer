@@ -46,7 +46,6 @@ void Map::write(string path) {
 void Map::loadModel(string in) {
     string buffer;
     ifstream map;
-    int todo;
     string path = "res/map/" + in + ".map";
 
     if (in != "editor") {

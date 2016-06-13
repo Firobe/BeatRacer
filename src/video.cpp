@@ -2,6 +2,7 @@
 #include "map.h"
 #include "model3d.h"
 #include "model2d.h"
+#include "keymanager.h"
 
 #define GLFW_CDECL
 #include <AntTweakBar.h>
@@ -16,53 +17,17 @@ using namespace std;
 enum Axes { xAxis, yAxis, zAxis };
 
 static void error_callback(int error, const char* description) {
-    cerr << description << endl;
-    }
-
-inline void TwEventMouseButtonGLFW3(GLFWwindow* window, int button, int action, int mods) {
-    TwEventMouseButtonGLFW(button, action);
-    }
-inline void TwEventMousePosGLFW3(GLFWwindow* window, double xpos, double ypos) {
-    TwMouseMotion(int(xpos), int(ypos));
-    }
-inline void TwEventMouseWheelGLFW3(GLFWwindow* window, double xoffset, double yoffset) {
-    TwEventMouseWheelGLFW(yoffset);
-    }
-inline void TwEventKeyGLFW3(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    TwEventKeyGLFW(key, action);
-    }
-inline void TwEventCharGLFW3(GLFWwindow* window, unsigned int codepoint) {
-    TwEventCharGLFW(codepoint, GLFW_PRESS);
-    }
-
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    TwEventKeyGLFW(key, action);
-
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GL_TRUE);
-
-    if (key == GLFW_KEY_LEFT_ALT && action == GLFW_PRESS)
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
-    if (key == GLFW_KEY_RIGHT_ALT && action == GLFW_PRESS)
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-    if (key == GLFW_KEY_UNKNOWN)
-        return;
-
-    if (action == GLFW_PRESS)
-        KeyManager::get().press(key);
-
-    if (action == GLFW_RELEASE)
-        KeyManager::get().release(key);
+    cout << description << endl;
     }
 
 void Video::twRedirect() {
     glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    glfwSetMouseButtonCallback(_window, TwEventMouseButtonGLFW3);
-    glfwSetCursorPosCallback(_window, TwEventMousePosGLFW3);
-    glfwSetScrollCallback(_window, TwEventMouseWheelGLFW3);
-    glfwSetCharCallback(_window, TwEventCharGLFW3);
+    glfwSetScrollCallback(_window, [](GLFWwindow* w, double x, double y){
+			TwEventMouseWheelGLFW(y);
+			});
+    glfwSetCharCallback(_window, [](GLFWwindow* w, unsigned int codepoint){
+			TwEventCharGLFW(codepoint, GLFW_PRESS);
+			});
     }
 
 Video::Video(string a, string b) {
@@ -94,6 +59,7 @@ Video::Video(string a, string b) {
 
     glfwMakeContextCurrent(_window);
 #ifdef _WIN32
+    cout << "Windows patch enabled !" << endl;
     glewExperimental = GL_TRUE;
     GLenum init(glewInit());
 
@@ -102,7 +68,9 @@ Video::Video(string a, string b) {
 
 #endif
     glfwSwapInterval(VERTICAL_SYNC);
-    glfwSetKeyCallback(_window, key_callback);
+    glfwSetKeyCallback(_window, KeyManager::keyCallback);
+	glfwSetCursorPosCallback(_window, KeyManager::cursorPosCallback);
+	glfwSetMouseButtonCallback(_window, KeyManager::mouseButtonCallback);
     glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     _shaderArray.push_back(Shader(a, b));
     _shaderArray[0].load();
@@ -213,15 +181,5 @@ glm::dvec3 toSpherical(glm::dvec3 v) {
     res[0] = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
     res[1] = atan(v.y / v.x); //THETA
     res[2] = (acos(v.z / res[0]) - glm::half_pi<double>()); //PHI
-    return res;
-    }
-
-glm::vec2 Video::getCursor() {
-    double x, y;
-    glfwGetCursorPos(_window, &x, &y);
-    static double xO = x, yO = y;
-    glm::vec2 res = SENSITIVITY * glm::vec2(xO - x, y - yO);
-    xO = x;
-    yO = y;
     return res;
     }
