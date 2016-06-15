@@ -116,7 +116,8 @@ void gameLoop(Video& video, Audio& audio) {
         notehandler.checkNotes();
         video.shipCamera(ship.getAbsPos(), ship.getVertical(), map);
         audio.changePitch(ship.getSpeed() / SPEED_REFERENCE);
-		audio.sync();
+        ss.str("");
+		ss << "FPS (" << FPS_GOAL << ") : " << audio.sync();
 
         //Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -124,6 +125,7 @@ void gameLoop(Video& video, Audio& audio) {
         ship.draw(video);
         notehandler.draw(video);
         bar.draw(video);
+        font.drawString(glm::vec2(10., 90.), ss.str(), video);
         ss.str("");
         ss << "Speed x" << pitchGoal;
         font.drawString(glm::vec2(10., 42.), ss.str(), video);
