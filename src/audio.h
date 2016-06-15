@@ -14,7 +14,7 @@ class Audio {
         Audio();
         void loadBuffer(std::string);
         void playSource();
-        void changePitch(float);
+        void changePitch(double);
         float sync();
         ~Audio();
     private:
@@ -23,8 +23,8 @@ class Audio {
         ALuint _source;
         ALuint _buffer;
 
-        float _pitch;
-        float _correction;
+        double _pitch;
+        double _correction;
     };
 
 #endif
