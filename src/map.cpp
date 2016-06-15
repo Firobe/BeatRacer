@@ -69,7 +69,7 @@ void Map::loadModel(string in) {
 
     for (glm::dvec4 v : _fileMap) {
         if (in != "editor")
-            while (v[1] >= 0.0005 || v[2] >= 0.0005) {
+            while (v[1] >= 0.001 || v[2] >= 0.001) {
                 v[0] /= 2.;    //On s'assure que les angles sont suffisamment petits
                 v[1] /= 2. ;
                 v[2] /= 2. ;

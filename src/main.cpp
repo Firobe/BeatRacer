@@ -60,7 +60,7 @@ void gameLoop(Video& video, Audio& audio) {
     LifeBar bar(glm::vec2(screen_width, screen_height));
     NoteHandler notehandler(mapName, map, bar, ship);
     Text font(glm::vec2(screen_width, screen_height), 60.);
-    font.load("atari");
+    font.load("klill");
     //font.setSize(glm::vec2(300, 300));
 
     ////////////MAIN LOOP/////////
@@ -116,8 +116,7 @@ void gameLoop(Video& video, Audio& audio) {
         notehandler.checkNotes();
         video.shipCamera(ship.getAbsPos(), ship.getVertical(), map);
         audio.changePitch(ship.getSpeed() / SPEED_REFERENCE);
-        ss.str("");
-        ss << audio.sync();
+		audio.sync();
 
         //Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -125,10 +124,12 @@ void gameLoop(Video& video, Audio& audio) {
         ship.draw(video);
         notehandler.draw(video);
         bar.draw(video);
-        font.drawString(glm::vec2(screen_width - 300, 40), ss.str(), video);
         ss.str("");
-        ss << "x" << pitchGoal;
+        ss << "Speed x" << pitchGoal;
         font.drawString(glm::vec2(10., 42.), ss.str(), video);
+        ss.str("");
+        ss << "Combo x" << notehandler.getCombo() << "   Score " << notehandler.getScore();
+        font.drawString(glm::vec2(screen_width/2 - 100., 42.), ss.str(), video);
         video.refresh();
         }
     }
@@ -161,8 +162,8 @@ void editorLoop(Video& video, Audio& audio) {
     unsigned int curSector = 0, oldSector = 1;
     glm::dvec4 sector(1., 0, 0, 1);
     glm::dvec4 oldSec = sector;
-	glm::dvec2 cursor = KeyManager::mousePosition();
-	glm::dvec2 oldCursor = cursor;
+    glm::dvec2 cursor = KeyManager::mousePosition();
+    glm::dvec2 oldCursor = cursor;
     double tranSpeed = 0.2;
     map.load(mapName);
     auto segMap = map.getMap();
@@ -213,12 +214,14 @@ void editorLoop(Video& video, Audio& audio) {
         if (KeyManager::check(GLFW_KEY_LEFT_CONTROL))
             video.translateCamera(dir, glm::dvec3(0, 0, -tranSpeed));
 
-		cursor = KeyManager::mousePosition();
-		if(KeyManager::mouseCheck(GLFW_MOUSE_BUTTON_LEFT) && oldCursor != cursor){
-			dir = glm::rotate(dir, glm::radians((oldCursor.y - cursor.y)*FOV / screen_height), glm::dvec3(0, 1, 0));
-			dir = glm::rotate(dir, glm::radians((oldCursor.x - cursor.x)*FOV / screen_width), glm::dvec3(0, 0, -1));
-		}
-		oldCursor = cursor;
+        cursor = KeyManager::mousePosition();
+
+        if (KeyManager::mouseCheck(GLFW_MOUSE_BUTTON_LEFT) && oldCursor != cursor) {
+            dir = glm::rotate(dir, glm::radians((oldCursor.y - cursor.y) * FOV / screen_height), glm::dvec3(0, 1, 0));
+            dir = glm::rotate(dir, glm::radians((oldCursor.x - cursor.x) * FOV / screen_width), glm::dvec3(0, 0, -1));
+            }
+
+        oldCursor = cursor;
 
         //User-interface operations
         glfwPollEvents();
