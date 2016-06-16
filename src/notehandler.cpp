@@ -4,6 +4,7 @@
 #include "lifebar.h"
 #include "ship.h"
 #include <stdexcept>
+#include <random>
 #include <fstream>
 
 using namespace std;
@@ -72,6 +73,8 @@ void NoteHandler::checkNotes(){
 	int diff = 0;
     int quality = 0;
     int noteIndex = 1;
+	std::random_device rd;
+	std::mt19937 gen(rd());
 	for(int i = 0 ; i < 4 ; i++) touches2[i] = KeyManager::check(touches[i], true);
 	for (int col = 0; col < 4; col++){
 		if(_currentNote[col] >= _notes[col].size())
@@ -86,7 +89,7 @@ void NoteHandler::checkNotes(){
 				diff -= 5;
                 if(_lifebar.getValue() < 30 && FAIL_PENALTY){
                     std::uniform_real_distribution<> rot (-(30 - _lifebar.getValue()), 30 - _lifebar.getValue());
-                    _ship.turn(30);
+                    _ship.turn(rot(gen));
                 }
 			}
 			else{
@@ -111,7 +114,7 @@ void NoteHandler::checkNotes(){
                     }
                 if(_notes[col][_currentNote[col]].state == NOTE_FAILURE && _lifebar.getValue() < 30 && FAIL_PENALTY){
                     std::uniform_real_distribution<> rot (-(30 - _lifebar.getValue()), 30 - _lifebar.getValue());
-                    _ship.turn(30);
+                    _ship.turn(rot(gen));
                 }
 					_currentNote[col]++;
 				}

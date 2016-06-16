@@ -44,7 +44,7 @@
 
 //Camera parameters
 #define SHIP_CAMERA_BEHIND 3.
-#define SHIP_CAMERA_HEIGHT (1.7)
+#define SHIP_CAMERA_HEIGHT (2.5) //1.7
 #define SHIP_CAMERA_GROUNDPOINT 5.
 
 //DO NOT MODIFY
