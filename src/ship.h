@@ -23,6 +23,7 @@ class Ship : public Model3D {
         double getSpeed();
         glm::dvec3 getAbsPos();
         glm::dvec3 getVertical();
+		void reset();
     protected:
         void move(double);
         void putOnRoad();

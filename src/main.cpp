@@ -73,6 +73,16 @@ void gameLoop(Video& video, Audio& audio) {
         glfwPollEvents();
         //pos = video.getCursor();
 
+        if (KeyManager::check(GLFW_KEY_ENTER, true) || audio.hasEnded()) {
+            video.reset();
+            ship.reset();
+            bar.setValue(100.);
+            notehandler.reset();
+            pitchGoal = 1.;
+            superSpeed = false;
+            audio.reset();
+            }
+
         if (bar.getValue() > 0. && KeyManager::check(GLFW_KEY_SPACE) && KeyManager::check(GLFW_KEY_UP))
             superSpeed = true;
 
@@ -117,7 +127,7 @@ void gameLoop(Video& video, Audio& audio) {
         video.shipCamera(ship.getAbsPos(), ship.getVertical(), map);
         audio.changePitch(ship.getSpeed() / SPEED_REFERENCE);
         ss.str("");
-		ss << "FPS (" << FPS_GOAL << ") : " << audio.sync();
+        ss << "FPS (" << FPS_GOAL << ") : " << audio.sync();
 
         //Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -131,7 +141,7 @@ void gameLoop(Video& video, Audio& audio) {
         font.drawString(glm::vec2(10., 42.), ss.str(), video);
         ss.str("");
         ss << "Combo x" << notehandler.getCombo() << "   Score " << notehandler.getScore();
-        font.drawString(glm::vec2(screen_width/2 - 100., 42.), ss.str(), video);
+        font.drawString(glm::vec2(screen_width / 2 - 100., 42.), ss.str(), video);
         video.refresh();
         }
     }

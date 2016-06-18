@@ -50,11 +50,22 @@ NoteHandler::NoteHandler(string path, Map& map, LifeBar& lifebar, Ship& ship) : 
 NoteHandler::~NoteHandler() {
 }
 
+void NoteHandler::reset(){
+	_barPosition = 0.;
+	_combo = 0;
+	_score = 0;
+	_precision = 100.;
+	_currentNote = vector<unsigned int>(4, 0);
+	for(auto&& v : _notes)
+		for(auto&& n : v)
+			n.state = 0;
+}
+
 void NoteHandler::draw(Video& vid) {
-	for (unsigned int i = 0; i < 4 ; i++)
-		for(unsigned int j = 0 ; j < _notes[i].size() ; j++){
-			_model.setUniform("state", _notes[i][j].state);
-			_model.draw(vid, _notes[i][j].matrix);
+	for (auto&&v : _notes)
+		for(auto&& n : v){
+			_model.setUniform("state", n.state);
+			_model.draw(vid, n.matrix);
 		}
 
 	_timingBar.draw(vid);

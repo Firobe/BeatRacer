@@ -7,6 +7,16 @@ using namespace std;
 Ship::Ship(vector<glm::dvec3>& map): _map(map) {
     load("spaceship");
 	_shaderNb = 1;
+	reset();
+	//To send to shaders
+	addUniform("speed", 1);
+    }
+
+Ship::~Ship() {
+    }
+
+void Ship::reset(){
+	_modelMatrix = glm::dmat4(1.);
 	_gameOver = false;
     translate(glm::dvec3(0., 0., SHIP_HEIGHT));
     _roadPosition = glm::dvec3(0., 0., SHIP_HEIGHT);
@@ -18,13 +28,7 @@ Ship::Ship(vector<glm::dvec3>& map): _map(map) {
     _absPos = 0;
     _counter = 0;
     _curSegment = 0;
-
-	//To send to shaders
-	addUniform("speed", 1);
-    }
-
-Ship::~Ship() {
-    }
+}
 
 glm::dvec3 Ship::getVertical() {
     return glm::dvec3(_modelMatrix[2]);

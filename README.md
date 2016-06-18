@@ -19,6 +19,7 @@ WXCV :touches notes
 Alt : passage en caméra libre (contrôlable avec ZQDS)  
 Ctrl gauche : libérer le curseur  
 Ctrl droit : lier le curseur  
+Entrée : recommencer  
 Echap : quitter
 
 Joue par défaut test.ogg

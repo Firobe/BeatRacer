@@ -31,8 +31,8 @@ void Text::drawString(glm::vec2 pos, std::string str, Video& video) {
     float xpos = pos.x, ypos = pos.y;
     stbtt_aligned_quad tmp;
 
-    for (unsigned int i = 0 ; i < str.size() ; i++) {
-        tmp = _bitmap.charTexCoord(str[i], &xpos, &ypos);
+    for (char c : str) {
+        tmp = _bitmap.charTexCoord(c, &xpos, &ypos);
         quadCoords(_mapModel, tmp.x0, tmp.x1, _screen.y - tmp.y0, _screen.y - tmp.y1);
         quadCoords(_mapTex, tmp.s0, tmp.s1, 1. - tmp.t0, 1. - tmp.t1);
         loadV();

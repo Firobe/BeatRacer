@@ -16,6 +16,8 @@ class Audio {
         void playSource();
         void changePitch(double);
         float sync();
+		void reset();
+		bool hasEnded();
         ~Audio();
     private:
         ALCdevice* _device;

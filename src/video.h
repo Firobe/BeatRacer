@@ -80,6 +80,7 @@ class Video {
 		void twRedirect();
 		void quatCamera(glm::dquat);
 		void translateCamera(glm::dquat, glm::dvec3);
+		void reset();
     private:
         GLFWwindow* _window;
 		std::vector<Shader> _shaderArray;

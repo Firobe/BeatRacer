@@ -87,6 +87,10 @@ Video::~Video() {
     glfwTerminate();
     }
 
+void Video::reset(){
+    _position = glm::dvec3(-5, 0, 0.1);
+}
+
 void Video::refresh() {
     GLenum err;
 

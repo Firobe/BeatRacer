@@ -30,12 +30,16 @@ class NoteHandler {
         void draw(Video&);
         void placeBar(float, Map&);
         void checkNotes();
+		void reset();
         int getCombo() {
             return _combo;
             }
         double getScore() {
             return _score;
             }
+		double getPrecision() {
+			return _precision;
+		}
     private:
         float _barPosition;
         std::vector<unsigned int> _currentNote;
