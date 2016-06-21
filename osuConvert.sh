@@ -8,7 +8,7 @@ unzip "$1"
 dir2ogg -Q *.mp3
 mv *.ogg ../res/songs/$2.ogg
 echo '[Name]' > ../res/tracks/$2.trk
-echo $1 | sed -r 's/\.osz//g' | sed -r 's/\[0-9]+ (.+)/\1/' >> ../res/tracks/$2.trk
+echo $1 | sed -r 's/\.osz//g' | sed -r 's/[0-9]+ (.+)/\1/' >> ../res/tracks/$2.trk
 echo '[Difficulties]' >> ../res/tracks/$2.trk
 ls *.osu | sed 's/ //g' | sed -r 's/.*\[(.+)\].*/\1/' >> ../res/tracks/$2.trk
 c=0

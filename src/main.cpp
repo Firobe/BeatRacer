@@ -166,7 +166,7 @@ void gameLoop(Video& video, Audio& audio, Track& track) {
         ss << "Speed x" << pitchGoal;
         font.drawString(glm::vec2(10., 42.), ss.str(), video);
         ss.str("");
-        ss << "Combo x" << notehandler.getCombo() << "   Score " << notehandler.getScore();
+        ss << "Combo x" << notehandler.getCombo() << "   Score " << fixed << notehandler.getScore();
         font.drawString(glm::vec2(screen_width / 2 - 100., 42.), ss.str(), video);
         video.refresh();
         }
