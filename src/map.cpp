@@ -35,7 +35,6 @@ void Map::setMapSeg(unsigned int n, glm::dvec4 seg) {
     }
 
 void Map::write(string path) {
-    path = "res/map/" + path + ".map";
     ofstream map(path);
 
     for (glm::dvec4 v : _fileMap) {
@@ -43,12 +42,11 @@ void Map::write(string path) {
         }
     }
 
-void Map::loadModel(string in) {
+void Map::loadModel(string path) {
     string buffer;
     ifstream map;
-    string path = "res/map/" + in + ".map";
 
-    if (in != "editor") {
+    if (path != "editor") {
         dvec4 temp;
         int todo;
         map.open(path);
@@ -68,7 +66,7 @@ void Map::loadModel(string in) {
     _transMap.clear();
 
     for (glm::dvec4 v : _fileMap) {
-        if (in != "editor")
+        if (path != "editor")
             while (v[1] >= 0.001 || v[2] >= 0.001) {
                 v[0] /= 2.;    //On s'assure que les angles sont suffisamment petits
                 v[1] /= 2. ;
@@ -79,7 +77,7 @@ void Map::loadModel(string in) {
         for (int i = 0 ; i < v[3] ; i++)
             _transMap.push_back(glm::dvec3(v[0], radians(v[1]), -radians(v[2])));
         }
-	if(in != "editor")
+	if(path != "editor")
 		cout << "Map contains " << _transMap.size() << " sectors." << endl;
     _segmentMap.resize(_transMap.size());
     _vertexNb = 6 * _transMap.size();

@@ -24,11 +24,12 @@
 #include "keymanager.h"
 #include "lifebar.h"
 #include "text.h"
+#include "track.h"
 
 extern int screen_width;
 extern int screen_height;
 enum Axes { xAxis, yAxis, zAxis };
-void gameLoop(Video&, Audio&);
-void editorLoop(Video&, Audio&);
+void gameLoop(Video&, Audio&, Track&);
+void editorLoop(Video&, Audio&, Track&);
 
 #endif

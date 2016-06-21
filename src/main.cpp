@@ -5,17 +5,43 @@
 #define PITCH_STEP 0.05
 
 using namespace std;
-string mapName;
 
 int main(int argc, char** argv) {
     try {
-        int choice;
+        unsigned int choice;
+
         ///////////////MENU////////////
-        cout << "BeatRacer (InDev)\n========================\nMap name : ";
-        cin >> mapName;
+        cout << "BeatRacer (InDev)\n========================\nAvailable tracks : \n";
+
+        for (string s : Track::List()) {
+            static int i = 1;
+            cout << "[" << i++ << "] " << s << endl;
+            }
 
         do {
-            cout << "What to do with it ?\n\t1 - Play on it\n\t2 - Edit it (creates it if nonexistent (or not))\nChoice : ";
+            cout << "Your choice : ";
+            cin >> choice;
+            }
+        while (choice < 1 || choice > Track::List().size());
+
+        Track track(choice - 1);
+		cout << "\nAvailable difficulties : \n";
+        for (string s : track.getDiffList()) {
+            static int i = 1;
+            cout << "[" << i++ << "] " << s << endl;
+            }
+
+        do {
+            cout << "Your choice : ";
+            cin >> choice;
+            }
+        while (choice < 1 || choice > track.getDiffList().size());
+
+        track.setDiffID(choice - 1);
+        cout << "\nWhat to do with it ?\n[1] Play on it\n[2] Edit it (creates it if nonexistent (or not))" << endl;
+
+        do {
+            cout << "Your Choice : ";
             cin >> choice;
             }
         while (choice != 1 && choice != 2);
@@ -24,7 +50,7 @@ int main(int argc, char** argv) {
         //Init Audio/Video/Text
         cout << "Loading audio... (might take some time)" << endl;
         Audio audio;
-        audio.loadBuffer("res/" + mapName + ".ogg");
+        audio.loadBuffer(track.getOGG());
 
         Video video("default.vert", "default.frag");
         video.addShader("default.vert", "ship.frag");
@@ -35,9 +61,9 @@ int main(int argc, char** argv) {
         TwInit(TW_OPENGL, NULL);
 
         if (choice == 1)
-            gameLoop(video, audio);
+            gameLoop(video, audio, track);
         else
-            editorLoop(video, audio);
+            editorLoop(video, audio, track);
 
         TwTerminate();
         }
@@ -49,16 +75,16 @@ int main(int argc, char** argv) {
     return EXIT_SUCCESS;
     }
 
-void gameLoop(Video& video, Audio& audio) {
+void gameLoop(Video& video, Audio& audio, Track& track) {
     stringstream ss;
     glm::vec2 pos;
     double pitchGoal = 1.;
     bool superSpeed = false;
     Map map;
-    map.load(mapName);
+    map.load(track.getMAP());
     Ship ship(map.getMap());
     LifeBar bar(glm::vec2(screen_width, screen_height));
-    NoteHandler notehandler(mapName, map, bar, ship);
+    NoteHandler notehandler(track.getNT(), map, bar, ship);
     Text font(glm::vec2(screen_width, screen_height), 60.);
     font.load("klill");
     //font.setSize(glm::vec2(300, 300));
@@ -151,6 +177,7 @@ struct Disco {
     Video& video;
     Audio& audio;
     Map& map;
+    Track& track;
     };
 void TW_CALL resetCamCall(void* v) {
     *((glm::quat*)v) = glm::quat(1., 0., 0., 0.);
@@ -158,26 +185,27 @@ void TW_CALL resetCamCall(void* v) {
 void TW_CALL resetSetCall(void* v) {
     *((glm::dvec4*)v) = glm::dvec4(1., 0., 0., 1.);
     }
-void TW_CALL saveCall(void* m) {
-    ((Map*)m)->write(mapName);
+void TW_CALL saveCall(void* v) {
+    struct Disco* s = (Disco*) v;
+    s->map.write(s->track.getMAP());
     }
 void TW_CALL saveTryCall(void* v) {
     struct Disco* s = (Disco*) v;
-    s->map.write(mapName);
-    gameLoop(s->video, s->audio);
+    s->map.write(s->track.getMAP());
+    gameLoop(s->video, s->audio, s->track);
     }
 
-void editorLoop(Video& video, Audio& audio) {
+void editorLoop(Video& video, Audio& audio, Track& track) {
     Map map;
     stringstream ss;
-    Disco send = {video, audio, map};
+    Disco send = {video, audio, map, track};
     unsigned int curSector = 0, oldSector = 1;
     glm::dvec4 sector(1., 0, 0, 1);
     glm::dvec4 oldSec = sector;
     glm::dvec2 cursor = KeyManager::mousePosition();
     glm::dvec2 oldCursor = cursor;
     double tranSpeed = 0.2;
-    map.load(mapName);
+    map.load(track.getMAP());
     auto segMap = map.getMap();
     Text font(glm::vec2(screen_width, screen_height), 60.);
     font.load("atari");
@@ -193,7 +221,7 @@ void editorLoop(Video& video, Audio& audio) {
     TwAddVarRW(tbar, "Sector theta", TW_TYPE_DOUBLE, &sector[1], " precision=5 step=0.0001 ");
     TwAddVarRW(tbar, "Sector phi", TW_TYPE_DOUBLE, &sector[2], " precision=5 step=0.0001 ");
     TwAddButton(tbar, "Reset settings", resetSetCall, &sector, "");
-    TwAddButton(tbar, "Save map", saveCall, &map, "");
+    TwAddButton(tbar, "Save map", saveCall, &send, "");
     TwAddButton(tbar, "Save and try", saveTryCall, &send, "");
     freopen("/dev/null", "w", stderr);
     video.twRedirect();

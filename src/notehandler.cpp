@@ -23,7 +23,6 @@ NoteHandler::NoteHandler(string path, Map& map, LifeBar& lifebar, Ship& ship) : 
 	_model.setShaderNb(2);
 	_model.addUniform("state", 1);
 	_timingBar.load("timingbar");
-	path = "res/map/" + path + ".nt";
 	input.open(path);
 	if(!input)
 		throw runtime_error("Unable to open " + path);
