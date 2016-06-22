@@ -2,7 +2,6 @@
 #include <AntTweakBar.h>
 #include <stdexcept>
 #include <sstream>
-#include <string>
 
 using namespace std;
 

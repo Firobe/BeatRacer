@@ -18,10 +18,7 @@
 #include <GLFW/glfw3.h>
 
 #define GLM_FORCE_RADIANS
-#include "../libs/glm/glm.hpp"
 #include "../libs/glm/gtc/type_ptr.hpp"
-#include "../libs/glm/gtc/quaternion.hpp"
-#include "../libs/glm/gtc/constants.hpp"
 #include "../libs/glm/gtx/quaternion.hpp"
 
 #include "shader.h"

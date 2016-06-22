@@ -48,9 +48,13 @@ int main(int argc, char** argv) {
 
         ///////////////INIT////////////
         //Init Audio/Video/Text
-        cout << "Loading audio... (might take some time)" << endl;
+        cout << "Loading audio...\n";
         Audio audio;
         audio.loadBuffer(track.getOGG());
+		cout << "Computing map sectors...\n";
+		Map map;
+		map.loadModel(track.getMAP());
+		cout << "Creating window...\n";
 
         Video video("default.vert", "default.frag");
         video.addShader("default.vert", "ship.frag");
@@ -58,12 +62,14 @@ int main(int argc, char** argv) {
         video.addShader("2d.vert", "2d.frag");
         video.addShader("2d.vert", "text.frag");
 
+		map.loadTexture("");
+		map.loadV();
         TwInit(TW_OPENGL, NULL);
 
         if (choice == 1)
-            gameLoop(video, audio, track);
+            gameLoop(video, audio, track, map);
         else
-            editorLoop(video, audio, track);
+            editorLoop(video, audio, track, map);
 
         TwTerminate();
         }
@@ -75,13 +81,11 @@ int main(int argc, char** argv) {
     return EXIT_SUCCESS;
     }
 
-void gameLoop(Video& video, Audio& audio, Track& track) {
+void gameLoop(Video& video, Audio& audio, Track& track, Map& map) {
     stringstream ss;
     glm::vec2 pos;
     double pitchGoal = 1.;
     bool superSpeed = false;
-    Map map;
-    map.load(track.getMAP());
     Ship ship(map.getMap());
     LifeBar bar(glm::vec2(screen_width, screen_height));
     NoteHandler notehandler(track.getNT(), map, bar, ship);
@@ -166,7 +170,7 @@ void gameLoop(Video& video, Audio& audio, Track& track) {
         ss << "Speed x" << pitchGoal;
         font.drawString(glm::vec2(10., 42.), ss.str(), video);
         ss.str("");
-        ss << "Combo x" << notehandler.getCombo() << "   Score " << fixed << notehandler.getScore();
+        ss << "Combo x" << notehandler.getCombo() << "   Score " << fixed << setprecision(0) << notehandler.getScore() << resetiosflags(ios::fixed) << setprecision(6);
         font.drawString(glm::vec2(screen_width / 2 - 100., 42.), ss.str(), video);
         video.refresh();
         }
@@ -192,11 +196,10 @@ void TW_CALL saveCall(void* v) {
 void TW_CALL saveTryCall(void* v) {
     struct Disco* s = (Disco*) v;
     s->map.write(s->track.getMAP());
-    gameLoop(s->video, s->audio, s->track);
+    gameLoop(s->video, s->audio, s->track, s->map);
     }
 
-void editorLoop(Video& video, Audio& audio, Track& track) {
-    Map map;
+void editorLoop(Video& video, Audio& audio, Track& track, Map& map) {
     stringstream ss;
     Disco send = {video, audio, map, track};
     unsigned int curSector = 0, oldSector = 1;
@@ -205,7 +208,6 @@ void editorLoop(Video& video, Audio& audio, Track& track) {
     glm::dvec2 cursor = KeyManager::mousePosition();
     glm::dvec2 oldCursor = cursor;
     double tranSpeed = 0.2;
-    map.load(track.getMAP());
     auto segMap = map.getMap();
     Text font(glm::vec2(screen_width, screen_height), 60.);
     font.load("atari");
@@ -223,7 +225,10 @@ void editorLoop(Video& video, Audio& audio, Track& track) {
     TwAddButton(tbar, "Reset settings", resetSetCall, &sector, "");
     TwAddButton(tbar, "Save map", saveCall, &send, "");
     TwAddButton(tbar, "Save and try", saveTryCall, &send, "");
-    freopen("/dev/null", "w", stderr);
+#ifndef _WIN32
+    if(freopen("/dev/null", "w", stderr) == NULL)
+		cout << "WARNING : Couldn't redirect cerr stream" << endl;
+#endif
     video.twRedirect();
 
     ////////////MAIN LOOP/////////

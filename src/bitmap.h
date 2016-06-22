@@ -2,11 +2,13 @@
 #define BITMAP__H
 
 #include "texture.h"
+
+#pragma GCC system_header
 #include "../libs/stb_truetype.h"
 
 #include <string>
-
 #define BITMAP_SIZE (512)
+
 class Bitmap : public Texture{
     public:
 		Bitmap();

@@ -1,6 +1,10 @@
 #!/bin/bash
 #Usage : osuConvert.sh [input file] [output ID]
 
+if [[ $# -lt 2 ]];then
+	echo "Usage : osuConvert.sh [input file] [output ID]"
+	exit
+fi
 mkdir tmp
 mv "$1" tmp/
 cd tmp
@@ -13,7 +17,7 @@ echo '[Difficulties]' >> ../res/tracks/$2.trk
 ls *.osu | sed 's/ //g' | sed -r 's/.*\[(.+)\].*/\1/' >> ../res/tracks/$2.trk
 c=0
 for i in *.osu; do
-	../converter < "$i" > "../res/map/$2_$c.nt";
+	../converter < "$i" | uniq > "../res/map/$2_$c.nt";
 	let "c=c+1"
 done
 SIZE=`tail -1 ../res/map/$2_0.nt | sed -r 's/(.+),/\1/'`

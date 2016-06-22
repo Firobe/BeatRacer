@@ -1,7 +1,5 @@
 #include "model2d.h"
 #include "video.h"
-#include <new>
-#include <vector>
 #include <stdexcept>
 
 using namespace std;

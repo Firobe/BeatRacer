@@ -1,6 +1,4 @@
 #include "model2d.h"
-#define GLM_FORCE_RADIANS
-#include "../libs/glm/glm.hpp"
 
 #define BAR_HEIGHT 50
 

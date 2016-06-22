@@ -1,9 +1,7 @@
 #include "map.h"
 #include "video.h"
-#include <cstdlib>
 #include <fstream>
 #include <iostream>
-#include <cmath>
 #include <stdexcept>
 
 enum Axes { xAxis, yAxis, zAxis };
@@ -77,8 +75,7 @@ void Map::loadModel(string path) {
         for (int i = 0 ; i < v[3] ; i++)
             _transMap.push_back(glm::dvec3(v[0], radians(v[1]), -radians(v[2])));
         }
-	if(path != "editor")
-		cout << "Map contains " << _transMap.size() << " sectors." << endl;
+
     _segmentMap.resize(_transMap.size());
     _vertexNb = 6 * _transMap.size();
 
@@ -117,6 +114,10 @@ void Map::loadModel(string path) {
         fillModel(6 * s + 4, act - t);
         cursor += 1. / ROAD_WIDTH * _transMap[s][0];
         }
+
+    if (path != "editor")
+        cout << "Map contains " << _transMap.size() << " sectors.\n";
+
     }
 
 void Map::fillModel(int vertex, dvec4 v) {

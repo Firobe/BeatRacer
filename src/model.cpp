@@ -1,5 +1,4 @@
 #include "model.h"
-#include <fstream>
 #include <stdexcept>
 #include <iostream>
 
@@ -35,7 +34,7 @@ void Model::loadTexture(string path) {
 		_texture.load();
 	}
 	catch (exception const& ex) {
-		cerr << "WARNING : " << ex.what() << endl;
+		cout << "WARNING : " << ex.what() << endl;
 		_textured = false;
 		_texture.setPath("res/tex/default.png");
 		_texture.load();

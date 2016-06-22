@@ -1,9 +1,6 @@
 #ifndef MAP__H
 #define MAP__H
 
-#define GLM_FORCE_RADIANS
-#include "../libs/glm/glm.hpp"
-
 #include "model3d.h"
 #include <vector>
 #include <string>
@@ -28,8 +25,8 @@ class Map : public Model3D {
 		void setMapSeg(unsigned int, glm::dvec4);
 		void write(std::string);//contains a string
 		glm::dvec4 getSegment(unsigned int);
-    private:
 		void loadTexture(std::string path) { Model::loadTexture("map"); }
+    private:
         void fillModel(int vertex, glm::dvec4 v);
         void fillTex(int, double);
 

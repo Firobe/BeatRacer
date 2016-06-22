@@ -4,8 +4,6 @@
 #include "model2d.h"
 #include "bitmap.h"
 
-#define GLM_FORCE_RADIANS
-#include "../libs/glm/glm.hpp"
 #include <string>
 
 class Video;

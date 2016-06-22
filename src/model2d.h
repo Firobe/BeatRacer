@@ -1,9 +1,6 @@
 #ifndef MODEL2D__H
 #define MODEL2D__H
 
-#define GLM_FORCE_RADIANS
-#include "../libs/glm/glm.hpp"
-
 #include "model.h"
 #include <string>
 #include <vector>

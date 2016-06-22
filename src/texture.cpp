@@ -1,7 +1,12 @@
 #include "texture.h"
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #include "../libs/stb_image.h"
+#pragma GCC diagnostic pop
+
 #include <stdexcept>
 
 using namespace std;

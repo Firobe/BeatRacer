@@ -1,7 +1,6 @@
 #include "text.h"
 #include "video.h"
 #include "../libs/stb_truetype.h"
-#include <iostream>
 
 using namespace std;
 

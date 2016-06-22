@@ -2,7 +2,6 @@
 #define NOTE_H
 
 #include "model3d.h"
-#include <random>
 
 #define FAIL_PENALTY true
 #define NOTE_ERROR_MAX 1

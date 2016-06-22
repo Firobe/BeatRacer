@@ -1,32 +1,37 @@
 #include "audio.h"
 #include "video.h"
+
+#pragma GCC diagnostic ignored "-Wunused-function"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #include "../libs/stb_vorbis.c"
+#pragma GCC diagnostic pop
+
 #include <stdexcept>
-#include <cstdlib>
 #include <chrono>
 
 typedef std::chrono::high_resolution_clock Clock;
 
 using namespace std;
 
-/*
-   void listDev(const ALCchar *devices) {
-   const ALCchar *device = devices, *next = devices + 1;
-   size_t len = 0;
 
-   cout << "Devices list:\n";
-   cout << "----------\n";
+/*void listDev(const ALCchar* devices) {
+    const ALCchar* device = devices, *next = devices + 1;
+    size_t len = 0;
 
-   while (device && *device != '\0' && next && *next != '\0') {
-   cout << device << endl;;
-   len = strlen(device);
-   device += (len + 1);
-   next += (len + 2);
-   }
+    cout << "Devices list:\n";
+    cout << "----------\n";
 
-   cout << "----------\n";
-   }
-   */
+    while (device && *device != '\0' && next && *next != '\0') {
+        cout << device << endl;;
+        len = strlen(device);
+        device += (len + 1);
+        next += (len + 2);
+        }
+
+    cout << "----------\n";
+    }*/
+
 
 Audio::Audio() {
     _correction = 1;
@@ -62,9 +67,9 @@ void Audio::reset() {
     }
 
 bool Audio::hasEnded() {
-	ALint state;
+    ALint state;
     alGetSourcei(_source, AL_SOURCE_STATE, &state);
-	return state == AL_STOPPED;
+    return state == AL_STOPPED;
     }
 
 void Audio::loadBuffer(string name) {

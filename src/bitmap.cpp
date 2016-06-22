@@ -2,7 +2,6 @@
 #include "bitmap.h"
 #include <stdexcept>
 #include <fstream>
-#include <iostream>
 
 std::ifstream::pos_type filesize(const char* filename)
 {

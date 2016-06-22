@@ -2,11 +2,9 @@
 #define MODEL__H
 
 #define GLM_FORCE_RADIANS
-#include "../libs/glm/glm.hpp"
 #include "../libs/glm/gtx/transform.hpp"
 
 #include "texture.h"
-#include <cstdlib>
 #include <vector>
 #include <string>
 
@@ -38,8 +36,8 @@ class Model { //ABSTRACT
 		void setUniform(std::string, float, int = 0);
         virtual void loadModel(std::string) = 0;
         virtual void loadV() = 0;
-    protected:
         virtual void loadTexture(std::string);
+    protected:
 
         Texture _texture;
         glm::dmat4 _modelMatrix;

@@ -2,8 +2,6 @@
 #define SHIP__H
 
 #include "model3d.h"
-#include "../libs/glm/glm.hpp"
-#include <vector>
 
 #define SHIP_HEIGHT (0.4)
 #define SHIP_ROUTINE_AMPLITUDE (0.05) //0.05
