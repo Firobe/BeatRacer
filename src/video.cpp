@@ -49,10 +49,10 @@ Video::Video(string a, string b) {
         glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 		screen_width = mode->width;
 		screen_height = mode->height;
-        _window = glfwCreateWindow(screen_width, screen_height, "BeatRacer", glfwGetPrimaryMonitor(), NULL);
+        _window = glfwCreateWindow(screen_width, screen_height, "BeatRacer", glfwGetPrimaryMonitor(), nullptr);
         }
     else
-        _window = glfwCreateWindow(screen_width, screen_height, "BeatRacer", NULL, NULL);
+        _window = glfwCreateWindow(screen_width, screen_height, "BeatRacer", nullptr, nullptr);
 
     if (!_window)
         throw runtime_error("Unable to create window");

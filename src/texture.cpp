@@ -11,7 +11,7 @@
 
 using namespace std;
 
-Texture::Texture(): _path("NULL"), _width(-1) {
+Texture::Texture(): _path("Empty path"), _width(-1) {
     }
 
 Texture::Texture(string path) : _path(path), _id(0), _width(-1), _height(-1) {
@@ -37,7 +37,7 @@ void Texture::load() {
     int compN;
     unsigned char* data = stbi_load(_path.c_str(), &_width, &_height, &compN, 0);
 
-    if (data == NULL)
+    if (data == nullptr)
         throw runtime_error("Unable to open "+ _path);
 
     //Flipping texture

@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
 
 		map.loadTexture("");
 		map.loadV();
-        TwInit(TW_OPENGL, NULL);
+        TwInit(TW_OPENGL, nullptr);
 
         if (choice == 1)
             gameLoop(video, audio, track, map);
@@ -226,7 +226,7 @@ void editorLoop(Video& video, Audio& audio, Track& track, Map& map) {
     TwAddButton(tbar, "Save map", saveCall, &send, "");
     TwAddButton(tbar, "Save and try", saveTryCall, &send, "");
 #ifndef _WIN32
-    if(freopen("/dev/null", "w", stderr) == NULL)
+    if(freopen("/dev/null", "w", stderr) == nullptr)
 		cout << "WARNING : Couldn't redirect cerr stream" << endl;
 #endif
     video.twRedirect();

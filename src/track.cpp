@@ -37,11 +37,11 @@ vector<string> Track::List() {
     dir = opendir("res/tracks/");
     vector<string> res;
 
-    if (dir == NULL) {
+    if (dir == nullptr) {
         throw runtime_error("Unable to list tracks (" + string(strerror(errno)) + ")");
         }
 
-    while ((ent = readdir(dir)) != NULL) {
+    while ((ent = readdir(dir)) != nullptr) {
         if (ent->d_type == DT_REG) {
             ifstream file("res/tracks/" + string(ent->d_name));
             res.push_back("");

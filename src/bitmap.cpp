@@ -32,10 +32,10 @@ void Bitmap::load(){
 	unsigned char flipData[BITMAP_SIZE * BITMAP_SIZE];
 	_width = BITMAP_SIZE;
 	_height = BITMAP_SIZE;
-	FILE* file = NULL;
+	FILE* file = nullptr;
 	file = fopen(_path.c_str(), "rb");
 
-	if( file == NULL )
+	if( file == nullptr )
 		throw runtime_error("Unable to open " + _path);
 
 	if( fread(buffer, 1, size, file) != size)
@@ -50,7 +50,7 @@ void Bitmap::load(){
 	//int w, h;
 	//bitm = stbtt_GetCodepointBitmap(&_font, 0, stbtt_ScaleForPixelHeight(&_font, 60), 'A', &w, &h, 0, 0);
 
-	if( bitm == NULL )
+	if( bitm == nullptr )
 		throw runtime_error("Unable to make bitmap");
 
 	for (int i = 0 ; i < _height ; i++)

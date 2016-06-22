@@ -52,7 +52,7 @@ void Model3D::loadModel(string path) {
     path = "res/obj/" + path + ".obj";
     FILE* file = fopen(path.c_str(), "r");
 
-    if (file == NULL)
+    if (file == nullptr)
         throw runtime_error("Unable to open " + path);
 
     if (!_textured) {

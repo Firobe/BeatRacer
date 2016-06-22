@@ -35,12 +35,12 @@ using namespace std;
 
 Audio::Audio() {
     _correction = 1;
-    _device = alcOpenDevice(NULL);
+    _device = alcOpenDevice(nullptr);
 
     if (!_device)
         throw runtime_error("OpenAL : can't open default audio device");
 
-    _context = alcCreateContext(_device, NULL);
+    _context = alcCreateContext(_device, nullptr);
 
     if (!alcMakeContextCurrent(_context))
         throw runtime_error("OpenAL : failed to make context current");
@@ -56,7 +56,7 @@ Audio::Audio() {
 Audio::~Audio() {
     alDeleteSources(1, &_source);
     alDeleteBuffers(1, &_buffer);
-    alcMakeContextCurrent(NULL);
+    alcMakeContextCurrent(nullptr);
     alcDestroyContext(_context);
     alcCloseDevice(_device);
     }

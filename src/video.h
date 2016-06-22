@@ -46,7 +46,7 @@
 
 //DO NOT MODIFY
 #ifndef BUFFER_OFFSET
-#define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
+#define BUFFER_OFFSET(offset) ((char*)nullptr + (offset))
 #endif //!BUFFER_OFFSET
 
 #if VERTICAL_SYNC == 1
