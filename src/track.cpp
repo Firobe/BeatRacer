@@ -44,7 +44,7 @@ vector<string> Track::List() {
     while ((ent = readdir(dir)) != nullptr) {
         if (ent->d_type == DT_REG) {
             ifstream file("res/tracks/" + string(ent->d_name));
-            res.push_back("");
+            res.emplace_back("");
             string buffer;
 
             while (buffer != "[Name]") file >> buffer;

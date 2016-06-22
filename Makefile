@@ -1,5 +1,5 @@
 COMPILER = g++
-ADD_CFLAGS = -Wall -std=c++11 -O3
+ADD_CFLAGS = -Wall -std=c++11 -O3 -g
 LIBS = glu openal glfw3
 NO_PKG_LIBS = -lAntTweakBar
 CXXFLAGS = `pkg-config --static --cflags $(LIBS)` $(ADD_CFLAGS)

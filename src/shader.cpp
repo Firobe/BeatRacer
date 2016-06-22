@@ -6,21 +6,21 @@
 
 using namespace std;
 
-Shader::Shader() : _vertexID(0), _fragmentID(0), _programID(0), _srcVert(), _srcFrag() {
+Shader::Shader() : _vertexID(0), _fragmentID(0), _programID(0) {
     }
 
-Shader::Shader(Shader const &toCp) {
+Shader::Shader(Shader const& toCp) {
     _srcVert = toCp._srcVert;
     _srcFrag = toCp._srcFrag;
-	_vertexID = toCp._vertexID;
-	_fragmentID = toCp._fragmentID;
-	_programID = toCp._fragmentID;
+    _vertexID = toCp._vertexID;
+    _fragmentID = toCp._fragmentID;
+    _programID = toCp._fragmentID;
     load();
     }
 
 
-Shader::Shader(string srcVert, string srcFrag) : _vertexID(0), _fragmentID(0), _programID(0),
-    _srcVert("res/shaders/"+srcVert), _srcFrag("res/shaders/"+srcFrag) {
+Shader::Shader(string srcVert, string srcFrag) : _vertexID(0), _fragmentID(0), _programID(0), _srcVert("res/shaders/" + srcVert), _srcFrag("res/shaders/" + srcFrag) {
+    load();
     }
 
 
@@ -30,7 +30,7 @@ Shader::~Shader() {
     glDeleteProgram(_programID);
     }
 
-Shader& Shader::operator=(Shader const &toCp) {
+Shader& Shader::operator=(Shader const& toCp) {
     _srcVert = toCp._srcVert;
     _srcFrag = toCp._srcFrag;
     load();
@@ -64,23 +64,23 @@ void Shader::load() {
         glGetProgramiv(_programID, GL_INFO_LOG_LENGTH, &errSize);
         vector<char> error(errSize + 1);
         glGetShaderInfoLog(_programID, errSize, &errSize, error.data());
-		throw runtime_error("Shader linking failure\n--> " + string(error.begin(), error.end()));
+        throw runtime_error("Shader linking failure\n--> " + string(error.begin(), error.end()));
         }
     }
 
 
-void Shader::buildShader(GLuint &shader, GLenum type, string const &src) {
+void Shader::buildShader(GLuint& shader, GLenum type, string const& src) {
     shader = glCreateShader(type);
-	stringstream typeSs;
-	typeSs << type;
+    stringstream typeSs;
+    typeSs << type;
 
     if (shader == 0)
-		throw invalid_argument("Wrong shader type : " + typeSs.str());
+        throw invalid_argument("Wrong shader type : " + typeSs.str());
 
     ifstream file(src);
 
     if (!file)
-		throw runtime_error("Unable to open " + src);
+        throw runtime_error("Unable to open " + src);
 
     string line;
     string srcC;
@@ -99,8 +99,8 @@ void Shader::buildShader(GLuint &shader, GLenum type, string const &src) {
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &errSize);
         vector<char> error(errSize + 1);
         glGetShaderInfoLog(shader, errSize, &errSize, error.data());
-		throw runtime_error(typeSs.str() + " type shader build failure\n--> " 
-				+ string(error.begin(), error.end()));
+        throw runtime_error(typeSs.str() + " type shader build failure\n--> "
+                            + string(error.begin(), error.end()));
         }
     }
 

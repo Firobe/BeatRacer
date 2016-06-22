@@ -43,7 +43,7 @@ void Model::loadTexture(string path) {
 
 void Model::addUniform(string name, int size){
 	_uniform.resize(_uniform.size() + size);
-	_uniformStructure.push_back( (UniformValue) {.size = size, .name = name });
+	_uniformStructure.emplace_back(size, name);
 }
 
 
@@ -89,12 +89,12 @@ void Model::setOrientation(glm::dmat3 axes) {
 }
 
 void Model::uniformize(int shaderID){
-	unsigned int i = 0, i2 = 0;
-	while( i2 < _uniformStructure.size() ){
-		int location = glGetUniformLocation(shaderID, _uniformStructure[i2].name.c_str());
+	unsigned int i = 0;
+	for( auto&& u : _uniformStructure ){
+		int location = glGetUniformLocation(shaderID, u.name.c_str());
 		if(location == -1)
-			throw runtime_error("Uniform variable '" + _uniformStructure[i2].name + "' does not exist in the shader");
-		switch(_uniformStructure[i2].size){
+			throw runtime_error("Uniform variable '" + u.name + "' does not exist in the shader");
+		switch(u.size){
 			case 4:
 				glUniform4fv(location, 1, _uniform.data() + i);
 				break;
@@ -108,7 +108,6 @@ void Model::uniformize(int shaderID){
 				glUniform1fv(location, 1, _uniform.data() + i);
 				break;
 		}
-		i += _uniformStructure[i2].size;
-		i2 ++;
+		i += u.size;
 	}
 }

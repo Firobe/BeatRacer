@@ -56,9 +56,9 @@ void Model3D::loadModel(string path) {
         throw runtime_error("Unable to open " + path);
 
     if (!_textured) {
-        tex.push_back(vec2(0., 0.));
-        tex.push_back(vec2(1., 0.));
-        tex.push_back(vec2(1., 1.));
+        tex.emplace_back(0., 0.);
+        tex.emplace_back(1., 0.);
+        tex.emplace_back(1., 1.);
         }
 
     //Reading file

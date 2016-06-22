@@ -12,10 +12,12 @@ class Video;
 
 typedef struct UniformValue UniformValue;
 
-struct UniformValue{
-	int size;
-	std::string name;
-};
+class UniformValue {
+    public:
+        UniformValue(int s, std::string n) : size(s), name(n) {}
+        int size;
+        std::string name;
+    };
 
 class Model { //ABSTRACT
     public:
@@ -30,25 +32,25 @@ class Model { //ABSTRACT
         void setOrientation(glm::dmat3);
         void resetMatrix();
         glm::dmat4 getMatrix();
-		void uniformize(int);
-		void setShaderNb(int);
-		void addUniform(std::string, int);
-		void setUniform(std::string, float, int = 0);
+        void uniformize(int);
+        void setShaderNb(int);
+        void addUniform(std::string, int);
+        void setUniform(std::string, float, int = 0);
         virtual void loadTexture(std::string);
     protected:
         virtual void loadModel(std::string) = 0;
         virtual void loadV() = 0;
         Texture _texture;
         glm::dmat4 _modelMatrix;
-		std::vector<float> _mapModel; //Vertices (te be rendered as triangles)
-		std::vector<float> _mapTex; //Texture coordinates
+        std::vector<float> _mapModel; //Vertices (te be rendered as triangles)
+        std::vector<float> _mapTex; //Texture coordinates
         GLuint _vboID, _vaoID;
         int _vertexNb;
         bool _textured;
 
-		int _shaderNb;
-		std::vector<float> _uniform;
-		std::vector<UniformValue> _uniformStructure;
+        int _shaderNb;
+        std::vector<float> _uniform;
+        std::vector<UniformValue> _uniformStructure;
     };
 
 #endif

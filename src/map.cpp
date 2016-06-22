@@ -73,7 +73,7 @@ void Map::loadModel(string path) {
                 }
 
         for (int i = 0 ; i < v[3] ; i++)
-            _transMap.push_back(glm::dvec3(v[0], radians(v[1]), -radians(v[2])));
+            _transMap.emplace_back(v[0], radians(v[1]), -radians(v[2]));
         }
 
     _segmentMap.resize(_transMap.size());

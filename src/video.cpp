@@ -71,7 +71,7 @@ Video::Video(string a, string b) {
 	glfwSetCursorPosCallback(_window, KeyManager::cursorPosCallback);
 	glfwSetMouseButtonCallback(_window, KeyManager::mouseButtonCallback);
     glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    _shaderArray.push_back(Shader(a, b));
+    _shaderArray.emplace_back(a, b);
     _shaderArray[0].load();
     _projection = glm::perspective(FOV, (double) screen_width / screen_height, NEAR, FAR);
     _position = glm::dvec3(-5, 0, 0.1);
@@ -123,7 +123,7 @@ void Video::shipCamera(glm::dvec3 shipPos, glm::dvec3 vertical, Map& map) {
     }
 
 void Video::addShader(string a, string b) {
-    _shaderArray.push_back(Shader(a, b));
+    _shaderArray.emplace_back(a, b);
     }
 
 void Video::render(GLuint id, int size, Texture& tex, Model3D* mod, glm::dmat4 model, int shaderNb) {
