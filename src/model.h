@@ -34,11 +34,10 @@ class Model { //ABSTRACT
 		void setShaderNb(int);
 		void addUniform(std::string, int);
 		void setUniform(std::string, float, int = 0);
-        virtual void loadModel(std::string) = 0;
-        virtual void loadV() = 0;
         virtual void loadTexture(std::string);
     protected:
-
+        virtual void loadModel(std::string) = 0;
+        virtual void loadV() = 0;
         Texture _texture;
         glm::dmat4 _modelMatrix;
 		std::vector<float> _mapModel; //Vertices (te be rendered as triangles)

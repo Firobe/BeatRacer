@@ -41,9 +41,6 @@ Video::Video(string a, string b) {
 	cout << "GLFW version is " << maj << "." << min << "." << rev << endl;
     glfwWindowHint(GLFW_SAMPLES, 4); //Anti-aliasing
 
-    //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     if (FULLSCREEN) {
         const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         glfwWindowHint(GLFW_RED_BITS, mode->redBits);
