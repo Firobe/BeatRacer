@@ -7,18 +7,20 @@
 #include "../libs/stb_image.h"
 #pragma GCC diagnostic pop
 
+#include <vector>
 #include <stdexcept>
 
 using namespace std;
 
-Texture::Texture(): _path("Empty path"), _width(-1) {
+Texture::Texture(): Texture("Empty path") {
     }
 
-Texture::Texture(string path) : _path(path), _id(0), _width(-1), _height(-1) {
+Texture::Texture(string path) : _path(path), _id(-1), _width(-1), _height(-1) {
     }
 
 Texture::~Texture() {
-    glDeleteTextures(1, &_id);
+	if(!empty())
+    	glDeleteTextures(1, &_id);
     }
 
 GLuint Texture::getID() {
@@ -41,7 +43,7 @@ void Texture::load() {
         throw runtime_error("Unable to open "+ _path);
 
     //Flipping texture
-    unsigned char* flipData = new unsigned char[_width * _height * compN];
+    vector<char> flipData(_width * _height * compN);
 
     for (int i = 0 ; i < _height ; i++)
         for (int j = 0 ; j < compN * _width ; j++)
@@ -50,11 +52,10 @@ void Texture::load() {
     GLenum format = (compN == 3) ? GL_RGB : GL_RGBA;
     glGenTextures(1, &_id);
     glBindTexture(GL_TEXTURE_2D, _id);
-    glTexImage2D(GL_TEXTURE_2D, 0, format, _width, _height, 0, format, GL_UNSIGNED_BYTE, flipData);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, _width, _height, 0, format, GL_UNSIGNED_BYTE, flipData.data());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     stbi_image_free(data);
-    delete[] flipData;
     }

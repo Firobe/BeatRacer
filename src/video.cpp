@@ -36,6 +36,9 @@ Video::Video(string a, string b) {
     if (!glfwInit())
         throw runtime_error("Unable to initialize GLFW");
 
+	int min, maj, rev;
+	glfwGetVersion(&maj, &min, &rev);
+	cout << "GLFW version is " << maj << "." << min << "." << rev << endl;
     glfwWindowHint(GLFW_SAMPLES, 4); //Anti-aliasing
 
     //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -61,9 +64,8 @@ Video::Video(string a, string b) {
 #ifdef _WIN32
     cout << "Windows patch enabled !" << endl;
     glewExperimental = GL_TRUE;
-    GLenum init(glewInit());
 
-    if (init != GLEW_OK)
+    if (glewInit() != GLEW_OK)
         throw ("Unable to initialize GLEW");
 
 #endif
@@ -80,6 +82,7 @@ Video::Video(string a, string b) {
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	cout << "OpenGL context version is " << (unsigned char*)glGetString(GL_VERSION) << endl;
     }
 
 Video::~Video() {

@@ -17,7 +17,7 @@ class Text : public Model2D{
 		void draw(Video& video, glm::dmat4& modelMatrix);
     private:
         void loadTexture(std::string);
-		Bitmap _bitmap;
+		Bitmap _texture;
     };
 
 #endif

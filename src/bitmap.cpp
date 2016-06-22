@@ -2,6 +2,7 @@
 #include "bitmap.h"
 #include <stdexcept>
 #include <fstream>
+#include <vector>
 
 std::ifstream::pos_type filesize(const char* filename)
 {
@@ -27,7 +28,7 @@ void Bitmap::setHeight(float h){
 
 void Bitmap::load(){
 	unsigned int size = filesize(_path.c_str());
-	unsigned char* buffer = new unsigned char[size];
+	vector<unsigned char> buffer(size);
 	unsigned char bitm[BITMAP_SIZE * BITMAP_SIZE];
 	unsigned char flipData[BITMAP_SIZE * BITMAP_SIZE];
 	_width = BITMAP_SIZE;
@@ -38,11 +39,11 @@ void Bitmap::load(){
 	if( file == nullptr )
 		throw runtime_error("Unable to open " + _path);
 
-	if( fread(buffer, 1, size, file) != size)
+	if( fread(buffer.data(), 1, size, file) != size)
 		throw runtime_error("Unable to load " + _path + " in memory");
 	fclose(file);
 
-	if( stbtt_BakeFontBitmap(buffer, 0, _fontHeight, bitm, BITMAP_SIZE, BITMAP_SIZE, 32, 96, _cdata) == 0)
+	if( stbtt_BakeFontBitmap(buffer.data(), 0, _fontHeight, bitm, BITMAP_SIZE, BITMAP_SIZE, 32, 96, _cdata) == 0)
 		throw runtime_error("No character fit in the bitmap");
 
 	//if( stbtt_InitFont(&_font, buffer, stbtt_GetFontOffsetForIndex(buffer, 0)) == 0)
@@ -63,8 +64,6 @@ void Bitmap::load(){
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	delete[] buffer;
 }
 
 stbtt_aligned_quad Bitmap::charTexCoord(char carac, float* xpos, float* ypos){

@@ -1,6 +1,7 @@
 #include "shader.h"
 #include <fstream>
 #include <stdexcept>
+#include <vector>
 #include <sstream>
 
 using namespace std;
@@ -11,6 +12,9 @@ Shader::Shader() : _vertexID(0), _fragmentID(0), _programID(0), _srcVert(), _src
 Shader::Shader(Shader const &toCp) {
     _srcVert = toCp._srcVert;
     _srcFrag = toCp._srcFrag;
+	_vertexID = toCp._vertexID;
+	_fragmentID = toCp._fragmentID;
+	_programID = toCp._fragmentID;
     load();
     }
 
@@ -58,12 +62,9 @@ void Shader::load() {
     if (linkError != GL_TRUE) {
         GLint errSize(0);
         glGetProgramiv(_programID, GL_INFO_LOG_LENGTH, &errSize);
-        char *error = new char[errSize + 1];
-        glGetShaderInfoLog(_programID, errSize, &errSize, error);
-        error[errSize] = '\0';
-		string err = "Shader linking failure\n--> " + string(error);
-        delete[] error;
-		throw runtime_error(err);
+        vector<char> error(errSize + 1);
+        glGetShaderInfoLog(_programID, errSize, &errSize, error.data());
+		throw runtime_error("Shader linking failure\n--> " + string(error.begin(), error.end()));
         }
     }
 
@@ -96,12 +97,10 @@ void Shader::buildShader(GLuint &shader, GLenum type, string const &src) {
     if (compError != GL_TRUE) {
         GLint errSize(0);
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &errSize);
-        char *error = new char[errSize + 1];
-        glGetShaderInfoLog(shader, errSize, &errSize, error);
-        error[errSize] = '\0';
-		string err = typeSs.str() + " type shader build failure\n--> " + string(error);
-        delete[] error;
-		throw runtime_error(err);
+        vector<char> error(errSize + 1);
+        glGetShaderInfoLog(shader, errSize, &errSize, error.data());
+		throw runtime_error(typeSs.str() + " type shader build failure\n--> " 
+				+ string(error.begin(), error.end()));
         }
     }
 

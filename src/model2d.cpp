@@ -39,8 +39,8 @@ void Model2D::loadV() {
 	glGenBuffers(1, &_vboID);
 	glBindBuffer(GL_ARRAY_BUFFER, _vboID);
 	glBufferData(GL_ARRAY_BUFFER, size1 + size2, 0, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, size1, &_mapModel[0]);
-	glBufferSubData(GL_ARRAY_BUFFER, size1, size2, &_mapTex[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, size1, _mapModel.data());
+	glBufferSubData(GL_ARRAY_BUFFER, size1, size2, _mapTex.data());
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	//VAO
